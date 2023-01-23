@@ -1,7 +1,9 @@
 import React,{useState} from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {purple,yellow} from '@mui/material/colors/';
+import {blue, purple,yellow} from '@mui/material/colors/';
 import CssBaseline from "@mui/material/CssBaseline";
+
+
 export const darkTheme = createTheme({
   palette: {
     mode: "dark",
@@ -14,7 +16,7 @@ export const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: yellow[500],
+      main: blue[500],
     },
   },
 });
