@@ -5,7 +5,6 @@ import {
   Typography,
   Button,
   Box,
-  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -13,26 +12,17 @@ import {
   ListItemText,
   Drawer,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EditIcon from '@mui/icons-material/Edit';
 
 
-type Anchor = "top" | "left" | "bottom" | "right";
+
 function Navbar() {
-  const [state, setState] = React.useState(false);
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setState(!state);
+  const [state, setState] = useState(false);
+  const toggleDrawer =(open: boolean) => () => {
+      setState(open);
     };
 
   const sidebar = () => (
