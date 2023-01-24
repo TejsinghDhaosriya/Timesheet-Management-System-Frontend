@@ -8,15 +8,16 @@ import SideBar from "./SideBar";
 
 
 
-function Navbar() {
+function Navbar(props:any) {
+  const {darkMode,setDarkMode} = props;
   return (
-    <AppBar >
+    <AppBar>
       <Toolbar>
         <SideBar/>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} >
           Time Sheet Management
         </Typography>
-        <Button color="inherit">User</Button>
+        <Button variant="contained" color="primary" onClick={()=>{setDarkMode(!darkMode)}}>Toggle Theme</Button>
       </Toolbar>
     </AppBar>
   );
