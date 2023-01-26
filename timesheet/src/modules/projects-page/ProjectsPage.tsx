@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -70,24 +71,26 @@ function Projects() {
     <Box>
       <Typography variant="h3" textAlign="center"  color="inherit"> Projects</Typography>
       <Box textAlign="center"  >
-        <label>Project Name</label>
-        <br/>
-        <input
-          type="text"
-          id="new-project-name"
-          value={newProjectName}
-          onChange={(e) => setNewProjectName(e.target.value)}
-        />
+        <TextField
+          sx={{ mb: 2 }}
+          required
+          label="Project"
+           type="text"
+           id="new-project-name"
+           value={newProjectName}
+           onChange={(e) => setNewProjectName(e.target.value)}
+          />
       </Box>
       <Box textAlign="center"  >
-        <label>Company Name</label>
-        <br/>
-        <input
+         <TextField
+          sx={{ mb: 2 }}
+          required
+          label="Company"
           type="text"
           id="new-project-company"
           value={newProjectCompany}
           onChange={(e) => setNewProjectCompany(e.target.value)}
-        />
+          />
       </Box>
       <Box textAlign="center">
       <Button  onClick={addProject}>
@@ -96,7 +99,9 @@ function Projects() {
       </Box>
       
       <Card sx={{ minWidth: 275 }}>
-        <TableContainer component={Paper}>
+        <TableContainer 
+        sx={{}}
+        component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
