@@ -10,8 +10,14 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useDispatch, useSelector } from "react-redux";
+import { setTimesheetData } from "./timesheetSlice";
+import dayjs, { Dayjs } from "dayjs";
 
 const TimesheetForm = (props: any) => {
+  const dispatch =  useDispatch();
+  const getSelectedDateArray = useSelector<any>((state)=>state?.timesheet?.timesheetData);
+  const dateFormatted = `${props.dateSelected.slice(4,6)}${props.dateSelected.slice(0,3)}${props.dateSelected.slice(6)}`;
   const initialFormState = {
     description: {
       value: "",
@@ -37,8 +43,13 @@ const TimesheetForm = (props: any) => {
       errorMessage: "You must enter your overtime hours",
     },
   };
-  const { openStatus, dateSelected, setDateSelected } = props;
-  const [formValues, setFormValues] = useState<any>(initialFormState);
+  const [initialState,setInitialState] = useState(initialFormState);
+  const formSubmittedStatus = props.selectedDateArray.find((dateSelect:any)=>{
+    return (dateSelect.timeSheetSubmitted===true && dateSelect.date===props.dateSelected);
+  });
+  const { dateSelected } = props;
+  const [formValues, setFormValues] = useState<any>(initialState);
+
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormValues({
@@ -54,9 +65,10 @@ const TimesheetForm = (props: any) => {
     e.preventDefault();
     const { description, startTime, endTime, overTime } = formValues;
     let newFormValues = { ...formValues };
-
+    // console.log(new Date(startTime.value), new Date(endTime.value));
+    // console.log(new Date(startTime.value).getTime() , new Date(endTime.value).getTime());
     if (description.value === "") {
-      console.log("description", description);
+      //console.log("description", description);
       newFormValues = {
         ...newFormValues,
         description: {
@@ -66,7 +78,7 @@ const TimesheetForm = (props: any) => {
       };
     }
     if (overTime.value === "") {
-      console.log("overtime", overTime);
+      //console.log("overtime", overTime);
       newFormValues = {
         ...newFormValues,
         overTime: {
@@ -75,19 +87,19 @@ const TimesheetForm = (props: any) => {
         },
       };
     }
-    if (JSON.stringify(startTime.value) === JSON.stringify(endTime.value)) {
+    if ((JSON.stringify(startTime.value) === JSON.stringify(endTime.value)) || ( new Date(startTime.value).getTime() > new Date(endTime.value).getTime() )) {
       newFormValues = {
         ...newFormValues,
         endTime: {
           ...newFormValues["endTime"],
           error: true,
           value: "",
-          errorMessage: "Please Change End Time",
+          errorMessage: "End Time Incorrect",
         },
         startTime: {
           ...newFormValues["startTime"],
-          error: true,
-          value: "",
+          error: false,
+          value: new Date(startTime.value),
         },
       };
 
@@ -113,6 +125,8 @@ const TimesheetForm = (props: any) => {
       props.setSelectedDateArray([...props.selectedDateArray,timesheetData]);
       resetAllFields();
       props.setFormFilledStatus(true);
+      dispatch(setTimesheetData(timesheetData));
+      //console.log(timesheetData);
     }
   };
 
@@ -143,7 +157,7 @@ const TimesheetForm = (props: any) => {
         onSubmit={handleSubmit}
       >
         <TextField
-          value={formValues.description.value}
+          value={!!formSubmittedStatus?formSubmittedStatus.timesheetInfo.description:formValues.description.value}
           sx={{ mb: 2 }}
           label="Description"
           fullWidth
@@ -157,6 +171,7 @@ const TimesheetForm = (props: any) => {
               : ""
           }
           onChange={handleChange}
+          disabled={!!formSubmittedStatus?formSubmittedStatus.timeSheetSubmitted:false}
         />
         <TextField
           disabled
@@ -171,12 +186,13 @@ const TimesheetForm = (props: any) => {
           <TimePicker
             value={formValues.startTime.value}
             label="Start Time"
-            onChange={(value) => {
+            onChange={(value: Dayjs | null, keyboardInputValue?: string | undefined) => {
+              //console.log(new Date(`${dayjs(dateFormatted).toDate().toString().slice(0,15)} ${value?.format('hh:mm:ss a')} GMT+0530`),"value on chage of start time",value)
               setFormValues({
                 ...formValues,
                 startTime: {
                   ...formValues["startTime"],
-                  value,
+                  value:new Date(dayjs(value).toDate()),
                   error: false,
                 },
               });

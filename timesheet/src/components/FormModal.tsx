@@ -17,9 +17,12 @@ const style = {
 };
 
 const FormModal = (props: any) => {
-  const { openStatus, dateSelected, setDateSelected, formattedDate } = props;
-  const [openModal, setOpenModal] = useState(openStatus);
+  const { dateSelectedStatus, dateSelected, setDateSelected, formattedDate } = props;
+  const [openModal, setOpenModal] = useState(dateSelectedStatus);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
+  const formSubmittedStatus = props.selectedDateArray.find((dateSelect:any)=>{
+    return (dateSelect.timeSheetSubmitted===true && dateSelect.date===dateSelected);
+  });
   const handleOpen = () => {
     setOpenModal(true);
   };
@@ -27,16 +30,18 @@ const FormModal = (props: any) => {
     setOpenModal(false);
   };
   useEffect(() => {
+    //console.log('useffect running ... ')
+    const dateFormatted = `${dateSelected.slice(4,6)}${dateSelected.slice(0,3)}${dateSelected.slice(6)}`;
     if (openModal) {
       handleClose();
       setDateSelected(false);
     } else {
-      if (openStatus) {
+      if (dateSelectedStatus && !(!!formSubmittedStatus) && (new Date(dateFormatted).getTime()<new Date().getTime()) ) {
         handleOpen();
       }
     }
     
-  }, [dateSelected]);
+  }, [dateSelected,dateSelectedStatus]);
 
   useEffect(()=>{
     if(formFilledStatus){
