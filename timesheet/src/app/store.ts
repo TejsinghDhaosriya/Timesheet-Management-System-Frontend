@@ -1,26 +1,25 @@
-import { configureStore, ThunkAction, Action,applyMiddleware } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import createSagaMiddleware from 'redux-saga';
+import { rootSaga } from '../sagas';
+import project from '../modules/projects-page/reducers/project';
+import projects from '../modules/projects-page/reducers/projects';
+import { watchUsersAsync } from '../modules/projects-page/saga/projectSaga';
 import timesheetReducer from '../modules/timesheet-page/timesheetSlice';
-import createSagaMiddleware from "redux-saga";
-// import rootSaga from './rootSaga';
 
-export const sagaMiddleware = createSagaMiddleware();
+
+let sagaMiddleware = createSagaMiddleware()
+const middleware = [sagaMiddleware]
+
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    project,
+    projects,
     timesheet:timesheetReducer
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(sagaMiddleware)
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(middleware),
 });
 
+sagaMiddleware.run(rootSaga)
 
-//sagaMiddleware.run(rootSaga);
-export type AppDispatch = typeof store.dispatch;
-export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+   
