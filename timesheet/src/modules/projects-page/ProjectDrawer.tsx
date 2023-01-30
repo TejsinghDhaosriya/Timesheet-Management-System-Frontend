@@ -74,15 +74,13 @@ function ProjectBar() {
 
   return (
     <>
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="logo"
+      <Button
+      style={{ margin: "10px" }}
+      variant="contained"
         onClick={() => setIsDrawerOpen(true)}
       >
-        Manage Projects
-      </IconButton>
+        Manage Projects without saga
+      </Button>
       <Drawer anchor="right" open={isDrawerOpen}>
         <Box>
           <IconButton

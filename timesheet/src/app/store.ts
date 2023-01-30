@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { rootSaga } from '../sagas';
-import project from '../reducers/project';
-import projects from '../reducers/projects';
-import { watchUsersAsync } from '../sagas/projectSaga';
+import project from '../modules/projects-page/reducers/project';
+import projects from '../modules/projects-page/reducers/projects';
+import { watchUsersAsync } from '../modules/projects-page/saga/projectSaga';
 
 
 let sagaMiddleware = createSagaMiddleware()

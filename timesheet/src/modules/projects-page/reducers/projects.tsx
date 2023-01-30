@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import Projects from "../modules/projects-page/ProjectsPage";
+
 
 // type Project={
 //     id:number
@@ -31,7 +30,15 @@ const projects=createSlice({
     initialState:[{
         id:0,
         projectName:'',
-        companyName:''
+        companyName:'',
+        description:'',
+        start_date:'',
+        end_date:'',
+        total_time_spent:'',
+        status :'',
+        manager_id:'',
+        organization_id:0,        
+        is_active:''
     }],
     reducers:{
             getProjectsSlice: (state, action) => {
