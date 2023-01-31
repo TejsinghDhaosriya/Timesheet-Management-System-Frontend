@@ -30,17 +30,14 @@ function Projects() {
               setIsDrawerOpen(false);
               dispatch(
                 setProjectSlice({
-                  id: 0,
-                  projectName: "",
-                  companyName: "",
-                  description: "",
-                  start_date: "",
-                  end_date: "",
-                  total_time_spent: "",
-                  status: "",
-                  manager_id: "",
-                  organization_id: "",
-                  is_active: "",
+                  id:0,
+                  projectName:'',
+                  description:'',
+                  start_date:'',
+                  end_date:'',
+                  status :'',
+                  manager_id:'',
+                  is_active:''
                 })
               );
             }}

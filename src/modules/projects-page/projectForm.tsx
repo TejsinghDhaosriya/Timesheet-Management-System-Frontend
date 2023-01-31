@@ -17,17 +17,14 @@ const MyForm = () => {
   };
 
  const initialState=[{
-    id:0,
-    projectName:'',
-    companyName:'',
-    description:'',
-    start_date:'',
-    end_date:'',
-    total_time_spent:'',
-    status :'',
-    manager_id:'',
-    organization_id:0,        
-    is_active:''
+  id:0,
+  projectName:'',
+  description:'',
+  start_date:'',
+  end_date:'',
+  status :'',
+  manager_id:'',
+  is_active:''
 }]
 
   const handleSubmit = () => {
@@ -39,14 +36,11 @@ const MyForm = () => {
       setProjectSlice({
         id:0,
         projectName:'',
-        companyName:'',
         description:'',
         start_date:'',
         end_date:'',
-        total_time_spent:'',
         status :'',
         manager_id:'',
-        organization_id:0,        
         is_active:''
     })
     );
@@ -65,35 +59,22 @@ const MyForm = () => {
         />
         <TextField
           style={{ margin: "10px" }}
-          onChange={handleChange("companyName")}
-          placeholder="Enter Company"
-          value={project.companyName}
-        />
-        <br/>
-        <TextField
-          style={{ margin: "10px" }}
           onChange={handleChange("description")}
           placeholder="Enter Description"
           value={project.description}
         />
+        <br />
         <TextField
           style={{ margin: "10px" }}
           onChange={handleChange("start_date")}
           placeholder="Enter Start Date"
           value={project.start_date}
         />
-        <br/>
         <TextField
           style={{ margin: "10px" }}
           onChange={handleChange("end_date")}
           placeholder="Enter End Date"
           value={project.end_date}
-        />
-        <TextField
-          style={{ margin: "10px" }}
-          onChange={handleChange("total_time_spent")}
-          placeholder="Enter Total Time Spent"
-          value={project.total_time_spent}
         />
         <br/>
         <TextField
@@ -125,14 +106,11 @@ const MyForm = () => {
             setProjectSlice({
               id:0,
               projectName:'',
-              companyName:'',
               description:'',
               start_date:'',
               end_date:'',
-              total_time_spent:'',
               status :'',
               manager_id:'',
-              organization_id:0,        
               is_active:''
           })
           )}

@@ -30,14 +30,11 @@ const projects=createSlice({
     initialState:[{
         id:0,
         projectName:'',
-        companyName:'',
         description:'',
         start_date:'',
         end_date:'',
-        total_time_spent:'',
         status :'',
         manager_id:'',
-        organization_id:0,        
         is_active:''
     }],
     reducers:{
