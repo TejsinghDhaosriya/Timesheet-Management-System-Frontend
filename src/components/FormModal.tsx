@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Modal, Button, Typography, IconButton } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import TimesheetForm from "../modules/timesheet-page/TimesheetForm";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 const style = {
@@ -17,7 +17,7 @@ const style = {
 };
 
 const FormModal = (props: any) => {
-  const { dateSelectedStatus, dateSelected, setDateSelected, formattedDate } = props;
+  const { dateSelectedStatus, dateSelected, setDateSelectedStatus, formattedDate,setSelectedDate } = props;
   const [openModal, setOpenModal] = useState(dateSelectedStatus);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
   const formSubmittedStatus = props.selectedDateArray.find((dateSelect:any)=>{
@@ -28,15 +28,16 @@ const FormModal = (props: any) => {
   };
   const handleClose = () => {
     setOpenModal(false);
+    setSelectedDate("");
+    setDateSelectedStatus(false);
   };
   useEffect(() => {
     //console.log('useffect running ... ')
     const dateFormatted = `${dateSelected.slice(4,6)}${dateSelected.slice(0,3)}${dateSelected.slice(6)}`;
     if (openModal) {
       handleClose();
-      setDateSelected(false);
     } else {
-      if (dateSelectedStatus && !(!!formSubmittedStatus) && (new Date(dateFormatted).getTime()<new Date().getTime()) ) {
+      if (dateSelectedStatus && (new Date(dateFormatted).getTime()<new Date().getTime()) ) {
         handleOpen();
       }
     }

@@ -24,7 +24,7 @@
 /* css for day which has timesheet filled */
 button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class.timesheet-filled{
     /* pointer-events: none; */
-    cursor:auto;
+    cursor:pointer;
     position: relative;
 }
 button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class.timesheet-filled:hover {
@@ -42,7 +42,7 @@ button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar
 }
 
 button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class.future-date-disabled{
-    cursor:auto;
+    cursor:pointer;
 }
 .react-calendar-tile-class{
     position: relative;

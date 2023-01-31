@@ -9,14 +9,18 @@ import { Typography, Tooltip } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const TimesheetPage = () => {
-  const getSelectedDateArray = useSelector<any>((state)=>state?.timesheet?.timesheetData);
+  const state = useSelector((state)=>state);
+  const getSelectedDateArray = useSelector<any>((state)=>state.timesheet.timesheetData);
   const [date, setDate] = useState<Date>(new Date());
   const [formatedDate, setFormatedDate] = useState("");
-  const [dateSelectedStatus, setDateSelected] = useState(false);
+  const [dateSelectedStatus, setDateSelectedStatus] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedDateArray, setSelectedDateArray] = useState<any>(getSelectedDateArray);
   //--------------------------------------------------------
   //--------------------------------------------------------
+  useEffect(()=>{
+    setSelectedDateArray(getSelectedDateArray);
+  },[selectedDateArray,getSelectedDateArray])
 
   function checkDateInSelectedDateArray(dateString: string) {
     const isDatePresent = selectedDateArray.filter((selDate:any) => {
@@ -38,7 +42,7 @@ const TimesheetPage = () => {
         <Calendar
           onChange={(value: Date) => {
             setSelectedDate(dayjs(value).format("DD/MM/YYYY"));
-            setDateSelected(true);
+            setDateSelectedStatus(true);
           }}
           value={date}
           tileClassName="react-calendar-tile-class"
@@ -80,13 +84,14 @@ const TimesheetPage = () => {
       <FormModal
         dateSelectedStatus={dateSelectedStatus}
         dateSelected={selectedDate}
-        setDateSelected={(value: boolean) => setDateSelected(value)}
+        setDateSelectedStatus={(value: boolean) => setDateSelectedStatus(value)}
         formattedDate={formatedDate}
         setSelectedDateArray={setSelectedDateArray}
         selectedDateArray={selectedDateArray}
+        setSelectedDate={(value:string)=>{setSelectedDate(value)}}
       />
       <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {selectedDateArray.map((info:any, idx:number) => {
+        {!!selectedDateArray && selectedDateArray.map((info:any, idx:number) => {
           const { timesheetInfo } = info;
           return (
             <div
