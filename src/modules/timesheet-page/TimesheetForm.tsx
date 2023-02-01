@@ -35,6 +35,8 @@ const TimesheetForm = (props: any) => {
     },
     project_manager: {
       value: getProjectInfo.project_manager,
+      error:false,
+      errorMessage:"Please select a manager"
     },
     description: {
       value: "",
@@ -71,7 +73,7 @@ const TimesheetForm = (props: any) => {
     e.preventDefault();
     const { description, totalHours,project_manager } = formValues;
     let newFormValues = { ...formValues };
-    console.log("newFormValues",newFormValues);
+    //console.log("newFormValues",newFormValues);
     if (description.value === "") {
       //console.log("description", description);
       newFormValues = {
@@ -98,22 +100,29 @@ const TimesheetForm = (props: any) => {
         project_manager: {
           ...newFormValues["project_manager"],
           error: true,
+          errorMessage:"Please select a manager"
         },
       };
     }
-    if (description.value !== "" && totalHours.value !== "" && project_manager.value.length!=0) {
+    if(project_manager.value.length>2){
+      newFormValues = {
+        ...newFormValues,
+        project_manager: {
+          ...newFormValues["project_manager"],
+          error: true,
+          errorMessage:'Only 2 managers are allowed'
+        },
+      };
+    }
+    if (description.value !== "" && totalHours.value !== "" && project_manager.value.length!=0 && project_manager.value.length<=2) {
       //console.log("Form submit successfully");
       const timesheetData = {
         date: dateSelected,
         description: newFormValues.description.value,
         totalHours: Number(newFormValues.totalHours.value),
         timeSheetSubmitted: true,
-        project_name: {
-          value: formValues.project_name.value,
-        },
-        project_manager: {
-          value: formValues?.project_manager.value,
-        },
+        project_name: formValues.project_name.value,
+        project_manager: formValues?.project_manager.value,
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);
       props.setFormFilledStatus(true);
@@ -279,11 +288,11 @@ const TimesheetForm = (props: any) => {
               multiple
               name='project_manager'
             >
-              <MenuItem value={"Karan"}>Karan</MenuItem>
-              <MenuItem value={"Arjun"}>Arjun</MenuItem>
-              <MenuItem value={"Rahul"}>Rahul</MenuItem>
-              <MenuItem value={"<some_name>"}>Some_Name</MenuItem>
+              {["Karan","Arjun","Rahul","<some_name>"].map((name)=>{
+                return <MenuItem key={name} value={name}>{name}</MenuItem>
+              })}
             </Select>
+            {formValues.project_manager.error?<FormHelperText>{formValues.project_manager.errorMessage}</FormHelperText>:<></>}
           </FormControl>
         <Button
           type="submit"

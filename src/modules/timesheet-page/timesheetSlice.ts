@@ -31,6 +31,9 @@ export const timesheetSlice = createSlice({
   name: "timesheet",
   initialState,
   reducers: {
+    setTimesheetData:(state,action) =>{
+      state.timesheetData = action.payload
+    },
     addTimesheetData: (state, action) => {     
       state.timesheetData.push(action.payload);
     },
@@ -43,7 +46,8 @@ export const timesheetSlice = createSlice({
         timesheetData:filteredState
       };
     },
-    updateTimesheetData: (state,action) =>{;
+    updateTimesheetData: (state,action) =>{
+      const {project_manager,project_name} = action.payload
       const filteredState = state.timesheetData.filter((tsInfo)=>{
         return tsInfo.date!==action.payload.date
       });
@@ -53,6 +57,11 @@ export const timesheetSlice = createSlice({
       ]
       return {
         ...state,
+        project_info:{
+          ...state.project_info,
+          project_name:project_name,
+          project_manager:project_manager
+        },
         timesheetData:updatedState
       };
     }
