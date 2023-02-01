@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
+import {Box,Button,FormControl,FormHelperText,IconButton,InputLabel,MenuItem,Select,TextField,Typography,} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -6,6 +6,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTimesheetData,
@@ -17,13 +18,24 @@ import { formSubmittedStatusHelper } from "./helper";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
-  const getSelectedDateArray = useSelector<any>((state) => state);
+  //const getSelectedDateArray = useSelector<any>((state) => state);
+  const getProjectInfo: any = useSelector<any>(
+    (state) => state.timesheet.project_info
+  );
+  //console.log("getProjectInfo", getProjectInfo);
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
     props.dateSelected
   );
   // const dateFormatted = `${props.dateSelected.slice(4,6)}${props.dateSelected.slice(0,3)}${props.dateSelected.slice(6)}`;
   const initialFormState = {
+    project_name: {
+      value: getProjectInfo.project_name,
+      error:false
+    },
+    project_manager: {
+      value: getProjectInfo.project_manager,
+    },
     description: {
       value: "",
       error: false,
@@ -32,20 +44,10 @@ const TimesheetForm = (props: any) => {
     date: {
       value: props.dateSelected,
     },
-    startTime: {
-      value: null,
-      error: false,
-      errorMessage: "You must enter your start time",
-    },
-    endTime: {
-      value: null,
-      error: false,
-      errorMessage: "You must enter your end time cannot be same as start time",
-    },
-    overTime: {
+    totalHours: {
       value: "",
       error: false,
-      errorMessage: "You must enter your overtime hours",
+      errorMessage: "You must enter your total hours spent",
     },
   };
 
@@ -53,7 +55,7 @@ const TimesheetForm = (props: any) => {
   const { dateSelected } = props;
   const [formValues, setFormValues] = useState<any>(initialState);
   const [editFormStatus, setEditFormStatus] = useState<any>(false);
-
+  const [editDropdown,setEditDropdown] = useState(false);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormValues({
@@ -67,29 +69,9 @@ const TimesheetForm = (props: any) => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const { description, startTime, endTime, overTime } = formValues;
-    let newFormValues = {...formValues};
-    //console.log(newFormValues);
-    // let editFromValues = {
-    //   ...formValues,
-    //     description:{
-    //       ...newFormValues["description"],
-    //       value:formSubmittedStatus?.timesheetInfo.description
-    //     },
-    //     startTime:{
-    //       ...newFormValues["startTime"],
-    //       value:formSubmittedStatus?.timesheetInfo.startTime
-    //     },
-    //     endTime:{
-    //       ...newFormValues["endTime"],
-    //       value:formSubmittedStatus?.timesheetInfo.endTime
-    //     },
-    //     overTime:{
-    //       ...newFormValues["overTime"],
-    //       value:formSubmittedStatus?.timesheetInfo.overTime
-    //     },
-    //   }
-    // newFormValues= editFormStatus ? editFromValues: { ...formValues };
+    const { description, totalHours,project_manager } = formValues;
+    let newFormValues = { ...formValues };
+    console.log("newFormValues",newFormValues);
     if (description.value === "") {
       //console.log("description", description);
       newFormValues = {
@@ -100,80 +82,44 @@ const TimesheetForm = (props: any) => {
         },
       };
     }
-    if (overTime.value === "") {
-      //console.log("overtime", overTime);
+    if (totalHours.value === "") {
+      //console.log("overtime", totalHours);
       newFormValues = {
         ...newFormValues,
-        overTime: {
-          ...newFormValues["overTime"],
+        totalHours: {
+          ...newFormValues["totalHours"],
           error: true,
         },
       };
     }
-    if (startTime.value === null) {
-      //console.log("startTime", startTime);
+    if(project_manager.value.length==0){
       newFormValues = {
         ...newFormValues,
-        startTime: {
-          ...newFormValues["startTime"],
+        project_manager: {
+          ...newFormValues["project_manager"],
           error: true,
-          value: "",
-          errorMessage: "Please Enter Start Time ",
         },
       };
     }
-    if (endTime.value === null) {
-      newFormValues = {
-        ...newFormValues,
-        endTime: {
-          ...newFormValues["endTime"],
-          error: true,
-          value: "",
-          errorMessage: "Please Enter End Time ",
-        },
-      };
-    }
-    // if ((JSON.stringify(startTime.value) === JSON.stringify(endTime.value))
-    // // || ( new Date(startTime.value).getTime() > new Date(endTime.value).getTime() )
-    // )
-    // {
-    //   newFormValues = {
-    //     ...newFormValues,
-    //     endTime: {
-    //       ...newFormValues["endTime"],
-    //       error: true,
-    //       value: "",
-    //       errorMessage: "End Time Incorrect",
-    //     },
-    //     startTime: {
-    //       ...newFormValues["startTime"],
-    //       error: false,
-    //       value: "",
-    //     },
-    //   };
-    // }
-    if (
-      description.value !== "" &&
-      overTime.value !== "" &&
-      startTime.value !== "" &&
-      endTime.value !== ""
-    ) {
+    if (description.value !== "" && totalHours.value !== "" && project_manager.value.length!=0) {
       //console.log("Form submit successfully");
       const timesheetData = {
         date: dateSelected,
-        timesheetInfo: {
-          description: newFormValues.description.value,
-          startTime: newFormValues.startTime.value,
-          endTime: newFormValues.endTime.value,
-          overTime: newFormValues.overTime.value,
-        },
+        description: newFormValues.description.value,
+        totalHours: Number(newFormValues.totalHours.value),
         timeSheetSubmitted: true,
+        project_name: {
+          value: formValues.project_name.value,
+        },
+        project_manager: {
+          value: formValues?.project_manager.value,
+        },
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);
       props.setFormFilledStatus(true);
 
-      if(editFormStatus){
-        dispatch(updateTimesheetData(timesheetData))
+      if(editFormStatus) {
+        dispatch(updateTimesheetData(timesheetData));
       }else{
         dispatch(addTimesheetData(timesheetData));
       }
@@ -188,31 +134,29 @@ const TimesheetForm = (props: any) => {
   const resetAllFields = () => {
     setFormValues(initialFormState);
   };
-  useEffect(()=>{
+  useEffect(() => {
     // console.log("useffect called when formSTatus submiied chencged");
-      if(!!formSubmittedStatus && formSubmittedStatus.timeSheetSubmitted){
-        let editFormValues = {
-          ...formValues,
-            description:{
-              ...formValues["description"],
-              value:formSubmittedStatus?.timesheetInfo.description
-            },
-            startTime:{
-              ...formValues["startTime"],
-              value:formSubmittedStatus?.timesheetInfo.startTime
-            },
-            endTime:{
-              ...formValues["endTime"],
-              value:formSubmittedStatus?.timesheetInfo.endTime
-            },
-            overTime:{
-              ...formValues["overTime"],
-              value:formSubmittedStatus?.timesheetInfo.overTime
-            },
-          }
-        setFormValues(editFormValues);
-      }
-  },[editFormStatus])
+    if (!!formSubmittedStatus && formSubmittedStatus.timeSheetSubmitted) {
+      let editFormValues = {
+        ...formValues,
+        description: {
+          ...formValues["description"],
+          value: formSubmittedStatus?.description,
+        },
+        totalHours: {
+          ...formValues["totalHours"],
+          value: formSubmittedStatus?.totalHours,
+        },
+        project_name: {
+          value: getProjectInfo.project_name,
+        },
+        project_manager: {
+          value: getProjectInfo.project_manager,
+        },
+      };
+      setFormValues(editFormValues);
+    }
+  }, [editFormStatus]);
   return (
     <Box sx={{}}>
       <Box
@@ -225,19 +169,8 @@ const TimesheetForm = (props: any) => {
         }}
       >
         <Typography variant="h5">Time Sheet Information</Typography>
-        <IconButton onClick={props.closeModal}>
-          <CancelIcon />
-        </IconButton>
         {!!formSubmittedStatus ? (
           <>
-            <IconButton
-              onClick={() => {
-                setEditFormStatus(true);
-                //getDetailsOfTimeSheetSelected();
-              }}
-            >
-              <EditIcon />
-            </IconButton>
             <IconButton
               onClick={() => {
                 dispatch(deleteTimesheetData(props.dateSelected));
@@ -246,10 +179,21 @@ const TimesheetForm = (props: any) => {
             >
               <DeleteIcon />
             </IconButton>
+            <IconButton
+              onClick={() => {
+                setEditFormStatus(true);
+                setEditDropdown(true);
+              }}
+            >
+              <EditIcon />
+            </IconButton>
           </>
         ) : (
           <></>
         )}
+        <IconButton onClick={props.closeModal}>
+          <CancelIcon />
+        </IconButton>
       </Box>
       <Box
         component="form"
@@ -257,6 +201,14 @@ const TimesheetForm = (props: any) => {
         autoComplete="off"
         onSubmit={handleSubmit}
       >
+        <TextField
+          value={formValues.project_name.value}
+          sx={{ mb: 2 }}
+          label="Project Name"
+          fullWidth
+          name="project_name"
+          disabled
+        />
         <TextField
           value={formValues.description.value}
           sx={{ mb: 2 }}
@@ -287,113 +239,52 @@ const TimesheetForm = (props: any) => {
           fullWidth
           name="date"
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker
-            disabled={
-              !!formSubmittedStatus &&
-              formSubmittedStatus.timeSheetSubmitted &&
-              !editFormStatus
-            }
-            value={formValues.startTime.value}
-            label="Start Time"
-            onChange={(
-              value: Dayjs | null,
-              keyboardInputValue?: string | undefined
-            ) => {
-              const dateFormatted = `${props.dateSelected.slice(
-                4,
-                6
-              )}${props.dateSelected.slice(0, 3)}${props.dateSelected.slice(
-                6
-              )}`;
-              setFormValues({
-                ...formValues,
-                startTime: {
-                  ...formValues["startTime"],
-                  //value:new Date(dayjs(value).toDate()),
-                  value: new Date(
-                    `${dayjs(dateFormatted)
-                      .toDate()
-                      .toString()
-                      .slice(0, 15)} ${value?.format("hh:mm:ss a")} GMT+0530`
-                  ).toString(),
-                  error: false,
-                },
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                id={"outlined-error-helper-text"}
-                helperText={
-                  formValues.startTime.error
-                    ? formValues.startTime.errorMessage
-                    : ""
-                }
-                error={formValues.startTime.error}
-                sx={{ mb: 2 }}
-                {...params}
-              />
-            )}
-          />
-          <TimePicker
-            disabled={
-              !!formSubmittedStatus &&
-              formSubmittedStatus.timeSheetSubmitted &&
-              !editFormStatus
-            }
-            value={ formValues.endTime.value}
-            label="End Time"
-            onChange={(value) => {
-              const dateFormatted = `${props.dateSelected.slice(
-                4,
-                6
-              )}${props.dateSelected.slice(0, 3)}${props.dateSelected.slice(
-                6
-              )}`;
-              setFormValues({
-                ...formValues,
-                endTime: {
-                  ...formValues["endTime"],
-                  value: new Date(
-                    `${dayjs(dateFormatted)
-                      .toDate()
-                      .toString()
-                      .slice(0, 15)} ${value?.format("hh:mm:ss a")} GMT+0530`
-                  ).toString(),
-                  error: false,
-                },
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                id={"outlined-error-helper-text"}
-                helperText={
-                  formValues.endTime.error
-                    ? formValues.endTime.errorMessage
-                    : ""
-                }
-                error={formValues.endTime.error}
-                sx={{ mb: 2 }}
-                {...params}
-              />
-            )}
-          />
-        </LocalizationProvider>
         <TextField
-          value={formValues.overTime.value }
+          type="number"
+          value={formValues.totalHours.value}
           sx={{ mb: 2 }}
-          label="Overtime Hours"
+          label="Total Hours"
           fullWidth
           required
           onChange={handleChange}
-          error={formValues.overTime.error}
-          name="overTime"
+          error={formValues.totalHours.error}
+          name="totalHours"
           disabled={
             !!formSubmittedStatus &&
             formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
+          id={"outlined-error-helper-text"}
+          helperText={
+            formValues.totalHours.error
+              ? formValues.totalHours.errorMessage
+              : ""
+          }
         />
+          <FormControl
+            sx={{ mb: 2}}
+            disabled={!editDropdown}
+            error={formValues.project_manager.error}
+            fullWidth
+          >
+            <InputLabel id="demo-simple-select-error-label">
+              Project Manager
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-error-label"
+              id="demo-simple-select-error"
+              value={formValues.project_manager.value}
+              label="Project Manager"
+              onChange={handleChange}
+              multiple
+              name='project_manager'
+            >
+              <MenuItem value={"Karan"}>Karan</MenuItem>
+              <MenuItem value={"Arjun"}>Arjun</MenuItem>
+              <MenuItem value={"Rahul"}>Rahul</MenuItem>
+              <MenuItem value={"<some_name>"}>Some_Name</MenuItem>
+            </Select>
+          </FormControl>
         <Button
           type="submit"
           variant="outlined"
