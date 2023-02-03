@@ -12,33 +12,80 @@ import { DELETE_PROJECT_BY_ID, GET_PROJECTS } from "./actions/projectTypes";
 import { setProjectSlice } from "./reducers/project";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
+import { Box, Drawer, IconButton } from "@mui/material";
 import ProjectDrawer from "./ProjectDrawer";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { useEffect, useState } from "react";
+import MyForm from "./projectForm";
+import CloseIcon from "@mui/icons-material/Close";
+
+interface Project{
+  id:number
+  name:string
+  description:string,
+  startDate:string,
+  endDate:string,
+  status :number,
+  managerId:number,
+}
 
 export default function MyTable() {
   const project = useSelector((state: any) => state.projects);
   const dispatch = useDispatch();
-  React.useEffect((): any => {
+  useEffect((): any => {
     dispatch({ type: GET_PROJECTS });
   }, []);
-  
-  const [sortBy, setSortBy] = React.useState<"Active" | "Inactive" | "All">(
-    "All"
-  );
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<
+    | "Pending"
+    | "Started"
+    | "Failed"
+    | "Paused"
+    | "Success"
+    | "Cancelled"
+    | "All"
+  >("All");
   const handleSortChange = (event: any) => {
-    setSortBy(event.target.value as "Active" | "Inactive" | "All");
-    console.log(event.target.value);
+    setSortBy(
+      event.target.value as
+        | "Pending"
+        | "Started"
+        | "Failed"
+        | "Paused"
+        | "Success"
+        | "Cancelled"
+        | "All"
+    );
   };
 
+  
+
+  const numberMap:any={
+    0:'Pending',
+    1:'Paused',
+    2:'Started',
+    3:'Failed',
+    4:'Success',
+    5:'Cancelled'
+  };
+
+  const managerMap:any={
+    0:'Manager 1',
+    1:'Manager 2',
+    2:'Manager 3',
+    3:'Manager 4',
+    4:'Manager 5'
+
+  }
   const sortedData =
     sortBy === "All"
       ? project
-      : project.filter((row: any) => row.status === sortBy);
+      : project.filter((row: any) => numberMap[row.status] === sortBy);
 
   return (
     <>
@@ -46,15 +93,19 @@ export default function MyTable() {
         <FormControl>
           <Select value={sortBy} onChange={handleSortChange}>
             <MenuItem value="All">All</MenuItem>
-            <MenuItem value="Active">Active</MenuItem>
-            <MenuItem value="Inactive">Inactive</MenuItem>
+            <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="Started">Started</MenuItem>
+            <MenuItem value="Failed">Failed</MenuItem>
+            <MenuItem value="Paused">Paused</MenuItem>
+            <MenuItem value="Success">Success</MenuItem>
+            <MenuItem value="Cancelled">Cancelled</MenuItem>
           </Select>
         </FormControl>
       </Toolbar>
       <TableContainer component={Paper} sx={{}}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
-            <TableRow>
+            <TableRow sx={{backgroundColor:"#D5D5D5" ,fontWeight:"bold"}}>
               <TableCell align="right">Id</TableCell>
               <TableCell align="right">Project</TableCell>
               <TableCell align="right">Description</TableCell>
@@ -67,31 +118,71 @@ export default function MyTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedData.map((row: any) => (
+            {sortedData.map((row: Project) => (
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="right">{row.id}</TableCell>
                 <TableCell align="right" component="th" scope="row">
-                  {row.projectName}
+                  {row.name}
                 </TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.start_date}</TableCell>
-                <TableCell align="right">{row.end_date}</TableCell>
-                <TableCell align="right">{row.status}</TableCell>
-                <TableCell align="right">{row.manager_id}</TableCell>
+                <TableCell align="right">{row.startDate}</TableCell>
+                <TableCell align="right">{row.endDate}</TableCell>
+                <TableCell align="right">{numberMap[row.status]}</TableCell>
+                <TableCell align="right">{managerMap[row.managerId]}</TableCell>
                 <TableCell align="right">
                   <IconButton
+                  sx={{backgroundColor:"#D5D5D5"}}
                     onClick={() => {
                       dispatch(setProjectSlice(row));
+                      setIsDrawerOpen(!isDrawerOpen);
                     }}
                   >
                     <EditIcon />
                   </IconButton>
+                  <Drawer
+                    PaperProps={{
+                      sx: {
+                        width: 400,
+                      },
+                    }}
+                    anchor="right"
+                    open={isDrawerOpen}
+                  >
+                    <Box    style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
+                      <IconButton
+                        size="small"
+                        edge="end"
+                        color="inherit"
+                        aria-label="logo"
+                        onClick={() => {
+                          setIsDrawerOpen(false);
+                          dispatch(
+                            setProjectSlice({
+                              id: 0,
+                              projectName: "",
+                              description: "",
+                              start_date: "",
+                              end_date: "",
+                              status: 0,
+                              manager_id: 0,
+                            })
+                          );
+                        }}
+                      >
+                        <CloseIcon  />
+                      </IconButton>
+                    </Box>
+                    <Box>
+                      <MyForm />
+                    </Box>
+                  </Drawer>
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
+                  sx={{backgroundColor:"#D5D5D5"}}
                     onClick={() =>
                       dispatch({ type: DELETE_PROJECT_BY_ID, id: row.id })
                     }

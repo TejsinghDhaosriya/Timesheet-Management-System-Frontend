@@ -6,21 +6,32 @@ import CloseIcon from "@mui/icons-material/Close";
 import { setProjectSlice } from "./reducers/project";
 import { useDispatch } from "react-redux";
 import ProjectBar from "./ProjectDrawer";
+import { borderRight } from "@mui/system";
 
 function Projects() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const dispatch = useDispatch();
   return (
     <>
+    <Box style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
       <Button
-        style={{ margin: "10px" }}
+        style={{ margin: "20px" ,alignItems:"right"}}
         variant="contained"
         onClick={() => setIsDrawerOpen(true)}
       >
         Add Projects
       </Button>
-      <Drawer anchor="right" open={isDrawerOpen}>
-        <Box>
+      </Box>
+      <Drawer
+        PaperProps={{
+          sx: {
+            width: 500,
+          },
+        }}
+        anchor="right"
+        open={isDrawerOpen}
+      >
+        <Box style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
           <IconButton
             size="small"
             edge="start"
@@ -30,14 +41,13 @@ function Projects() {
               setIsDrawerOpen(false);
               dispatch(
                 setProjectSlice({
-                  id:0,
-                  projectName:'',
-                  description:'',
-                  start_date:'',
-                  end_date:'',
-                  status :'',
-                  manager_id:'',
-                  is_active:''
+                  id: 0,
+                  name: "",
+                  description: "",
+                  startDate: "",
+                  endDate: "",
+                  status: 0,
+                  managerId: 0,
                 })
               );
             }}

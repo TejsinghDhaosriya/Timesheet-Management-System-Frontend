@@ -4,13 +4,12 @@ const project = createSlice({
     name: 'project',
     initialState:{
         id:0,
-        projectName:'',
+        name:'',
         description:'',
-        start_date:'',
-        end_date:'',
-        status :'',
-        manager_id:'',
-        is_active:''
+        startDate:'',
+        endDate:'',
+        status :0,
+        managerId:0
 
     },
     reducers: {

@@ -20,6 +20,7 @@ export function* createProjectSaga(action:any) {
 }
 
 export function* updateProjectSaga(action:any) {
+    console.log(action.project)
     yield updateProjectAPI(action.project)
     yield put(editProjectSlice(action.project))
 }

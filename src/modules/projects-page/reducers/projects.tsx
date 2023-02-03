@@ -1,11 +1,16 @@
+import formGroupClasses from "@mui/material/FormGroup/formGroupClasses";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 
-// type Project={
-//     id:number
-//     projectName:string
-//     companyName:string
-// }
+interface Project{
+    id:number
+    projectName:string
+    description:string,
+    start_date:Date,
+    end_date:Date,
+    status :number,
+    manager_id:number,
+}
 
 // type IntialState={
 //     loading:boolean
@@ -18,6 +23,15 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 //     projects:[],
 //     error:''
 // }
+const intialState:Project={
+        id:0,
+        projectName:'',
+        description:'',
+        start_date:new Date(),
+        end_date:new Date(),
+        status :0,
+        manager_id:0,
+}
 
 // export const fetchProjects=createAsyncThunk('project/fetchProjects',()=>{
 //     return axios
@@ -27,15 +41,17 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const projects=createSlice({
     name:'projects',
+    // initialState:[{
+    //     intialState
+    // }],
     initialState:[{
         id:0,
-        projectName:'',
+        name:'',
         description:'',
-        start_date:'',
-        end_date:'',
-        status :'',
-        manager_id:'',
-        is_active:''
+        startDate:'',
+        endDate:'',
+        status :0,
+        managerId:0,
     }],
     reducers:{
             getProjectsSlice: (state, action) => {
@@ -43,6 +59,7 @@ const projects=createSlice({
                 return state
             },
             addProjectSlice: (state, action) => {
+                console.log(action.payload)
                 state.push(action.payload)
                 return state
             },
