@@ -91,7 +91,7 @@ const TimesheetPage = () => {
           setSelectedDate(value);
         }}
       />
-      <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+      {/* <Box sx={{ display: "flex", flexWrap: "wrap" }}>
         {!!selectedDateArray &&
           selectedDateArray.map((info: any, idx: number) => {
             const { date, description, totalHours } = info;
@@ -112,7 +112,7 @@ const TimesheetPage = () => {
               </div>
             );
           })}
-      </Box>
+      </Box>*/}
     </Box>
   );
 };
