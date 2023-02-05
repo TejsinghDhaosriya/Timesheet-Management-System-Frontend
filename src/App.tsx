@@ -9,7 +9,6 @@ import { withTheme } from "./theme";
 
 function App(props: any) {
   return (
-    <BrowserRouter>
       <>
         <Box
           sx={{
@@ -27,7 +26,6 @@ function App(props: any) {
         </Routes>
         </Box>
       </>
-    </BrowserRouter>
   );
 }
 

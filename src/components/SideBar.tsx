@@ -1,65 +1,106 @@
-import {
-  IconButton,
-  Typography,
-  Box,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Drawer,
-} from "@mui/material";
-import React, { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import EditIcon from "@mui/icons-material/Edit";
+import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
+import Tooltip from "@mui/material/Tooltip";
+import { styled } from "@mui/material/styles";
+import { List, ListItem, ListItemIcon, Drawer } from "@mui/material";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import HelpIcon from "@mui/icons-material/Help";
+import PunchClockIcon from "@mui/icons-material/PunchClock";
 
-interface SideBarProps{
-    
-}
+import { DRAWER_WIDTH } from "../utils/constants";
+import { fontWeight } from "@mui/system";
 
-function SideBar(Props:SideBarProps) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+let drawerList = [
+  { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
+  { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
+  { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
+  { key: "help", text: "Help", icon: <HelpIcon /> },
+];
+
+interface SideBarProps {}
+
+function SideBar(Props: SideBarProps) {
+  const [isSelected, setIsSelected] = useState("projects");
+
+  const list = {
+    textAlign: "center",
+  };
+  const ListItemStyled = styled(ListItem)(({ theme }) => ({
+    borderRadius: "14px",
+    padding: "16px",
+    height: "60px",
+    width: "60px",
+    marginBottom: "10px",
+    "&.Mui-selected": {
+      backgroundColor: theme.palette.primary.main,
+    },
+  }));
+  const ListItemIconStyled = styled(ListItemIcon)({
+    fontSize: "24px",
+    color: "#D2D2D2",
+  });
+  const listItemSelectedIcon: any = {
+    color: "red",
+  };
+  const handleIsSelected = (e: any, key: string) => {
+    setIsSelected(key);
+  };
+  const DrawerStyled = styled(Drawer)({
+    display: "flex",
+    flexDirection: "column",
+    overflowX: "hidden",
+    overflowY: "hidden",
+    width: `${DRAWER_WIDTH}px)`,
+  });
   return (
     <>
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="logo"
-        onClick={() => setIsDrawerOpen(true)}
-      >
-        <MenuIcon />
-      </IconButton>
-      <Drawer
+      <DrawerStyled
+        hideBackdrop={true}
         anchor="left"
-        open={isDrawerOpen}
-        onClick={() => setIsDrawerOpen(false)}
+        open={true}
+        variant="permanent"
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
       >
-        <Box p={2} width="250px" textAlign="center" role="presentation">
-          <Typography variant="h6" component="div">
-            Side Panel
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemButton>
-                <ListItemIcon>
-                  <EditIcon />
-                </ListItemIcon>
-                <ListItemText primary="Projects" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem>
-              <ListItemButton>
-                <ListItemIcon>
-                  <CalendarMonthIcon />
-                </ListItemIcon>
-                <ListItemText primary="Calendar" />
-              </ListItemButton>
-            </ListItem>
+        <div
+          style={{
+            padding: "20px",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: "3em",
+              fontWeight: "bolder",
+            }}
+          >
+            TMS
+          </div>
+          <List sx={{ list }}>
+            {drawerList.map((item, index) => {
+              return (
+                <Tooltip
+                  title={item.text}
+                  aria-label={item.text}
+                  placement="right"
+                  key={item.key}
+                >
+                  <Link to={`/${item.key}`}>
+                    <ListItemStyled
+                      selected={isSelected === item.key ? true : false}
+                      onClick={(e) => handleIsSelected(e, item.key)}
+                    >
+                      <ListItemIconStyled>{item.icon}</ListItemIconStyled>
+                    </ListItemStyled>
+                  </Link>
+                </Tooltip>
+              );
+            })}
           </List>
-        </Box>
-      </Drawer>
+        </div>
+      </DrawerStyled>
     </>
   );
 }
