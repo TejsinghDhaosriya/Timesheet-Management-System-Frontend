@@ -6,7 +6,7 @@ import ProjectsPage from "./modules/projects-page/ProjectsPage";
 import TimesheetPage from "./modules/timesheet-page/TimesheetPage";
 import { BrowserRouter } from "react-router-dom";
 import { withTheme } from "./theme";
-
+import { DRAWER_WIDTH } from "./utils/constants";
 function App(props: any) {
   return (
       <>
