@@ -22,16 +22,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState } from "react";
 import MyForm from "./projectForm";
 import CloseIcon from "@mui/icons-material/Close";
-
-interface Project{
-  id:number
-  name:string
-  description:string,
-  startDate:string,
-  endDate:string,
-  status :number,
-  managerId:number,
-}
+import Project from "./ProjectInterface";
+import { intialState } from "./ProjectState";
 
 export default function MyTable() {
   const project = useSelector((state: any) => state.projects);
@@ -63,25 +55,22 @@ export default function MyTable() {
     );
   };
 
-  
-
-  const numberMap:any={
-    0:'Pending',
-    1:'Paused',
-    2:'Started',
-    3:'Failed',
-    4:'Success',
-    5:'Cancelled'
+  const numberMap: any = {
+    0: "Pending",
+    1: "Paused",
+    2: "Started",
+    3: "Failed",
+    4: "Success",
+    5: "Cancelled",
   };
 
-  const managerMap:any={
-    0:'Manager 1',
-    1:'Manager 2',
-    2:'Manager 3',
-    3:'Manager 4',
-    4:'Manager 5'
-
-  }
+  const managerMap: any = {
+    0: "Manager 1",
+    1: "Manager 2",
+    2: "Manager 3",
+    3: "Manager 4",
+    4: "Manager 5",
+  };
   const sortedData =
     sortBy === "All"
       ? project
@@ -103,9 +92,9 @@ export default function MyTable() {
         </FormControl>
       </Toolbar>
       <TableContainer component={Paper} sx={{}}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table sx={{ minWidth: 200 }} aria-label="simple table">
           <TableHead>
-            <TableRow sx={{backgroundColor:"#D5D5D5" ,fontWeight:"bold"}}>
+            <TableRow sx={{ backgroundColor: "#D5D5D5", fontWeight: "bold" }}>
               <TableCell align="right">Id</TableCell>
               <TableCell align="right">Project</TableCell>
               <TableCell align="right">Description</TableCell>
@@ -134,7 +123,7 @@ export default function MyTable() {
                 <TableCell align="right">{managerMap[row.managerId]}</TableCell>
                 <TableCell align="right">
                   <IconButton
-                  sx={{backgroundColor:"#D5D5D5"}}
+                    sx={{ backgroundColor: "#D5D5D5" }}
                     onClick={() => {
                       dispatch(setProjectSlice(row));
                       setIsDrawerOpen(!isDrawerOpen);
@@ -151,7 +140,13 @@ export default function MyTable() {
                     anchor="right"
                     open={isDrawerOpen}
                   >
-                    <Box    style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
+                    <Box
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                    >
                       <IconButton
                         size="small"
                         edge="end"
@@ -160,19 +155,11 @@ export default function MyTable() {
                         onClick={() => {
                           setIsDrawerOpen(false);
                           dispatch(
-                            setProjectSlice({
-                              id: 0,
-                              projectName: "",
-                              description: "",
-                              start_date: "",
-                              end_date: "",
-                              status: 0,
-                              manager_id: 0,
-                            })
+                            setProjectSlice(intialState)
                           );
                         }}
                       >
-                        <CloseIcon  />
+                        <CloseIcon />
                       </IconButton>
                     </Box>
                     <Box>
@@ -182,7 +169,7 @@ export default function MyTable() {
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
-                  sx={{backgroundColor:"#D5D5D5"}}
+                    sx={{ backgroundColor: "#D5D5D5" }}
                     onClick={() =>
                       dispatch({ type: DELETE_PROJECT_BY_ID, id: row.id })
                     }

@@ -7,6 +7,7 @@ import { setProjectSlice } from "./reducers/project";
 import { useDispatch } from "react-redux";
 import ProjectBar from "./ProjectDrawer";
 import { borderRight } from "@mui/system";
+import { intialState } from "./ProjectState";
 
 function Projects() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -40,15 +41,7 @@ function Projects() {
             onClick={() => {
               setIsDrawerOpen(false);
               dispatch(
-                setProjectSlice({
-                  id: 0,
-                  name: "",
-                  description: "",
-                  startDate: "",
-                  endDate: "",
-                  status: 0,
-                  managerId: 0,
-                })
+                setProjectSlice(intialState)
               );
             }}
           >

@@ -8,6 +8,7 @@ import { CREATE_PROJECT, UPDATE_PROJECT_BY_ID } from "./actions/projectTypes";
 import { setProjectSlice } from "./reducers/project";
 import { Box } from "@mui/system";
 import { FormControl, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { intialState } from "./ProjectState";
 
 const MyForm = () => {
   const project = useSelector((state: any) => state.project);
@@ -22,18 +23,6 @@ const MyForm = () => {
     }
   };
 
-  const initialState = [
-    {
-      id: 0,
-      name: "",
-      description: "",
-      startDate: "",
-      endDate: "",
-      status: 0,
-      managerId: 0,
-    },
-  ];
-
   const handleSubmit = () => {
     console.log(project);
     project.id === 0
@@ -41,25 +30,8 @@ const MyForm = () => {
       : dispatch({ type: UPDATE_PROJECT_BY_ID, project });
 
     dispatch(
-      setProjectSlice({
-        id: 0,
-        name: "",
-        description: "",
-        startDate: "",
-        endDate: "",
-        status: 0,
-        managerId: 0,
-      })
+      setProjectSlice(intialState)
     );
-  };
-
-  const statusEnums = {
-    pending: 0,
-    paused: 1,
-    started: 2,
-    failed: 3,
-    success: 4,
-    cancelled: 5,
   };
 
   return (
@@ -168,21 +140,13 @@ const MyForm = () => {
             onClick={() => handleSubmit()}
             variant="contained"
           >
-            Add
+          {project.id===0?"Add":"Update"}
           </Button>
           <Button
             style={{ margin: "10px" }}
             onClick={() =>
               dispatch(
-                setProjectSlice({
-                  id: 0,
-                  name: "",
-                  description: "",
-                  startDate: "",
-                  endDate: "",
-                  status: 0,
-                  managerId: 0,
-                })
+                setProjectSlice(intialState)
               )
             }
             variant="contained"
