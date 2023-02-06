@@ -14,7 +14,7 @@ import axios from 'axios'
 
 
 
-axios.defaults.baseURL = 'http://143.110.248.171:8001/api/v1/'
+axios.defaults.baseURL = 'https://143.110.248.171:5001/api/v1/'
 
 export const getProjectsAPI = async () => axios.get('/project')
 
