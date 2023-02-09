@@ -7,6 +7,8 @@ import TimesheetPage from "./modules/timesheet-page/TimesheetPage";
 import { BrowserRouter } from "react-router-dom";
 import { withTheme } from "./theme";
 import { DRAWER_WIDTH } from "./utils/constants";
+import ApprovalPage from "./modules/approvals-page/ApprovalPage";
+
 function App(props: any) {
   return (
       <>
@@ -23,6 +25,7 @@ function App(props: any) {
           <Route path="/" element={<h1>Home Page</h1>} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/timesheet" element={<TimesheetPage />} />
+          <Route path="/myapprovals" element={<ApprovalPage/>} />
         </Routes>
         </Box>
       </>
