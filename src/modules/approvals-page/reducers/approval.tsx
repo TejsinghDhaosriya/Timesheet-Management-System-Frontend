@@ -1,34 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Timesheet } from "../TimesheetInterface";
 
-interface Approval{
-    id:number,
-    userName:string,
-    totalHours:number,
-    date:string,
-    description:string,
-    status:'pending'|'accepted'|'rejected';
-    reason:string
-}
-const intialState:Approval={
-    id:0,
-    userName:'',
-    totalHours:0,
-    date:"",
-    description:"",
-    status:"pending",
-    reason:""
-}
+const intialState: Timesheet = {
+  id: 0,
+  description: "",
+  date: "",
+  totalHours: 0,
+  createdBy: 0,
+  organizationId: 0,
+  approvals: [
+    {
+      id: 0,
+      timesheetId: 0,
+      status: 0,
+      reasonForRejection: "",
+      approvalDate: "",
+      managerId: 0,
+      organizationId: 0,
+      createdAt: "",
+      modifiedAt: "",
+    },
+  ],
+};
 
-const approval=createSlice({
-    name:'approval',
-    initialState:intialState,
-    reducers:{
-        setApproval:(state,action)=>{
-            state=action.payload
-            return state
-        }
-    }
-})
+const approval = createSlice({
+  name: "approval",
+  initialState: intialState,
+  reducers: {
+    setApproval: (state, action) => {
+      state = action.payload;
+      return state;
+    },
+  },
+});
 
-export const{ setApproval }=approval.actions
-export default approval.reducer
+export const { setApproval } = approval.actions;
+export default approval.reducer;

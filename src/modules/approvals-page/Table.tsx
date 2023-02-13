@@ -1,4 +1,12 @@
-import { Box, Modal, Paper, TextField } from "@mui/material";
+import {
+  Box,
+  Drawer,
+  IconButton,
+  Modal,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -17,6 +25,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { Approval, Timesheet } from "./TimesheetInterface";
+import EditIcon from "@mui/icons-material/Edit";
 
 const style = {
   position: "absolute" as "absolute",
@@ -31,19 +40,20 @@ const style = {
 };
 
 export default function Tablee() {
-  const approv = useSelector((state: any) => state.approvals);
-  const dispatch = useDispatch();
-  useEffect((): any => {
-    dispatch({ type: GET_APPROVALS });
-  }, []);
-
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(Number);
   const [reason, setReason] = useState("");
   const [modal, setModal] = useState(false);
   const [state, setState] = useState<Approval>();
   const [open, setOpen] = useState(false);
   const handleOpenn = () => setOpen(true);
   const handleClosee = () => setOpen(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const approv = useSelector((state: any) => state.approvals);
+  const dispatch = useDispatch();
+  useEffect((): any => {
+    dispatch({ type: GET_APPROVALS });
+  }, []);
 
   const handleDelete = (id: number) => {
     console.log(id);
@@ -52,6 +62,7 @@ export default function Tablee() {
 
   const handleChangeStatusAccept = (row: Approval) => {
     setStatus(1); //setting accepted
+    console.log(status);
     dispatch({
       type: UPDATE_APPROVAL,
       approval: { ...row, status: status },
@@ -59,20 +70,27 @@ export default function Tablee() {
   };
   const handleChangeStatusReject = (row: Approval) => {
     setState(row);
-    console.log("rejectd", row);
     handleOpenn();
     setStatus(2); //setting reject
     setModal(true);
   };
+  const handleEditStatus = (row: Approval) => {
+    setStatus(0);
+    dispatch({
+      type: UPDATE_APPROVAL,
+      approval: { ...row, status: status },
+    });
+  };
+  useEffect((): any => {
+    dispatch({ type: GET_APPROVALS });
+  }, []);
 
   const handleSave = () => {
     const currrow = state;
-    console.log(currrow);
-    console.log(reason)
     dispatch({
       type: UPDATE_APPROVAL,
-      approval: { ...currrow,status:status, reasonForRejection: reason },
-    }); 
+      approval: { ...currrow, status: status, reasonForRejection: reason },
+    });
   };
 
   const statusMap: any = {
@@ -93,13 +111,14 @@ export default function Tablee() {
               <TableCell>Total Hours</TableCell>
               <TableCell>Reason</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Edit</TableCell>
               <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            { approv?.map((approval:Timesheet) =>
+            {approv?.map((approval: Timesheet) =>
               approval?.approvals?.map((row: Approval) => (
-                <TableRow key={approval.id}>
+                <TableRow key={row.id}>
                   <TableCell>{row.timesheetId}</TableCell>
                   <TableCell>{approval.description}</TableCell>
                   <TableCell>{approval.date}</TableCell>
@@ -132,6 +151,9 @@ export default function Tablee() {
                             aria-describedby="modal-modal-description"
                           >
                             <Box sx={style}>
+                              <Typography>
+                                Confirm Rejection With Reason!!!
+                              </Typography>
                               <TextField
                                 rows="5"
                                 value={reason}
@@ -152,6 +174,11 @@ export default function Tablee() {
                     ) : (
                       <Box color="red">{statusMap[row.status]}</Box>
                     )}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleEditStatus(row)}>
+                      <EditIcon />
+                    </IconButton>
                   </TableCell>
                   <TableCell>
                     <Button
