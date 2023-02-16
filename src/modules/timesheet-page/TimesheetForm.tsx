@@ -1,4 +1,15 @@
-import {Box,Button,FormControl,FormHelperText,IconButton,InputLabel,MenuItem,Select,TextField,Typography,} from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -8,13 +19,16 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  addTimesheetData,
-  deleteTimesheetData,
-  updateTimesheetData,
-} from "./timesheetSlice";
 import dayjs, { Dayjs } from "dayjs";
-import { formSubmittedStatusHelper } from "./helper";
+import {
+  checkDateInSelectedDateArray2,
+  formSubmittedStatusHelper,
+} from "./helper";
+import {
+  CREATE_TIMESHEET,
+  DELETE_TIMESHEET,
+  UPDATE_TIMESHEET,
+} from "./actions/timesheetTypes";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -31,12 +45,12 @@ const TimesheetForm = (props: any) => {
   const initialFormState = {
     project_name: {
       value: getProjectInfo.project_name,
-      error:false
+      error: false,
     },
     project_manager: {
       value: getProjectInfo.project_manager,
-      error:false,
-      errorMessage:"Please select a manager"
+      error: false,
+      errorMessage: "Please select a manager",
     },
     description: {
       value: "",
@@ -52,12 +66,12 @@ const TimesheetForm = (props: any) => {
       errorMessage: "You must enter your total hours spent",
     },
   };
-
+  // console.log(props, "check data");
   const [initialState, setInitialState] = useState(initialFormState);
   const { dateSelected } = props;
   const [formValues, setFormValues] = useState<any>(initialState);
   const [editFormStatus, setEditFormStatus] = useState<any>(false);
-  const [editDropdown,setEditDropdown] = useState(false);
+  const [editDropdown, setEditDropdown] = useState(false);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormValues({
@@ -71,7 +85,7 @@ const TimesheetForm = (props: any) => {
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const { description, totalHours,project_manager } = formValues;
+    const { description, totalHours, project_manager } = formValues;
     let newFormValues = { ...formValues };
     //console.log("newFormValues",newFormValues);
     if (description.value === "") {
@@ -94,43 +108,56 @@ const TimesheetForm = (props: any) => {
         },
       };
     }
-    if(project_manager.value.length==0){
+    if (project_manager.value.length == 0) {
       newFormValues = {
         ...newFormValues,
         project_manager: {
           ...newFormValues["project_manager"],
           error: true,
-          errorMessage:"Please select a manager"
+          errorMessage: "Please select a manager",
         },
       };
     }
-    if(project_manager.value.length>2){
+    if (project_manager.value.length > 2) {
       newFormValues = {
         ...newFormValues,
         project_manager: {
           ...newFormValues["project_manager"],
           error: true,
-          errorMessage:'Only 2 managers are allowed'
+          errorMessage: "Only 2 managers are allowed",
         },
       };
     }
-    if (description.value !== "" && totalHours.value !== "" && project_manager.value.length!=0 && project_manager.value.length<=2) {
+    if (
+      description.value !== "" &&
+      totalHours.value !== "" &&
+      project_manager.value.length != 0 &&
+      project_manager.value.length <= 2
+    ) {
       //console.log("Form submit successfully");
       const timesheetData = {
-        date: dateSelected,
+        date: dayjs(dateSelected).format("YYYY-MM-DD"),
         description: newFormValues.description.value,
         totalHours: Number(newFormValues.totalHours.value),
-        timeSheetSubmitted: true,
-        project_name: formValues.project_name.value,
-        project_manager: formValues?.project_manager.value,
+        // timeSheetSubmitted: true,
+        // project_name: formValues.project_name.value,
+        // project_manager: formValues?.project_manager.value,
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);
       props.setFormFilledStatus(true);
 
-      if(editFormStatus) {
-        dispatch(updateTimesheetData(timesheetData));
-      }else{
-        dispatch(addTimesheetData(timesheetData));
+      if (editFormStatus) {
+        const id = checkDateInSelectedDateArray2(
+          props.selectedDateArray,
+          dateSelected
+        );
+        const tData = {
+          id,
+          timesheetData,
+        };
+        dispatch({ type: UPDATE_TIMESHEET, tData });
+      } else {
+        dispatch({ type: CREATE_TIMESHEET, timesheetData });
       }
       //console.log(timesheetData);
       resetAllFields();
@@ -145,7 +172,7 @@ const TimesheetForm = (props: any) => {
   };
   useEffect(() => {
     // console.log("useffect called when formSTatus submiied chencged");
-    if (!!formSubmittedStatus && formSubmittedStatus.timeSheetSubmitted) {
+    if (!!formSubmittedStatus) {
       let editFormValues = {
         ...formValues,
         description: {
@@ -182,7 +209,12 @@ const TimesheetForm = (props: any) => {
           <>
             <IconButton
               onClick={() => {
-                dispatch(deleteTimesheetData(props.dateSelected));
+                //dispatch(deleteTimesheetData(props.dateSelected));
+                const x = checkDateInSelectedDateArray2(
+                  props.selectedDateArray,
+                  props.dateSelected
+                );
+                dispatch({ type: DELETE_TIMESHEET, id: x });
                 props.closeModal();
               }}
             >
@@ -270,30 +302,40 @@ const TimesheetForm = (props: any) => {
               : ""
           }
         />
-          <FormControl
-            sx={{ mb: 2}}
-            disabled={!editDropdown}
-            error={formValues.project_manager.error}
-            fullWidth
+        <FormControl
+          sx={{ mb: 2 }}
+          disabled={!editDropdown}
+          error={formValues.project_manager.error}
+          fullWidth
+        >
+          <InputLabel id="demo-simple-select-error-label">
+            Project Manager
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-error-label"
+            id="demo-simple-select-error"
+            value={formValues.project_manager.value}
+            label="Project Manager"
+            onChange={handleChange}
+            multiple
+            name="project_manager"
           >
-            <InputLabel id="demo-simple-select-error-label">
-              Project Manager
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-error-label"
-              id="demo-simple-select-error"
-              value={formValues.project_manager.value}
-              label="Project Manager"
-              onChange={handleChange}
-              multiple
-              name='project_manager'
-            >
-              {["Karan","Arjun","Rahul","<some_name>"].map((name)=>{
-                return <MenuItem key={name} value={name}>{name}</MenuItem>
-              })}
-            </Select>
-            {formValues.project_manager.error?<FormHelperText>{formValues.project_manager.errorMessage}</FormHelperText>:<></>}
-          </FormControl>
+            {["Karan", "Arjun", "Rahul", "<some_name>"].map((name) => {
+              return (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+          {formValues.project_manager.error ? (
+            <FormHelperText>
+              {formValues.project_manager.errorMessage}
+            </FormHelperText>
+          ) : (
+            <></>
+          )}
+        </FormControl>
         <Button
           type="submit"
           variant="outlined"
@@ -304,7 +346,7 @@ const TimesheetForm = (props: any) => {
             !editFormStatus
           }
         >
-          Submit
+          {editFormStatus ? "Update" : "Create"}
         </Button>
       </Box>
     </Box>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Modal, Typography } from "@mui/material";
 import TimesheetForm from "../modules/timesheet-page/TimesheetForm";
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -17,12 +17,23 @@ const style = {
 };
 
 const FormModal = (props: any) => {
-  const { dateSelectedStatus, dateSelected, setDateSelectedStatus, formattedDate,setSelectedDate } = props;
+  const {
+    dateSelectedStatus,
+    dateSelected,
+    setDateSelectedStatus,
+    formattedDate,
+    setSelectedDate,
+  } = props;
   const [openModal, setOpenModal] = useState(dateSelectedStatus);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
-  const formSubmittedStatus = props.selectedDateArray.find((dateSelect:any)=>{
-    return (dateSelect.timeSheetSubmitted===true && dateSelect.date===dateSelected);
-  });
+  const formSubmittedStatus = props.selectedDateArray.find(
+    (dateSelect: any) => {
+      return (
+        dateSelect.timeSheetSubmitted === true &&
+        dateSelect.date === dateSelected
+      );
+    }
+  );
   const handleOpen = () => {
     setOpenModal(true);
   };
@@ -33,25 +44,24 @@ const FormModal = (props: any) => {
   };
   useEffect(() => {
     //console.log('useffect running ... ')
-    const dateFormatted = `${dateSelected.slice(4,6)}${dateSelected.slice(0,3)}${dateSelected.slice(6)}`;
+    // const dateFormatted = `${dateSelected.slice(4,6)}${dateSelected.slice(0,3)}${dateSelected.slice(6)}`;
     if (openModal) {
       handleClose();
     } else {
-      if (dateSelectedStatus && (new Date(dateFormatted).getTime()<new Date().getTime()) ) {
+      if (dateSelectedStatus) {
         handleOpen();
       }
     }
-    
-  }, [dateSelected,dateSelectedStatus]);
+  }, [dateSelected, dateSelectedStatus]);
 
-  useEffect(()=>{
-    if(formFilledStatus){
-      setTimeout(()=>{
+  useEffect(() => {
+    if (formFilledStatus) {
+      setTimeout(() => {
         setFormFilledStatus(false);
-        handleClose()
-      },3000)
+        handleClose();
+      }, 3000);
     }
-  },[formFilledStatus])
+  }, [formFilledStatus]);
   return (
     <Modal
       open={openModal}
@@ -67,8 +77,16 @@ const FormModal = (props: any) => {
             closeModal={handleClose}
           />
         ) : (
-          <Typography variant="h6" sx={{display:"flex",justifyContent:'space-around',alignItems:'center'}}>
-            Time sheet form filled successfully <ThumbUpAltIcon fontSize="large" color="success"/>
+          <Typography
+            variant="h6"
+            sx={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "center",
+            }}
+          >
+            Timesheet filled
+            <ThumbUpAltIcon fontSize="large" color="success" />
           </Typography>
         )}
       </Box>
