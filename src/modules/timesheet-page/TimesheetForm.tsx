@@ -267,7 +267,7 @@ const TimesheetForm = (props: any) => {
           onChange={handleChange}
           disabled={
             !!formSubmittedStatus &&
-            formSubmittedStatus.timeSheetSubmitted &&
+            // formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
         />
@@ -292,7 +292,7 @@ const TimesheetForm = (props: any) => {
           name="totalHours"
           disabled={
             !!formSubmittedStatus &&
-            formSubmittedStatus.timeSheetSubmitted &&
+            // formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
           id={"outlined-error-helper-text"}

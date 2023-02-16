@@ -59,7 +59,7 @@ const FormModal = (props: any) => {
       setTimeout(() => {
         setFormFilledStatus(false);
         handleClose();
-      }, 3000);
+      }, 1000);
     }
   }, [formFilledStatus]);
   return (
@@ -70,25 +70,12 @@ const FormModal = (props: any) => {
       aria-describedby="parent-modal-description"
     >
       <Box sx={{ ...style, width: 500 }}>
-        {!formFilledStatus ? (
           <TimesheetForm
             {...props}
             setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}
             closeModal={handleClose}
           />
-        ) : (
-          <Typography
-            variant="h6"
-            sx={{
-              display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
-            }}
-          >
-            Timesheet filled
-            <ThumbUpAltIcon fontSize="large" color="success" />
-          </Typography>
-        )}
+        
       </Box>
     </Modal>
   );
