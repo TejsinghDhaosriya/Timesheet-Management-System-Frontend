@@ -3,12 +3,14 @@ import {
   DELETE_APPROVALS,
   GET_APPROVALS,
   GET_APPROVALS_WEEK,
+  UPDATE_ALL_APPROVALS,
   UPDATE_APPROVAL,
 } from "../actions/approvalTypes";
 import {
   deleteApprovalByIdAPI,
   getApprovalAPI,
   getApprovalByWeek,
+  updateAllApprovalsAPI,
   updateApprovalAPI,
 } from "../APIs/approvalAPIs";
 import {
@@ -30,6 +32,11 @@ export function* updateApprovalSaga(action: any) {
   yield updateApprovalAPI(action.approval);
   yield put(updateApproval(action.approval));
 }
+export function* updateAllApprovalSaga(action:any){
+  console.log(action.result)
+  yield updateAllApprovalsAPI(action.result)
+  
+}
 
 export function* deleteApprovalSaga(action: any) {
   yield deleteApprovalByIdAPI(action.id);
@@ -40,5 +47,6 @@ export function* watchApprovalsAsync() {
   yield takeEvery(GET_APPROVALS, getApprovalSaga);
   yield takeEvery(GET_APPROVALS_WEEK, getApprovalWeekSaga);
   yield takeEvery(UPDATE_APPROVAL, updateApprovalSaga);
+  yield takeEvery(UPDATE_ALL_APPROVALS,updateAllApprovalSaga);
   yield takeEvery(DELETE_APPROVALS, deleteApprovalSaga);
 }

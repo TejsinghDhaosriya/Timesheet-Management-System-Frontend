@@ -29,6 +29,7 @@ import {
   DELETE_TIMESHEET,
   UPDATE_TIMESHEET,
 } from "./actions/timesheetTypes";
+import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -36,7 +37,12 @@ const TimesheetForm = (props: any) => {
   const getProjectInfo: any = useSelector<any>(
     (state) => state.timesheet.project_info
   );
-  //console.log("getProjectInfo", getProjectInfo);
+  const getProjectInfoo=useSelector((state: any) => state.projects);
+  useEffect((): any => {
+    dispatch({ type: GET_PROJECTS });
+  }, []);
+  // console.log("getProjectInfoo", getProjectInfoo);
+  // console.log(getProjectInfoo[0].name)
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
     props.dateSelected
@@ -44,7 +50,7 @@ const TimesheetForm = (props: any) => {
   // const dateFormatted = `${props.dateSelected.slice(4,6)}${props.dateSelected.slice(0,3)}${props.dateSelected.slice(6)}`;
   const initialFormState = {
     project_name: {
-      value: getProjectInfo.project_name,
+      value: getProjectInfoo[0].name,
       error: false,
     },
     project_manager: {
@@ -140,7 +146,7 @@ const TimesheetForm = (props: any) => {
         description: newFormValues.description.value,
         totalHours: Number(newFormValues.totalHours.value),
         // timeSheetSubmitted: true,
-        // project_name: formValues.project_name.value,
+        project_name: formValues.project_name.value,
         // project_manager: formValues?.project_manager.value,
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);

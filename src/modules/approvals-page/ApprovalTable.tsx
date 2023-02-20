@@ -1,4 +1,11 @@
-import { Box, IconButton, Modal, Paper, TextField } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Modal,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -12,6 +19,7 @@ import {
   DELETE_APPROVALS,
   GET_APPROVALS,
   GET_APPROVALS_WEEK,
+  UPDATE_ALL_APPROVALS,
   UPDATE_APPROVAL,
 } from "./actions/approvalTypes";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -37,10 +45,9 @@ export default function WeekTable() {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState("");
   const [reason, setReason] = useState("");
   const [modal, setModal] = useState(false);
-  const [state, setState] = useState<Approval>();
   const [open, setOpen] = useState(false);
   const handleOpenn = () => setOpen(true);
   const handleClosee = () => setOpen(false);
@@ -52,6 +59,47 @@ export default function WeekTable() {
     setEndDate(event?.target.value);
   };
 
+  // console.log(approv);
+  const totalHourss = approv.reduce(
+    (sum: any, entry: any) => sum + entry.totalHours,
+    0
+  );
+  // console.log(totalHourss, "totalHours");
+
+  const result: { id: any; status: any; reasonForRejection: any }[] = [];
+
+  for (let i = 0; i < approv.length; i++) {
+    const res = approv[i].approvals;
+    for (let j = 0; j < res.length; j++) {
+      const { id, status, reasonForRejection } = res[j];
+      result.push({ id, status, reasonForRejection });
+    }
+  }
+
+  const handleAccept = () => {
+    result.map((app: any, i: any) => (result[i].status = 1));
+    // console.log(result)
+    setStatus("set");
+    dispatch({ type: UPDATE_ALL_APPROVALS, result });
+  };
+  const handleReject = () => {
+    // result.map((app: any, i: any) => (result[i].status = 2));
+    // console.log(result)
+    // setStatus("set");
+    // dispatch({ type: UPDATE_ALL_APPROVALS, result });
+
+    handleOpenn();
+    setModal(true);
+  };
+  const handleSave = () => {
+    result.map(
+      (app: any, i: any) => (
+        (result[i].status = 2), (result[i].reasonForRejection = reason)
+      )
+    );
+    dispatch({ type: UPDATE_ALL_APPROVALS, result });
+  };
+
   useEffect((): any => {
     dispatch({
       type: GET_APPROVALS_WEEK,
@@ -60,48 +108,19 @@ export default function WeekTable() {
       startDate: startDate,
       endDate: endDate,
     });
-  }, [startDate, endDate,status,reason,]);
-
-  const handleDelete = (id: number) => {
-    console.log(id)
-    dispatch({ type: DELETE_APPROVALS, id: id })
-  };
-
-  const handleChangeStatusAccept = (row: Approval) => {
-    setStatus(1); //setting accepted
-    dispatch({
-      type: UPDATE_APPROVAL,
-      approval: { ...row, status: status },
-    });
-  };
-  const handleChangeStatusReject = (row: Approval) => {
-    setState(row)
-    handleOpenn()
-    setStatus(2) //setting reject
-    setModal(true)
-  };
-  const handleEditStatus = (row: Approval) => {
-    setStatus(0);
-    dispatch({
-      type: UPDATE_APPROVAL,
-      approval: { ...row, status: status },
-    });
-  };
-
-  const handleSave = () => {
-    const currrow = state;
-    dispatch({
-      type: UPDATE_APPROVAL,
-      approval: { ...currrow, status: status, reasonForRejection: reason },
-    });
-  };
+  }, [startDate, endDate]);
 
   const statusMap: any = {
     0: "pending",
     1: "accepted",
     2: "rejected",
   };
-
+  // {
+  //   index,
+  //   daterange
+  //   total hours
+  //   status
+  //   }
   return (
     <>
       <TextField
@@ -124,88 +143,65 @@ export default function WeekTable() {
       <TableContainer component={Paper}>
         <Table aria-label="simple table">
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#D5D5D5", fontWeight: "bold" }}>
-              <TableCell>Timesheet Id</TableCell>
-              <TableCell>Date</TableCell>
+            <TableRow>
+              {/* <TableCell>Index</TableCell> */}
+              <TableCell>Start Date</TableCell>
+              <TableCell>End Date</TableCell>
               <TableCell>Total Hours</TableCell>
-              <TableCell>Reason</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Edit</TableCell>
-              <TableCell>Delete</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {approv.map((approval: Timesheet) =>
-              approval.approvals.map((row: Approval) => (
-                <TableRow key={approval.id}>
-                  <TableCell>{row.timesheetId}</TableCell>
-                  <TableCell>{approval.date}</TableCell>
-                  <TableCell>{approval.totalHours}</TableCell>
-                  <TableCell>
-                    {statusMap[row.status] === "rejected"
-                      ? row.reasonForRejection
-                      : "-------"}
-                  </TableCell>
-                  <TableCell>
-                    {statusMap[row.status] == "pending" ? (
-                      <Box>
-                        <Button
-                          color="primary"
-                          onClick={() => handleChangeStatusAccept(row)}
-                        >
-                          <DoneIcon />
-                        </Button>
-                        <Button
-                          color="primary"
-                          onClick={() => handleChangeStatusReject(row)}
-                        >
-                          <CloseIcon />
-                        </Button>
-                        {modal && (
-                          <Modal
-                            open={open}
-                            onClose={handleClosee}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <Box sx={style}>
-                              <TextField
-                                rows="5"
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
-                              />
-                              <Button
-                                onClick={() => {
-                                  handleSave();
-                                  handleClosee();
-                                }}
-                              >
-                                Submit
-                              </Button>
-                            </Box>
-                          </Modal>
-                        )}
-                      </Box>
-                    ) : (
-                      <Box color="red">{statusMap[row.status]}</Box>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleEditStatus(row)}>
-                      <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      color="inherit"
-                      onClick={() => handleDelete(row.id)}
-                    >
-                      <DeleteIcon />
+            {/* {approv.map((item: any, index: any) => ( */}
+            <TableRow>
+              {/* <TableCell>{index}</TableCell> */}
+              <TableCell>{startDate}</TableCell>
+              <TableCell>{endDate}</TableCell>
+              <TableCell>{totalHourss}</TableCell>
+              <TableCell>
+                {status != "set" ? (
+                  <Box>
+                    <Button color="primary" onClick={() => handleAccept()}>
+                      <DoneIcon />
                     </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+                    <Button color="primary" onClick={() => handleReject()}>
+                      <CloseIcon />
+                    </Button>
+                    {
+                      <Modal
+                        open={open}
+                        onClose={handleClosee}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <Typography>
+                            Confirm Rejection With Reason!!!
+                          </Typography>
+                          <TextField
+                            rows="5"
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                          />
+                          <Button
+                            onClick={() => {
+                              handleSave();
+                              handleClosee();
+                              setReason("");
+                            }}
+                          >
+                            Submit
+                          </Button>
+                        </Box>
+                      </Modal>
+                    }
+                  </Box>
+                ) : (
+                  <Box>"Already Set"</Box>
+                )}
+              </TableCell>
+            </TableRow>
+            {/* ))} */}
           </TableBody>
         </Table>
       </TableContainer>
