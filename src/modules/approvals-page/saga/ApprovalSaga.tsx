@@ -30,7 +30,8 @@ export function* getApprovalWeekSaga(action: any): any {
 export function* updateApprovalSaga(action: any) {
   console.log(action.approval);
   yield updateApprovalAPI(action.approval);
-  yield put(updateApproval(action.approval));
+  //yield put(updateApproval(action.approval));
+  yield getApprovalSaga()
 }
 export function* updateAllApprovalSaga(action:any){
   console.log(action.result)

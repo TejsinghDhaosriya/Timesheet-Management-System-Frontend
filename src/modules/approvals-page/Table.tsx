@@ -41,15 +41,12 @@ const style = {
 };
 
 export default function Tablee() {
-  const [status, setStatus] = useState(Number);
   const [reason, setReason] = useState("");
-  const [modal, setModal] = useState(false);
   const [state, setState] = useState<Approval>();
   const [open, setOpen] = useState(false);
   const handleOpenn = () => setOpen(true);
   const handleClosee = () => setOpen(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   const approv = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
@@ -60,40 +57,29 @@ export default function Tablee() {
   };
 
   const handleChangeStatusAccept = (row: Approval) => {
-    setStatus(1); //setting accepted
-    console.log("accepted");
+    const acceptStatus = 1;
     dispatch({
       type: UPDATE_APPROVAL,
-      approval: { ...row, status: 1 },
+      approval: { ...row, status: acceptStatus },
     });
   };
   const handleChangeStatusReject = (row: Approval) => {
     setState(row);
     handleOpenn();
-    setStatus(2); //setting reject
-    setModal(true);
   };
   const handleEditStatus = (row: Approval) => {
-    setStatus(0);
-    console.log(status, "pending");
     dispatch({
       type: UPDATE_APPROVAL,
       approval: { ...row, status: 0 },
     });
   };
-  // useEffect((): any => {
-  //   dispatch({ type: GET_APPROVALS });
-  // }, []);
-
   const handleSave = () => {
     const currrow = state;
-    console.log(status, "rejected");
     dispatch({
       type: UPDATE_APPROVAL,
       approval: { ...currrow, status: 2, reasonForRejection: reason },
     });
   };
-
   const statusMap: any = {
     0: "pending",
     1: "accepted",
@@ -104,98 +90,92 @@ export default function Tablee() {
 
   useEffect((): any => {
     dispatch({ type: GET_APPROVALS });
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, [state, setState, status, setStatus, reason, setReason, dispatch]);
+  }, []);
   return (
     <>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#D5D5D5", fontWeight: "bold" }}>
-                <TableCell>Index</TableCell>
-                <TableCell>Timesheet Id</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Total Hours</TableCell>
-                <TableCell>Reason</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Edit</TableCell>
-                {/* <TableCell>Delete</TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {approv?.map((approval: Timesheet, index: any) =>
-                approval?.approvals?.map((row: Approval) => (
-                  <TableRow key={index}>
-                    <TableCell>{index}</TableCell>
-                    <TableCell>{row.timesheetId}</TableCell>
-                    <TableCell>{approval.description}</TableCell>
-                    <TableCell>{approval.date}</TableCell>
-                    <TableCell>{approval.totalHours}</TableCell>
-                    <TableCell>
-                      {statusMap[row.status] === "rejected"
-                        ? row.reasonForRejection
-                        : "-------"}
-                    </TableCell>
-                    <TableCell>
-                      {statusMap[row.status] == "pending" ? (
-                        <Box>
-                          <Button
-                            color="primary"
-                            onClick={() => handleChangeStatusAccept(row)}
+      <TableContainer component={Paper}>
+        <Table aria-label="simple table">
+          <TableHead>
+            <TableRow sx={{ backgroundColor: "#D5D5D5", fontWeight: "bold" }}>
+              <TableCell>Index</TableCell>
+              <TableCell>Timesheet Id</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Date</TableCell>
+              <TableCell>Total Hours</TableCell>
+              <TableCell>Reason</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Edit</TableCell>
+              {/* <TableCell>Delete</TableCell> */}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {approv?.map((approval: Timesheet, index: any) =>
+              approval?.approvals?.map((row: Approval) => (
+                <TableRow key={index}>
+                  <TableCell>{index}</TableCell>
+                  <TableCell>{row.timesheetId}</TableCell>
+                  <TableCell>{approval.description}</TableCell>
+                  <TableCell>{approval.date}</TableCell>
+                  <TableCell>{approval.totalHours}</TableCell>
+                  <TableCell>
+                    {statusMap[row.status] === "rejected"
+                      ? row.reasonForRejection
+                      : "-------"}
+                  </TableCell>
+                  <TableCell>
+                    {statusMap[row.status] == "pending" ? (
+                      <Box>
+                        <Button
+                          color="primary"
+                          onClick={() => handleChangeStatusAccept(row)}
+                        >
+                          <DoneIcon />
+                        </Button>
+                        <Button
+                          color="primary"
+                          onClick={() => handleChangeStatusReject(row)}
+                        >
+                          <CloseIcon />
+                        </Button>
+                        
+                          <Modal
+                            open={open}
+                            onClose={handleClosee}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
                           >
-                            <DoneIcon />
-                          </Button>
-                          <Button
-                            color="primary"
-                            onClick={() => handleChangeStatusReject(row)}
-                          >
-                            <CloseIcon />
-                          </Button>
-                          {modal && (
-                            <Modal
-                              open={open}
-                              onClose={handleClosee}
-                              aria-labelledby="modal-modal-title"
-                              aria-describedby="modal-modal-description"
-                            >
-                              <Box sx={style}>
-                                <Typography>
-                                  Confirm Rejection With Reason!!!
-                                </Typography>
-                                <TextField
-                                  rows="5"
-                                  value={reason}
-                                  onChange={(e) => setReason(e.target.value)}
-                                />
-                                <Button
-                                  onClick={() => {
-                                    handleSave();
-                                    handleClosee();
-                                    setReason("");
-                                  }}
-                                >
-                                  Submit
-                                </Button>
-                              </Box>
-                            </Modal>
-                          )}
-                        </Box>
-                      ) : (
-                        <Box color="red">{statusMap[row.status]}</Box>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => handleEditStatus(row)}>
-                        <EditIcon />
-                      </IconButton>
-                    </TableCell>
-                    {/* <TableCell>
+                            <Box sx={style}>
+                              <Typography>
+                                Confirm Rejection With Reason!!!
+                              </Typography>
+                              <TextField
+                                rows="5"
+                                value={reason}
+                                onChange={(e) => setReason(e.target.value)}
+                              />
+                              <Button
+                                onClick={() => {
+                                  handleSave();
+                                  handleClosee();
+                                  setReason("");
+                                }}
+                              >
+                                Submit
+                              </Button>
+                            </Box>
+                          </Modal>
+                        
+                      </Box>
+                    ) : (
+                      <Box color="red">{statusMap[row.status]}</Box>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleEditStatus(row)}>
+                      <EditIcon />
+                    </IconButton>
+                  </TableCell>
+                  {/* <TableCell>
                       <Button
                         color="inherit"
                         onClick={() => handleDelete(row.id)}
@@ -203,13 +183,12 @@ export default function Tablee() {
                         <DeleteIcon />
                       </Button>
                     </TableCell> */}
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      )}
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }
