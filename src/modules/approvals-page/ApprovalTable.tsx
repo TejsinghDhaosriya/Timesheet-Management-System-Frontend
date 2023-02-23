@@ -13,7 +13,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useEffect, useState } from "react";
+import {
+  JSXElementConstructor,
+  ReactElement,
+  ReactFragment,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DELETE_APPROVALS,
@@ -59,35 +66,35 @@ export default function WeekTable() {
     setEndDate(event?.target.value);
   };
 
-  // console.log(approv);
   const totalHourss = approv.reduce(
     (sum: any, entry: any) => sum + entry.totalHours,
     0
   );
-  // console.log(totalHourss, "totalHours");
 
   const result: { id: any; status: any; reasonForRejection: any }[] = [];
 
   for (let i = 0; i < approv.length; i++) {
-    const res = approv[i].approvals;
+    const res = approv[i].approvals.filter((k: any) => k.status == 0);
     for (let j = 0; j < res.length; j++) {
       const { id, status, reasonForRejection } = res[j];
       result.push({ id, status, reasonForRejection });
     }
   }
 
+  // const result2: { id: any; status: any; reasonForRejection: any; }[]=[]
+  // approv.forEach(({ approvals }:any) => {
+  //   approvals.forEach(({ id, status, reasonForRejection }:any) => {
+  //     result2.push({ id, status, reasonForRejection });
+  //   });
+  // });
+  // const result3=result.filter(i=>i.status==0)
+
   const handleAccept = () => {
     result.map((app: any, i: any) => (result[i].status = 1));
-    // console.log(result)
     setStatus("set");
     dispatch({ type: UPDATE_ALL_APPROVALS, result });
   };
   const handleReject = () => {
-    // result.map((app: any, i: any) => (result[i].status = 2));
-    // console.log(result)
-    // setStatus("set");
-    // dispatch({ type: UPDATE_ALL_APPROVALS, result });
-
     handleOpenn();
     setModal(true);
   };

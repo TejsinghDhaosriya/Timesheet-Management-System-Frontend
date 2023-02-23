@@ -11,7 +11,7 @@ function Navbar(props: any) {
   const { darkMode, setDarkMode } = props;
 
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
-    backgroundColor: "transparent",
+    backgroundColor: "white",
     color: theme.palette.text.primary,
     boxShadow: "none",
     marginTop: 24,

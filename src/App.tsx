@@ -12,15 +12,22 @@ import ApprovalPage from "./modules/approvals-page/ApprovalPage";
 function App(props: any) {
   return (
       <>
-        <Box
+      <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            margin:"2em",
+            
+          }}>
+             <Box
           sx={{
             display: "flex",
             flexDirection: "column",
+            
           }}
         >
           <Navbar {...props} />
         </Box>
-        <Box sx={{marginTop:'60px',marginLeft: `${DRAWER_WIDTH}px`}}>
+        <Box sx={{marginTop:'6em',marginLeft: `${DRAWER_WIDTH}px`}}>
         <Routes>
           <Route path="/" element={<h1>Home Page</h1>} />
           <Route path="/projects" element={<ProjectsPage />} />
@@ -28,6 +35,8 @@ function App(props: any) {
           <Route path="/myapprovals" element={<ApprovalPage/>} />
         </Routes>
         </Box>
+      </Box>
+       
       </>
   );
 }

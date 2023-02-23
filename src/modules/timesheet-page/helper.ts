@@ -17,6 +17,7 @@ export function checkDateInSelectedDateArray(
   dateString: string
 ) {
   const isDatePresent = selectedDateArray.filter((selDate: any) => {
+    console.log(dayjs(selDate.date).format("YYYY-MM-DD"),dateString,"check same")
     return dayjs(selDate.date).format("YYYY-MM-DD") === dateString;
   });
   return isDatePresent.length === 1;
