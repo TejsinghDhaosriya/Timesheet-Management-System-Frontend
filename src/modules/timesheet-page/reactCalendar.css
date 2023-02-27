@@ -22,7 +22,6 @@
     font-size: 1.5rem;
     position: relative;
     z-index: 99;
-    background:#FFCCCB;
 }
 /* css for day which has timesheet filled */
 button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class.timesheet-filled{
@@ -36,6 +35,16 @@ button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar
 
 button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class p{
     background: grey;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: -24px;
+    left: 0;
+}
+button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class p.not-filled{
+    /* background: rgb(247, 121, 121); */
+    background:#FFCCCB;
+    /* background-color:red; */
     position: absolute;
     width: 100%;
     height: 100%;

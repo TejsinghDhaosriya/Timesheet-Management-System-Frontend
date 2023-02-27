@@ -40,7 +40,6 @@ function TimesheetManager() {
     }
     return false;
   }
-  console.log(timeapproval.timesheet);
 
   return (
     <Box sx={{ marginTop: "70px" }} className="time-sheet-page-container">
@@ -65,7 +64,7 @@ function TimesheetManager() {
               <Tooltip arrow title="Time sheet filled" placement="bottom">
                 <p></p>
               </Tooltip>
-            ) : null;
+            ) : (<p className="not-filled"></p>);
           }}
           
           tileDisabled={isTileDisabled}
