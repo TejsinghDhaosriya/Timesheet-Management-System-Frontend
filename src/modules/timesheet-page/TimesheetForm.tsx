@@ -30,6 +30,7 @@ import {
   UPDATE_TIMESHEET,
 } from "./actions/timesheetTypes";
 import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
+import KeyCloakService from "../../security/keycloakService";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -37,20 +38,26 @@ const TimesheetForm = (props: any) => {
   const getProjectInfo: any = useSelector<any>(
     (state) => state.timesheet.project_info
   );
-  const getProjectInfoo=useSelector((state: any) => state.projects);
+  const getProjectInfoo = useSelector((state: any) => state.projects);
+  
+  const pId = KeyCloakService.CallUserProject();
+  const user = KeyCloakService.CallUserId();
+  const proj = getProjectInfoo.filter((proje: any) => proje.id === pId);
+
   useEffect((): any => {
+    console.log(props, "check");
+    console.log(proj,"check")
     dispatch({ type: GET_PROJECTS });
   }, []);
-  // console.log("getProjectInfoo", getProjectInfoo);
-  // console.log(getProjectInfoo[0].name)
+
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
     props.dateSelected
   );
-  // const dateFormatted = `${props.dateSelected.slice(4,6)}${props.dateSelected.slice(0,3)}${props.dateSelected.slice(6)}`;
+  
   const initialFormState = {
     project_name: {
-      value: getProjectInfoo[0].name,
+      value: "Project Name",
       error: false,
     },
     project_manager: {
@@ -72,7 +79,6 @@ const TimesheetForm = (props: any) => {
       errorMessage: "You must enter your total hours spent",
     },
   };
-  // console.log(props, "check data");
   const [initialState, setInitialState] = useState(initialFormState);
   const { dateSelected } = props;
   const [formValues, setFormValues] = useState<any>(initialState);
@@ -147,6 +153,7 @@ const TimesheetForm = (props: any) => {
         totalHours: Number(newFormValues.totalHours.value),
         // timeSheetSubmitted: true,
         project_name: formValues.project_name.value,
+        CreatedBy: user,
         // project_manager: formValues?.project_manager.value,
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);

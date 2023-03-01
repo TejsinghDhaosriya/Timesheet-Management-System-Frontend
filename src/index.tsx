@@ -8,10 +8,12 @@ import { store } from "./app/store";
 import App from "./App";
 import "./index.css";
 import { lightTheme } from "./theme";
+import KeyCloakService from "./security/keycloakService";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);
 
+const renderApp=()=>
 root.render(
   <React.StrictMode>
     <BrowserRouter>
@@ -23,3 +25,4 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
+KeyCloakService.CallLogin(renderApp);

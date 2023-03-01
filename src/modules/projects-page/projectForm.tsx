@@ -15,7 +15,7 @@ const MyForm = () => {
   const dispatch = useDispatch();
 
   const handleChange = (prop: any) => (event: any) => {
-    if (event.target.name === "statusId" || event.target.name === "Manager") {
+    if (event.target.name === "statusId" ) {
       const x = parseInt(event.target.value);
       dispatch(setProjectSlice({ ...project, [prop]: x }));
     } else {
@@ -128,7 +128,7 @@ const MyForm = () => {
             height: 50,
           }}
         >
-          <MenuItem value="0">Manager 1</MenuItem>
+          <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">Manager 1</MenuItem>
           <MenuItem value="1">Manager 2</MenuItem>
           <MenuItem value="2">Manager 3</MenuItem>
         </Select>

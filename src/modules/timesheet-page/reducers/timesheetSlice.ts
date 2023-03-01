@@ -38,7 +38,7 @@ export const timesheetSlice = createSlice({
       state.error = true;
     },
     addTimesheetData: (state, action) => {
-      console.log(action.payload.project_name)
+      console.log(action.payload.project_name,"proj name")
       state.project_info.project_name=action.payload.project_name
       state.timesheet.push(action.payload);
       return state;

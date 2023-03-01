@@ -16,7 +16,8 @@ export function* getProjectByIdSaga(action:any) {
 }
 export function* createProjectSaga(action:any) {
     yield createProjectAPI(action.project)
-    yield put(addProjectSlice(action.project))
+    // yield put(addProjectSlice(action.project))
+    yield getProjectSaga()
 }
 
 export function* updateProjectSaga(action:any) {

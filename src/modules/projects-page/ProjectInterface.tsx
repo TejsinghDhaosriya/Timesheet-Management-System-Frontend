@@ -5,5 +5,5 @@ export default interface Project{
     startDate:string,
     endDate:string,
     status :number,
-    managerId:number,
+    managerId:string,
   }

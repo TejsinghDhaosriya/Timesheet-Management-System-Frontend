@@ -65,7 +65,7 @@ export default function MyTable() {
   };
 
   const managerMap: any = {
-    0: "Manager 1",
+    "0df67465-e8b8-423b-9076-122538a6d253": "Manager 1",
     1: "Manager 2",
     2: "Manager 3",
     3: "Manager 4",

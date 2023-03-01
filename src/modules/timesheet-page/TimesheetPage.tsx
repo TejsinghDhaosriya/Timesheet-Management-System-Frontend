@@ -11,6 +11,7 @@ import TimesheetData from "./timesheetInterface";
 import { GET_TIMESHEETS } from "./actions/timesheetTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoadingStart } from "./reducers/timesheetSlice";
+import KeyCloakService from "../../security/keycloakService";
 
 export default function TimesheetPage() {
   // const state = useSelector((state) => state);
@@ -22,13 +23,16 @@ export default function TimesheetPage() {
   const isLoading = useSelector((state: any) => state.isLoading);
   const isError = useSelector((state: any) => state.error);
   const dispatch = useDispatch();
+  const userId=KeyCloakService.CallUserId()
+  const orgId=KeyCloakService.CallOrganizationId()
+
+  
   useEffect((): any => {
-    dispatch({ type: GET_TIMESHEETS });
+    dispatch({ type: GET_TIMESHEETS,timesheeet:{userId:userId,organizationId:orgId}});
   }, []);
-  // {isLoading?console.log(isLoading):console.log(ts,"why")}
+
   const getSelectedDateArray = ts.timesheet;
 
-  // const getSelectedDateArray=ts
   const [date, setDate] = useState<Date>(new Date());
   const [formatedDate, setFormatedDate] = useState("");
   const [dateSelectedStatus, setDateSelectedStatus] = useState(false);

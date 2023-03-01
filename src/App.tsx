@@ -8,7 +8,12 @@ import { BrowserRouter } from "react-router-dom";
 import { withTheme } from "./theme";
 import { DRAWER_WIDTH } from "./utils/constants";
 import ApprovalPage from "./modules/approvals-page/ApprovalPage";
+import KeyCloakService from "./security/keycloakService";
 
+
+function logout(){
+  KeyCloakService.CallLogout();
+}
 function App(props: any) {
   return (
       <>
@@ -29,10 +34,20 @@ function App(props: any) {
         </Box>
         <Box sx={{marginTop:'6em',marginLeft: `${DRAWER_WIDTH}px`}}>
         <Routes>
-          <Route path="/" element={<h1>Home Page</h1>} />
+          <Route path="/" element={
+            <Box>
+              <Box>Welcome {KeyCloakService.GetUserName()}</Box>
+              <Box>Roles:{KeyCloakService.GetUserRoles()?.join("")}</Box>
+              <Button onClick={logout}>Logout</Button>
+            </Box>
+          
+          } />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/timesheet" element={<TimesheetPage />} />
           <Route path="/myapprovals" element={<ApprovalPage/>} />
+          {/* {KeyCloakService.GetUserRoles()?.join("")!="Employee" && 
+          <Route path="/myapprovals" element={<ApprovalPage/>} />} */}
+          
         </Routes>
         </Box>
       </Box>

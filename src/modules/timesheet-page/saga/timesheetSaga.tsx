@@ -3,12 +3,13 @@ import { CREATE_TIMESHEET, DELETE_TIMESHEET, GET_TIMESHEETS, UPDATE_TIMESHEET } 
 import { createTimesheetAPI, deleteTimesheetByIdAPI, getTimesheetApi, updateTimesheetAPI } from "../APIs/timesheetAPIs"
 import { addTimesheetData, deleteTimesheetData, setTimesheetData, setLoadingEnd, setLoadingStart,updateTimesheetData } from "../reducers/timesheetSlice"
 
-export function * getTimesheetSaga():any{
+export function * getTimesheetSaga(action:any):any{
     // const timehseet =yield getTimesheetApi()
     // yield put(setTimesheetData(timehseet.data))
+    // console.log(action,"check aaaa")
     try {
         yield put(setLoadingStart());
-        const data = yield call(getTimesheetApi)
+        const data = yield getTimesheetApi(action.timesheeet)
         yield put(setTimesheetData(data.data))
       } catch (error) {
         console.log(error);

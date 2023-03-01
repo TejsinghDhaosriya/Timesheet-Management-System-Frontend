@@ -13,18 +13,14 @@ function TimesheetManager() {
   const timeapproval = useSelector((state: any) => state.timesheet);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({ type: GET_TIMESHEETS });
+    dispatch({
+      type: GET_TIMESHEETS,
+      timesheeet: {
+        userId: "ad2e9dae-0e56-441b-8bd5-cf401d61fc30", //hardcoded for now until we get list of users
+        organizationId: 1,
+      },
+    });
   }, []);
-
-//   function tileClassName() {
-//     const statusFormFilled = checkDateInSelectedDateArray(
-//       timeapproval.timesheet,
-//       dayjs(date).format("YYYY-MM-DD")
-//     );
-//     // console.log(statusFormFilled, "check");
-//     return statusFormFilled == true ? "highlight" : "react-calendar-tile-class";
-//     // return "react-calendar-tile-class"
-//   }
   function isWeekend(date: Date) {
     const day = date.getDay();
     return day === 6 || day === 0; // Saturday or Sunday
@@ -54,19 +50,20 @@ function TimesheetManager() {
         <Calendar
           value={date}
           tileClassName="react-calendar-tile-class"
-          tileContent={({date}) => {
+          tileContent={({ date }) => {
             const statusFormFilled = checkDateInSelectedDateArray(
               timeapproval.timesheet,
               dayjs(date).format("YYYY-MM-DD")
             );
-            
+
             return statusFormFilled ? (
               <Tooltip arrow title="Time sheet filled" placement="bottom">
                 <p></p>
               </Tooltip>
-            ) : (<p className="not-filled"></p>);
+            ) : (
+              <p className="not-filled"></p>
+            );
           }}
-          
           tileDisabled={isTileDisabled}
         />
       </Box>

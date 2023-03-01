@@ -38,7 +38,7 @@ function ProjectDrawer(props:any) {
               start_date:'',
               end_date:'',
               status :0,
-              manager_id:0,
+              manager_id:"",
               is_active:''
             })
           );

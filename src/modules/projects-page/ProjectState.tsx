@@ -7,5 +7,5 @@ export const intialState:Project={
     startDate: "",
     endDate: "",
     status: 0,
-    managerId: 0,
+    managerId:"",
 }
