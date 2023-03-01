@@ -11,13 +11,9 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs, { Dayjs } from "dayjs";
 import {
@@ -34,19 +30,17 @@ import KeyCloakService from "../../security/keycloakService";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
-  //const getSelectedDateArray = useSelector<any>((state) => state);
   const getProjectInfo: any = useSelector<any>(
     (state) => state.timesheet.project_info
   );
   const getProjectInfoo = useSelector((state: any) => state.projects);
-  
+
   const pId = KeyCloakService.CallUserProject();
   const user = KeyCloakService.CallUserId();
+  const orgId = KeyCloakService.CallOrganizationId();
   const proj = getProjectInfoo.filter((proje: any) => proje.id === pId);
 
   useEffect((): any => {
-    console.log(props, "check");
-    console.log(proj,"check")
     dispatch({ type: GET_PROJECTS });
   }, []);
 
@@ -54,10 +48,10 @@ const TimesheetForm = (props: any) => {
     props.selectedDateArray,
     props.dateSelected
   );
-  
+
   const initialFormState = {
     project_name: {
-      value: "Project Name",
+      value: proj[0].name,
       error: false,
     },
     project_manager: {
@@ -99,9 +93,7 @@ const TimesheetForm = (props: any) => {
     e.preventDefault();
     const { description, totalHours, project_manager } = formValues;
     let newFormValues = { ...formValues };
-    //console.log("newFormValues",newFormValues);
     if (description.value === "") {
-      //console.log("description", description);
       newFormValues = {
         ...newFormValues,
         description: {
@@ -111,7 +103,6 @@ const TimesheetForm = (props: any) => {
       };
     }
     if (totalHours.value === "") {
-      //console.log("overtime", totalHours);
       newFormValues = {
         ...newFormValues,
         totalHours: {
@@ -146,12 +137,10 @@ const TimesheetForm = (props: any) => {
       project_manager.value.length != 0 &&
       project_manager.value.length <= 2
     ) {
-      //console.log("Form submit successfully");
       const timesheetData = {
         date: dayjs(dateSelected).format("YYYY-MM-DD"),
         description: newFormValues.description.value,
         totalHours: Number(newFormValues.totalHours.value),
-        // timeSheetSubmitted: true,
         project_name: formValues.project_name.value,
         CreatedBy: user,
         // project_manager: formValues?.project_manager.value,
@@ -170,9 +159,15 @@ const TimesheetForm = (props: any) => {
         };
         dispatch({ type: UPDATE_TIMESHEET, tData });
       } else {
-        dispatch({ type: CREATE_TIMESHEET, timesheetData });
+        dispatch({
+          type: CREATE_TIMESHEET,
+          timesheetData,
+          user: user,
+          orgId: orgId,
+          pId: pId,
+          
+        });
       }
-      //console.log(timesheetData);
       resetAllFields();
       setEditFormStatus(false);
     }
@@ -184,7 +179,6 @@ const TimesheetForm = (props: any) => {
     setFormValues(initialFormState);
   };
   useEffect(() => {
-    // console.log("useffect called when formSTatus submiied chencged");
     if (!!formSubmittedStatus) {
       let editFormValues = {
         ...formValues,
@@ -222,7 +216,6 @@ const TimesheetForm = (props: any) => {
           <>
             <IconButton
               onClick={() => {
-                //dispatch(deleteTimesheetData(props.dateSelected));
                 const x = checkDateInSelectedDateArray2(
                   props.selectedDateArray,
                   props.dateSelected
@@ -280,7 +273,6 @@ const TimesheetForm = (props: any) => {
           onChange={handleChange}
           disabled={
             !!formSubmittedStatus &&
-            // formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
         />
@@ -305,7 +297,6 @@ const TimesheetForm = (props: any) => {
           name="totalHours"
           disabled={
             !!formSubmittedStatus &&
-            // formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
           id={"outlined-error-helper-text"}

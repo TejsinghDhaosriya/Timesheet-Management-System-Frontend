@@ -14,21 +14,18 @@ import { setLoadingStart } from "./reducers/timesheetSlice";
 import KeyCloakService from "../../security/keycloakService";
 
 export default function TimesheetPage() {
-  // const state = useSelector((state) => state);
-  // const getSelectedDateArray = useSelector<any>(
-  //   (state) => state.timesheet.timesheetData
-  // );
-
   const ts = useSelector((state: any) => state.timesheet);
   const isLoading = useSelector((state: any) => state.isLoading);
   const isError = useSelector((state: any) => state.error);
   const dispatch = useDispatch();
-  const userId=KeyCloakService.CallUserId()
-  const orgId=KeyCloakService.CallOrganizationId()
+  const userId = KeyCloakService.CallUserId();
+  const orgId = KeyCloakService.CallOrganizationId();
 
-  
   useEffect((): any => {
-    dispatch({ type: GET_TIMESHEETS,timesheeet:{userId:userId,organizationId:orgId}});
+    dispatch({
+      type: GET_TIMESHEETS,
+      timesheeet: { userId: userId, organizationId: orgId },
+    });
   }, []);
 
   const getSelectedDateArray = ts.timesheet;
@@ -53,8 +50,6 @@ export default function TimesheetPage() {
     }
     return false;
   }
-  //--------------------------------------------------------
-  //--------------------------------------------------------
   useEffect(() => {
     setSelectedDateArray(getSelectedDateArray);
   }, [selectedDateArray, getSelectedDateArray]);
@@ -91,16 +86,8 @@ export default function TimesheetPage() {
                 )
                 .classList.add("timesheet-filled");
             }
-            // if (clickedDate > todayDate) {
-            //   event.target
-            //     .closest(
-            //       "button.react-calendar__tile.react-calendar__month-view__days__day.react-calendar-tile-class"
-            //     )
-            //     .classList.add("future-date-disabled");
-            // }
           }}
           tileContent={({ date }) => {
-            //console.log(date,"caledar-date")
             const statusFormFilled = checkDateInSelectedDateArray(
               selectedDateArray,
               dayjs(date).format("YYYY-MM-DD")
@@ -125,28 +112,6 @@ export default function TimesheetPage() {
           setSelectedDate(value);
         }}
       />
-      {/* <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-        {!!selectedDateArray &&
-          selectedDateArray.map((info: any, idx: number) => {
-            const { date, description, totalHours } = info;
-            return (
-              <div
-                key={`${description}${date}${idx}`}
-                style={{
-                  border: "2px solid black",
-                  width: 200,
-                  margin: "10px",
-                  listStyle: "none",
-                  padding: "10px",
-                }}
-              >
-                <li>Date : {date}</li>
-                <li>Description : {description}</li>
-                <li>Total Hours: {totalHours}</li>
-              </div>
-            );
-          })}
-      </Box> */}
     </Box>
   );
 }

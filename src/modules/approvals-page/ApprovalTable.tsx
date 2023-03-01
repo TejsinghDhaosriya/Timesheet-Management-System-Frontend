@@ -110,8 +110,6 @@ export default function WeekTable() {
   useEffect((): any => {
     dispatch({
       type: GET_APPROVALS_WEEK,
-      userId: 12,
-      organizationId: 1,
       startDate: startDate,
       endDate: endDate,
     });

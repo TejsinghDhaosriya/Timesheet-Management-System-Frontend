@@ -38,8 +38,7 @@ export const timesheetSlice = createSlice({
       state.error = true;
     },
     addTimesheetData: (state, action) => {
-      console.log(action.payload.project_name,"proj name")
-      state.project_info.project_name=action.payload.project_name
+      state.project_info.project_name = action.payload.project_name;
       state.timesheet.push(action.payload);
       return state;
     },
@@ -55,20 +54,6 @@ export const timesheetSlice = createSlice({
       );
       return state;
     },
-    // increment: (state) => {
-    //   state.value += 1;
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1;
-    // },
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload;
-    // },
-    // incrementAsync: (state) => {},
-    // decrementAsync: (state) => {},
-    // incrementByAmountAsync: (state, action: PayloadAction<number>) => {},
-    // incrementByAmountAsyncSuccess: (state) => {},
-    // incrementByAmountAsyncFailure: (state) => {},
   },
 });
 

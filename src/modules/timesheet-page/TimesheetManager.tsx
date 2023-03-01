@@ -7,16 +7,18 @@ import { GET_TIMESHEETS } from "./actions/timesheetTypes";
 import { checkDateInSelectedDateArray } from "./helper";
 import "react-calendar/dist/Calendar.css";
 import "./reactCalendar.css";
+import KeyCloakService from "../../security/keycloakService";
 
 function TimesheetManager() {
   const [date, setDate] = useState<Date>(new Date());
   const timeapproval = useSelector((state: any) => state.timesheet);
   const dispatch = useDispatch();
+  const user=KeyCloakService.CallUserId()
   useEffect(() => {
     dispatch({
       type: GET_TIMESHEETS,
       timesheeet: {
-        userId: "ad2e9dae-0e56-441b-8bd5-cf401d61fc30", //hardcoded for now until we get list of users
+        userId:user, // after getting list of user , should be able to select the user
         organizationId: 1,
       },
     });

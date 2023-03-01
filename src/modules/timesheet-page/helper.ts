@@ -31,16 +31,5 @@ export function checkDateInSelectedDateArray2(
       dayjs(item.date).format("YYYY-MM-DD") ===
       dayjs(dateString).format("YYYY-MM-DD")
   );
-  // console.log(ti.id)
   return ti.id;
-}
-
-export function checkDateInSelectedDateArray3(
-  selectedDateArray: any,
-  dateString: string
-) {
-  console.log(selectedDateArray, dateString, "cehck");
-  // const ti=selectedDateArray.find((item:any)=>dayjs(item.date).format("YYYY-MM-DD")===dayjs(dateString).format("YYYY-MM-DD"))
-  // console.log(ti)
-  // return ti
 }

@@ -2,34 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import Project from "../ProjectInterface";
 import { intialState } from "../ProjectState";
 
-// interface Project{
-//     id:number
-//     name:string
-//     description:string,
-//     startDate:string,
-//     endDate:string,
-//     status :number,
-//     managerId:number,
-//   }
-// type IntialState={
-//     loading:boolean
-//     projects:Project[]
-//     error:string
-// }
-// const intialState:IntialState={
-//     loading:false,
-//     projects:[],
-//     error:''
-// }
-// const intialState:Project={
-//     id: 0,
-//     name: "",
-//     description: "",
-//     startDate: "",
-//     endDate: "",
-//     status: 0,
-//     managerId: 0,
-// }
 
 const projects=createSlice({
     name:'projects',
@@ -55,21 +27,7 @@ const projects=createSlice({
             }
         
     },
-    // extraReducers:builder=>{
-    //     builder.addCase(fetchProjects.pending,state=>{
-    //         state.loading=true
-    //     })
-    //     builder.addCase(fetchProjects.fulfilled,(state,action:PayloadAction<Project[]>)=>{
-    //         state.loading=false
-    //         state.projects=action.payload
-    //         state.error=''
-    //     })
-    //     builder.addCase(fetchProjects.rejected,(state,action)=>{
-    //         state.loading=false
-    //         state.projects=[]
-    //         state.error=action.error.message||"something went wrong"
-    //     })
-    // }
+
 
 })
 export const {getProjectsSlice, addProjectSlice, editProjectSlice, deleteProjectSlice } = projects.actions
