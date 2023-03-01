@@ -1,11 +1,17 @@
-import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-
+import LogoutIcon from '@mui/icons-material/Logout';
 import SideBar from "./SideBar";
 import { DRAWER_WIDTH } from "../utils/constants";
+import KeyCloakService from "../security/keycloakService";
+
+
+function logout(){
+  KeyCloakService.CallLogout();
+}
 
 function Navbar(props: any) {
   const { darkMode, setDarkMode } = props;
@@ -89,6 +95,9 @@ function Navbar(props: any) {
               }}
             />
           </FormGroup>
+          <IconButton onClick={logout}>
+            <LogoutIcon color="primary"/>
+          </IconButton>
         </Toolbar>
       </AppBarStyled>
     </>

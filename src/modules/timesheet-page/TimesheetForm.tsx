@@ -38,7 +38,7 @@ const TimesheetForm = (props: any) => {
   const pId = KeyCloakService.CallUserProject();
   const user = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
-  const proj = getProjectInfoo.filter((proje: any) => proje.id === pId);
+  const proj = getProjectInfoo?.filter((proje: any) => proje.id === pId);
 
   useEffect((): any => {
     dispatch({ type: GET_PROJECTS });
@@ -51,7 +51,7 @@ const TimesheetForm = (props: any) => {
 
   const initialFormState = {
     project_name: {
-      value: proj[0].name,
+      value: proj[0]?.name,
       error: false,
     },
     project_manager: {

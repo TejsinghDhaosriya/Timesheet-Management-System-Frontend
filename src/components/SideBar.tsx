@@ -7,11 +7,13 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import HelpIcon from "@mui/icons-material/Help";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
+import HomeIcon from "@mui/icons-material/Home";
 
 import { DRAWER_WIDTH } from "../utils/constants";
 import { fontWeight } from "@mui/system";
 
 let drawerList = [
+  { key: "home", text: "Home", icon: <HomeIcon /> },
   { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
   { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
@@ -21,7 +23,7 @@ let drawerList = [
 interface SideBarProps {}
 
 function SideBar(Props: SideBarProps) {
-  const [isSelected, setIsSelected] = useState("projects");
+  const [isSelected, setIsSelected] = useState("home");
 
   const list = {
     textAlign: "center",
