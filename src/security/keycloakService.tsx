@@ -23,7 +23,7 @@ const UserName = () => keycloakInstance.tokenParsed?.preferred_username;
 
 const UserRoles = () => {
   if (keycloakInstance.resourceAccess === undefined) return undefined;
-  else return keycloakInstance.resourceAccess["TMS-Client"].roles;
+  else return keycloakInstance.resourceAccess["TMS-Client-Local"].roles;
 };
 
 const UserId=()=>keycloakInstance.idTokenParsed?.sub

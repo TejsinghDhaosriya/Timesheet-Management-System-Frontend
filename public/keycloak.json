@@ -2,7 +2,7 @@
   "realm": "Augmento",
   "auth-server-url": "https://143.110.248.171:8443/",
   "ssl-required": "external",
-  "resource": "TMS-Client",
+  "resource": "TMS-Client-Local",
   "public-client": true,
   "verify-token-audience": true,
   "use-resource-role-mappings": true,

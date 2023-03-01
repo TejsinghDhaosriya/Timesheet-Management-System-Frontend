@@ -9,6 +9,7 @@ import { setProjectSlice } from "./reducers/project";
 import { Box } from "@mui/system";
 import { FormControl, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { intialState } from "./ProjectState";
+import KeyCloakService from "../../security/keycloakService";
 
 const MyForm = () => {
   const project = useSelector((state: any) => state.project);
@@ -23,10 +24,11 @@ const MyForm = () => {
     }
   };
 
+  const orgId = KeyCloakService.CallOrganizationId();
   const handleSubmit = () => {
     console.log(project);
     project.id === 0
-      ? dispatch({ type: CREATE_PROJECT, project: { ...project } })
+      ? dispatch({ type: CREATE_PROJECT, project: { ...project }, orgId: orgId })
       : dispatch({ type: UPDATE_PROJECT_BY_ID, project });
 
     dispatch(

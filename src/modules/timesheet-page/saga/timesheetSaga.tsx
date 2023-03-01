@@ -18,7 +18,7 @@ export function * getTimesheetSaga(action:any):any{
 }
 
 export function* createTimesheetSaga(action:any){
-    yield createTimesheetAPI(action.timesheetData)
+    yield createTimesheetAPI(action.timesheetData, action.user, action.orgId, action.pId)
     yield put(addTimesheetData(action.timesheetData))
 }
 

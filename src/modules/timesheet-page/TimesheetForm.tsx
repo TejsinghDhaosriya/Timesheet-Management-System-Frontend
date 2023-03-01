@@ -43,7 +43,7 @@ const TimesheetForm = (props: any) => {
   const pId = KeyCloakService.CallUserProject();
   const user = KeyCloakService.CallUserId();
   const proj = getProjectInfoo.filter((proje: any) => proje.id === pId);
-
+  const orgId = KeyCloakService.CallOrganizationId();
   useEffect((): any => {
     console.log(props, "check");
     console.log(proj,"check")
@@ -170,7 +170,7 @@ const TimesheetForm = (props: any) => {
         };
         dispatch({ type: UPDATE_TIMESHEET, tData });
       } else {
-        dispatch({ type: CREATE_TIMESHEET, timesheetData });
+        dispatch({ type: CREATE_TIMESHEET, timesheetData, user: user, orgId: orgId, pId: pId });
       }
       //console.log(timesheetData);
       resetAllFields();

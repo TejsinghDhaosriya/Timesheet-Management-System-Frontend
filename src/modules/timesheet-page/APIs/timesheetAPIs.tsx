@@ -1,13 +1,24 @@
 import axios from "axios";
 
-export const getTimesheetApi = async (timesheeet:any) =>
-  axios.get(
-    `https://143.110.248.171:5001/api/v1/timesheet?userId=${timesheeet.userId}&organizationId=${timesheeet.organizationId}`
-  );
+export const getTimesheetApi = async (timesheeet: any) =>
+  axios.get(`http://localhost:5295/api/v1/timesheet?userId=${timesheeet.userId}&organizationId=${timesheeet.organizationId}`);
 export const getTimesheetByIdApi = async (id: any) =>
   axios.get(`/timesheet/${id}`);
-export const createTimesheetAPI = async (timesheet: any) =>
-  axios.post(`https://143.110.248.171:5001/api/v1/timesheet`, timesheet);
+export const createTimesheetAPI = async (
+  timesheet: any,
+  user: any,
+  orgId: any,
+  pId: any
+) => {
+  const config: any = {
+    headers: { user_id: user, organization_id: orgId, project_id: pId },
+  };
+  return axios.post(
+    `http://localhost:5295/api/v1/timesheet`,
+    timesheet,
+    config
+  );
+};
 export const updateTimesheetAPI = async (timesheet: {
   id: any;
   timesheetData: any;

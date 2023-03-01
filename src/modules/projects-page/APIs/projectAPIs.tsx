@@ -14,13 +14,14 @@ import axios from 'axios'
 
 
 
-axios.defaults.baseURL = 'https://143.110.248.171:5001/api/v1/'
+axios.defaults.baseURL = 'http://localhost:5295/api/v1/'
 
 export const getProjectsAPI = async () => axios.get('/project')
 
 export const getProjectByIdAPI = async (id: any) => axios.get(`/project/${id}`)
 
-export const createProjectAPI = async (project: any) => axios.post(`/project`, project)
+export const createProjectAPI = async (project: any, orgId: any) => {const config: any = {headers:{organization_id:orgId}}
+ return axios.post(`/project`, project, config) }
 
 export const updateProjectAPI = async (project: { id: any }) => axios.patch(`/project/${project.id}`, project)
 
