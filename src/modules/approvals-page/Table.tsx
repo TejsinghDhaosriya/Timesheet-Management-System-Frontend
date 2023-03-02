@@ -131,7 +131,7 @@ export default function Tablee() {
                           aria-labelledby="modal-modal-title"
                           aria-describedby="modal-modal-description"
                         >
-                          <Box sx={style}>
+                          <Box sx={style} >
                             <Typography>
                               Confirm Rejection With Reason!!!
                             </Typography>
@@ -140,6 +140,7 @@ export default function Tablee() {
                               value={reason}
                               onChange={(e) => setReason(e.target.value)}
                             />
+                            <Box padding="10px 14px">
                             <Button
                               onClick={() => {
                                 handleSave();
@@ -149,6 +150,8 @@ export default function Tablee() {
                             >
                               Submit
                             </Button>
+                            </Box>
+                            
                           </Box>
                         </Modal>
                       </Box>
@@ -157,9 +160,11 @@ export default function Tablee() {
                     )}
                   </TableCell>
                   <TableCell>
+                    {row.status!==0 &&
                     <IconButton onClick={() => handleEditStatus(row)}>
-                      <EditIcon />
-                    </IconButton>
+                    <EditIcon />
+                  </IconButton>}
+                    
                   </TableCell>
                 </TableRow>
               ))

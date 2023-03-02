@@ -8,6 +8,7 @@ import { withTheme } from "./theme";
 import { DRAWER_WIDTH } from "./utils/constants";
 import ApprovalPage from "./modules/approvals-page/ApprovalPage";
 import HomePage from "./components/HomePage";
+import KeyCloakService from "./security/keycloakService";
 
 function App(props: any) {
   return (
@@ -32,9 +33,9 @@ function App(props: any) {
             <Route path="/home" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />
-            <Route path="/myapprovals" element={<ApprovalPage />} />
-            {/* {KeyCloakService.GetUserRoles()?.join("")!="Employee" && 
-          <Route path="/myapprovals" element={<ApprovalPage/>} />} */}
+            {/* <Route path="/myapprovals" element={<ApprovalPage />} /> */}
+            {KeyCloakService?.GetUserRoles()?.toString()==="Manager" && 
+          <Route path="/myapprovals" element={<ApprovalPage/>} />}
           </Routes>
         </Box>
       </Box>

@@ -41,16 +41,17 @@ const MyForm = () => {
           justifyContent: "space-between",
           alignItems: "left",
           mb: "1rem",
+          margin:"10%"
         }}
       >
-        <Typography variant="h5">Project</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">Project</Typography>
         <TextField
           style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("name")}
           placeholder="Enter Project"
           value={project.name}
         />
-        <Typography variant="h5">Description</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">Description</Typography>
         <TextField
           style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("description")}
@@ -58,7 +59,7 @@ const MyForm = () => {
           value={project.description}
         />
 
-        <Typography variant="h5">Start Date</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">Start Date</Typography>
         <TextField
           required
           type="date"
@@ -67,7 +68,7 @@ const MyForm = () => {
           placeholder="Enter Start Date"
           value={project.startDate}
         />
-        <Typography variant="h5">End Date</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">End Date</Typography>
         <TextField
           type="date"
           style={{ margin: "10px", width: "100%" }}
@@ -76,9 +77,8 @@ const MyForm = () => {
           value={project.endDate}
         />
 
-        <Typography variant="h5">Status</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">Status</Typography>
         <Select
-          label="status"
           placeholder="Status"
           onChange={handleChange("status")}
           name="statusId"
@@ -86,6 +86,7 @@ const MyForm = () => {
           sx={{
             width: "100%",
             height: 50,
+            margin: "3%"
           }}
         >
           <MenuItem value="0">Pending</MenuItem>
@@ -96,7 +97,7 @@ const MyForm = () => {
           <MenuItem value="5">Cancelled</MenuItem>
         </Select>
 
-        <Typography variant="h5">Manager</Typography>
+        <Typography variant="h5" margin="10px" lineHeight="0.5">Manager</Typography>
         <Select
           placeholder="Manager"
           defaultValue="select"
@@ -106,13 +107,14 @@ const MyForm = () => {
           sx={{
             width: "100%",
             height: 50,
+            margin: "3%"
           }}
         >
           <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">
-            Manager 1
+            Rohit
           </MenuItem>
-          <MenuItem value="1">Manager 2</MenuItem>
-          <MenuItem value="2">Manager 3</MenuItem>
+          <MenuItem value="1">Siddarth</MenuItem>
+          <MenuItem value="2">Rajneesh</MenuItem>
         </Select>
         <br />
 

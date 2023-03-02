@@ -4,7 +4,7 @@ import TimesheetData from "../timesheetInterface";
 const initialState: TimesheetData = {
   project_info: {
     project_name: "<some project_name>",
-    project_manager: ["<some_name>", "Karan"],
+    project_manager: ["Rohit"],
   },
   timesheet: [
     {

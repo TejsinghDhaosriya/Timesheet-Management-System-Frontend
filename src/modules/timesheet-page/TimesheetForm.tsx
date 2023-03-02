@@ -324,7 +324,7 @@ const TimesheetForm = (props: any) => {
             multiple
             name="project_manager"
           >
-            {["Karan", "Arjun", "Rahul", "<some_name>"].map((name) => {
+            {["Rohit", "Siddarth", "Rajneesh"].map((name) => {
               return (
                 <MenuItem key={name} value={name}>
                   {name}

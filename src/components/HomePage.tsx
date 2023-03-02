@@ -5,20 +5,14 @@ import KeyCloakService from "../security/keycloakService";
 function HomePage() {
   return (
     <Box>
-      <CardContent >
-      <Typography sx={{ fontSize: 20 }} color="text.secondary" gutterBottom>
-        Welcome
-      </Typography>
-      <Typography variant="h3" component="div">
-      {KeyCloakService.GetUserName()}
-      </Typography>
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        Role
-      </Typography>
-      <Typography variant="h4">
-      {KeyCloakService.GetUserRoles()?.join("")}
-      </Typography>
-    </CardContent>
+      <CardContent>
+        <Typography variant="h5" component="div">
+          Welcome {KeyCloakService.GetUserName()}
+        </Typography>
+        <Typography variant="h6">
+          My Role:{KeyCloakService.GetUserRoles()?.join("")}
+        </Typography>
+      </CardContent>
     </Box>
   );
 }

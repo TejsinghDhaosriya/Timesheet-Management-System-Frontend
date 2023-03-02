@@ -9,14 +9,23 @@ import HelpIcon from "@mui/icons-material/Help";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import HomeIcon from "@mui/icons-material/Home";
 import { DRAWER_WIDTH } from "../utils/constants";
+import KeyCloakService from "../security/keycloakService";
 
 let drawerList = [
   { key: "home", text: "Home", icon: <HomeIcon /> },
   { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
-  { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
   { key: "help", text: "Help", icon: <HelpIcon /> },
 ];
+if (KeyCloakService?.GetUserRoles()?.toString() === "Manager") {
+  drawerList = [
+    { key: "home", text: "Home", icon: <HomeIcon /> },
+    { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
+    { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
+    { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
+    { key: "help", text: "Help", icon: <HelpIcon /> },
+  ];
+}
 
 interface SideBarProps {}
 
