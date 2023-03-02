@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import TimesheetManager from "../timesheet-page/TimesheetManager";
-import { GET_APPROVALS, GET_APPROVALS_WEEK } from "./actions/approvalTypes";
+import { GET_APPROVALS } from "./actions/approvalTypes";
 import WeekTable from "./ApprovalTable";
 import Tablee from "./Table";
 
@@ -33,9 +26,9 @@ function ApprovalPage() {
           <MenuItem value={"USER_APPROVALS"}>User Approvals</MenuItem>
         </Select>
       </FormControl>
-      {select=="GET_APPROVALS" && <Tablee />}
-      {select=="GET_APPROVALS_WEEK" && <WeekTable />}
-      {select=="USER_APPROVALS" && <TimesheetManager />}
+      {select === "GET_APPROVALS" && <Tablee />}
+      {select === "GET_APPROVALS_WEEK" && <WeekTable />}
+      {select === "USER_APPROVALS" && <TimesheetManager />}
     </Box>
   );
 }

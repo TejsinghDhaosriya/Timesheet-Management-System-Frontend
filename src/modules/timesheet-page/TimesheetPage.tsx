@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 import FormModal from "../../components/FormModal";
 import { Box } from "@mui/system";
 import Calendar from "react-calendar";
@@ -7,16 +7,12 @@ import "react-calendar/dist/Calendar.css";
 import "./reactCalendar.css";
 import { Typography, Tooltip } from "@mui/material";
 import { checkDateInSelectedDateArray } from "./helper";
-import TimesheetData from "./timesheetInterface";
 import { GET_TIMESHEETS } from "./actions/timesheetTypes";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoadingStart } from "./reducers/timesheetSlice";
 import KeyCloakService from "../../security/keycloakService";
 
 export default function TimesheetPage() {
   const ts = useSelector((state: any) => state.timesheet);
-  const isLoading = useSelector((state: any) => state.isLoading);
-  const isError = useSelector((state: any) => state.error);
   const dispatch = useDispatch();
   const userId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
@@ -77,8 +73,6 @@ export default function TimesheetPage() {
               selectedDateArray,
               dayjs(date).format("YYYY-MM-DD")
             );
-            const todayDate = new Date().getTime();
-            const clickedDate = new Date(date).getTime();
             if (statusFormFilled) {
               event.target
                 .closest(

@@ -10,12 +10,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import {
   checkDateInSelectedDateArray2,
   formSubmittedStatusHelper,
@@ -42,7 +42,7 @@ const TimesheetForm = (props: any) => {
 
   useEffect((): any => {
     dispatch({ type: GET_PROJECTS });
-  }, []);
+  }, [dispatch]);
 
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
@@ -111,7 +111,7 @@ const TimesheetForm = (props: any) => {
         },
       };
     }
-    if (project_manager.value.length == 0) {
+    if (project_manager.value.length === 0) {
       newFormValues = {
         ...newFormValues,
         project_manager: {
@@ -134,7 +134,7 @@ const TimesheetForm = (props: any) => {
     if (
       description.value !== "" &&
       totalHours.value !== "" &&
-      project_manager.value.length != 0 &&
+      project_manager.value.length !== 0 &&
       project_manager.value.length <= 2
     ) {
       const timesheetData = {

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import TimesheetData from "../timesheetInterface";
 
 const initialState: TimesheetData = {
@@ -50,7 +50,7 @@ export const timesheetSlice = createSlice({
     },
     updateTimesheetData: (state, action) => {
       state.timesheet = state.timesheet.map((i) =>
-        i.id == action.payload.id ? action.payload.timesheetData : i
+        i.id === action.payload.id ? action.payload.timesheetData : i
       );
       return state;
     },

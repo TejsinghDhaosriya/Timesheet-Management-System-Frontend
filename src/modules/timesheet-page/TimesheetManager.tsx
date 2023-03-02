@@ -1,6 +1,6 @@
 import { Box, Tooltip } from "@mui/material";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "react-calendar";
 import { useDispatch, useSelector } from "react-redux";
 import { GET_TIMESHEETS } from "./actions/timesheetTypes";

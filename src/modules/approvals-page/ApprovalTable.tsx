@@ -1,11 +1,4 @@
-import {
-  Box,
-  IconButton,
-  Modal,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Modal, Paper, TextField, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,27 +6,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import {
-  JSXElementConstructor,
-  ReactElement,
-  ReactFragment,
-  ReactPortal,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  DELETE_APPROVALS,
-  GET_APPROVALS,
   GET_APPROVALS_WEEK,
   UPDATE_ALL_APPROVALS,
-  UPDATE_APPROVAL,
 } from "./actions/approvalTypes";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
-import { Approval, Timesheet } from "./TimesheetInterface";
-import EditIcon from "@mui/icons-material/Edit";
 
 const style = {
   position: "absolute" as "absolute",
@@ -74,20 +54,12 @@ export default function WeekTable() {
   const result: { id: any; status: any; reasonForRejection: any }[] = [];
 
   for (let i = 0; i < approv.length; i++) {
-    const res = approv[i].approvals.filter((k: any) => k.status == 0);
+    const res = approv[i].approvals.filter((k: any) => k.status === 0);
     for (let j = 0; j < res.length; j++) {
       const { id, status, reasonForRejection } = res[j];
       result.push({ id, status, reasonForRejection });
     }
   }
-
-  // const result2: { id: any; status: any; reasonForRejection: any; }[]=[]
-  // approv.forEach(({ approvals }:any) => {
-  //   approvals.forEach(({ id, status, reasonForRejection }:any) => {
-  //     result2.push({ id, status, reasonForRejection });
-  //   });
-  // });
-  // const result3=result.filter(i=>i.status==0)
 
   const handleAccept = () => {
     result.map((app: any, i: any) => (result[i].status = 1));
@@ -113,19 +85,14 @@ export default function WeekTable() {
       startDate: startDate,
       endDate: endDate,
     });
-  }, [startDate, endDate]);
+  }, [dispatch, startDate, endDate]);
 
   const statusMap: any = {
     0: "pending",
     1: "accepted",
     2: "rejected",
   };
-  // {
-  //   index,
-  //   daterange
-  //   total hours
-  //   status
-  //   }
+
   return (
     <>
       <TextField
@@ -149,7 +116,6 @@ export default function WeekTable() {
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              {/* <TableCell>Index</TableCell> */}
               <TableCell>Start Date</TableCell>
               <TableCell>End Date</TableCell>
               <TableCell>Total Hours</TableCell>
@@ -157,14 +123,12 @@ export default function WeekTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {approv.map((item: any, index: any) => ( */}
             <TableRow>
-              {/* <TableCell>{index}</TableCell> */}
               <TableCell>{startDate}</TableCell>
               <TableCell>{endDate}</TableCell>
               <TableCell>{totalHourss}</TableCell>
               <TableCell>
-                {status != "set" ? (
+                {status !== "set" ? (
                   <Box>
                     <Button color="primary" onClick={() => handleAccept()}>
                       <DoneIcon />

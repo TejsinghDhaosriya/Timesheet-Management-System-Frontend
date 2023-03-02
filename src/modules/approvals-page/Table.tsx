@@ -1,7 +1,5 @@
 import {
   Box,
-  CircularProgress,
-  Drawer,
   IconButton,
   Modal,
   Paper,
@@ -18,11 +16,9 @@ import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  DELETE_APPROVALS,
   GET_APPROVALS,
   UPDATE_APPROVAL,
 } from "./actions/approvalTypes";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { Approval, Timesheet } from "./TimesheetInterface";
@@ -46,15 +42,9 @@ export default function Tablee() {
   const [open, setOpen] = useState(false);
   const handleOpenn = () => setOpen(true);
   const handleClosee = () => setOpen(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const approv = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
-
-  const handleDelete = (id: number) => {
-    console.log(id);
-    dispatch({ type: DELETE_APPROVALS, id: id });
-  };
 
   const handleChangeStatusAccept = (row: Approval) => {
     const acceptStatus = 1;
@@ -86,11 +76,9 @@ export default function Tablee() {
     2: "rejected",
   };
 
-  // console.log(approv);
-
   useEffect((): any => {
     dispatch({ type: GET_APPROVALS });
-  }, []);
+  }, [dispatch]);
   return (
     <>
       <TableContainer component={Paper}>
@@ -105,7 +93,6 @@ export default function Tablee() {
               <TableCell>Reason</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Edit</TableCell>
-              {/* <TableCell>Delete</TableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,7 +110,7 @@ export default function Tablee() {
                       : "-------"}
                   </TableCell>
                   <TableCell>
-                    {statusMap[row.status] == "pending" ? (
+                    {statusMap[row.status] === "pending" ? (
                       <Box>
                         <Button
                           color="primary"
@@ -137,34 +124,33 @@ export default function Tablee() {
                         >
                           <CloseIcon />
                         </Button>
-                        
-                          <Modal
-                            open={open}
-                            onClose={handleClosee}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                          >
-                            <Box sx={style}>
-                              <Typography>
-                                Confirm Rejection With Reason!!!
-                              </Typography>
-                              <TextField
-                                rows="5"
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
-                              />
-                              <Button
-                                onClick={() => {
-                                  handleSave();
-                                  handleClosee();
-                                  setReason("");
-                                }}
-                              >
-                                Submit
-                              </Button>
-                            </Box>
-                          </Modal>
-                        
+
+                        <Modal
+                          open={open}
+                          onClose={handleClosee}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography>
+                              Confirm Rejection With Reason!!!
+                            </Typography>
+                            <TextField
+                              rows="5"
+                              value={reason}
+                              onChange={(e) => setReason(e.target.value)}
+                            />
+                            <Button
+                              onClick={() => {
+                                handleSave();
+                                handleClosee();
+                                setReason("");
+                              }}
+                            >
+                              Submit
+                            </Button>
+                          </Box>
+                        </Modal>
                       </Box>
                     ) : (
                       <Box color="red">{statusMap[row.status]}</Box>
@@ -175,14 +161,6 @@ export default function Tablee() {
                       <EditIcon />
                     </IconButton>
                   </TableCell>
-                  {/* <TableCell>
-                      <Button
-                        color="inherit"
-                        onClick={() => handleDelete(row.id)}
-                      >
-                        <DeleteIcon />
-                      </Button>
-                    </TableCell> */}
                 </TableRow>
               ))
             )}

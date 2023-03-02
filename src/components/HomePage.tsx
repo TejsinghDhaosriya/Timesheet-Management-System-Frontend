@@ -1,6 +1,5 @@
 import { CardContent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
 import KeyCloakService from "../security/keycloakService";
 
 function HomePage() {

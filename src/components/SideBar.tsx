@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import { List, ListItem, ListItemIcon, Drawer } from "@mui/material";
@@ -8,9 +8,7 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import HelpIcon from "@mui/icons-material/Help";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import HomeIcon from "@mui/icons-material/Home";
-
 import { DRAWER_WIDTH } from "../utils/constants";
-import { fontWeight } from "@mui/system";
 
 let drawerList = [
   { key: "home", text: "Home", icon: <HomeIcon /> },

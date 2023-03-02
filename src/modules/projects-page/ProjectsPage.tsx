@@ -1,12 +1,10 @@
 import { Box, Button, Drawer, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import MyForm from "./projectForm";
 import MyTable from "./projectTable";
 import CloseIcon from "@mui/icons-material/Close";
 import { setProjectSlice } from "./reducers/project";
 import { useDispatch } from "react-redux";
-import ProjectBar from "./ProjectDrawer";
-import { borderRight } from "@mui/system";
 import { intialState } from "./ProjectState";
 
 function Projects() {

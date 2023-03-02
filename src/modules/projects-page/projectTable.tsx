@@ -1,4 +1,3 @@
-import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,15 +6,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "@mui/material/Button";
 import { DELETE_PROJECT_BY_ID, GET_PROJECTS } from "./actions/projectTypes";
 import { setProjectSlice } from "./reducers/project";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Drawer, IconButton } from "@mui/material";
-import ProjectDrawer from "./ProjectDrawer";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -30,7 +26,7 @@ export default function MyTable() {
   const dispatch = useDispatch();
   useEffect((): any => {
     dispatch({ type: GET_PROJECTS });
-  }, []);
+  }, [dispatch]);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [sortBy, setSortBy] = useState<
@@ -154,9 +150,7 @@ export default function MyTable() {
                         aria-label="logo"
                         onClick={() => {
                           setIsDrawerOpen(false);
-                          dispatch(
-                            setProjectSlice(intialState)
-                          );
+                          dispatch(setProjectSlice(intialState));
                         }}
                       >
                         <CloseIcon />

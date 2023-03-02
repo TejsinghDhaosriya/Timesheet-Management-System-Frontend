@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Modal, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Modal } from "@mui/material";
 import TimesheetForm from "../modules/timesheet-page/TimesheetForm";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -43,8 +42,6 @@ const FormModal = (props: any) => {
     setDateSelectedStatus(false);
   };
   useEffect(() => {
-    //console.log('useffect running ... ')
-    // const dateFormatted = `${dateSelected.slice(4,6)}${dateSelected.slice(0,3)}${dateSelected.slice(6)}`;
     if (openModal) {
       handleClose();
     } else {
@@ -65,17 +62,15 @@ const FormModal = (props: any) => {
   return (
     <Modal
       open={openModal}
-      //onClose={handleClose}
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
       <Box sx={{ ...style, width: 500 }}>
-          <TimesheetForm
-            {...props}
-            setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}
-            closeModal={handleClose}
-          />
-        
+        <TimesheetForm
+          {...props}
+          setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}
+          closeModal={handleClose}
+        />
       </Box>
     </Modal>
   );

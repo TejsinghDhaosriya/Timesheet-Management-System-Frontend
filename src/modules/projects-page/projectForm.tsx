@@ -1,13 +1,9 @@
-import Input from "@mui/material/Input";
-import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "@reduxjs/toolkit";
-import Divider from "@mui/material/Divider";
 import { CREATE_PROJECT, UPDATE_PROJECT_BY_ID } from "./actions/projectTypes";
 import { setProjectSlice } from "./reducers/project";
 import { Box } from "@mui/system";
-import { FormControl, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { MenuItem, Select, TextField, Typography } from "@mui/material";
 import { intialState } from "./ProjectState";
 import KeyCloakService from "../../security/keycloakService";
 
@@ -16,7 +12,7 @@ const MyForm = () => {
   const dispatch = useDispatch();
 
   const handleChange = (prop: any) => (event: any) => {
-    if (event.target.name === "statusId" ) {
+    if (event.target.name === "statusId") {
       const x = parseInt(event.target.value);
       dispatch(setProjectSlice({ ...project, [prop]: x }));
     } else {
@@ -26,67 +22,60 @@ const MyForm = () => {
   const orgId = KeyCloakService.CallOrganizationId();
   const handleSubmit = () => {
     project.id === 0
-      ? dispatch({ type: CREATE_PROJECT, project: { ...project },orgId:orgId })
+      ? dispatch({
+          type: CREATE_PROJECT,
+          project: { ...project },
+          orgId: orgId,
+        })
       : dispatch({ type: UPDATE_PROJECT_BY_ID, project });
 
-    dispatch(
-      setProjectSlice(intialState)
-    );
+    dispatch(setProjectSlice(intialState));
   };
 
   return (
     <>
-      <Box sx={{
+      <Box
+        sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "left",
           mb: "1rem",
-          
-          
-        }}>
-        {/* <Input style={{ margin: "10px" }} value={project.id} placeholder="Id" fullWidth disabled/> */}
+        }}
+      >
         <Typography variant="h5">Project</Typography>
         <TextField
-          style={{ margin: "10px",width:"100%" }}
+          style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("name")}
           placeholder="Enter Project"
           value={project.name}
         />
         <Typography variant="h5">Description</Typography>
         <TextField
-          style={{ margin: "10px" ,width:"100%"}}
+          style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("description")}
           placeholder="Enter Description"
           value={project.description}
         />
-        
+
         <Typography variant="h5">Start Date</Typography>
         <TextField
           required
           type="date"
-          style={{ margin: "10px" ,width:"100%" }}
+          style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("startDate")}
           placeholder="Enter Start Date"
           value={project.startDate}
-        /> 
+        />
         <Typography variant="h5">End Date</Typography>
         <TextField
           type="date"
-          style={{ margin: "10px",width:"100%" }}
+          style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("endDate")}
           placeholder="Enter End Date"
           value={project.endDate}
         />
-        {/* <TextField
-          label="Status"
-          name="statusId"
-          type='number'
-          style={{ margin: "10px" }}
-          onChange={handleChange("status")}
-          placeholder="Enter Status"
-          value={project.status}
-        /> */}
+
         <Typography variant="h5">Status</Typography>
         <Select
           label="status"
@@ -95,7 +84,7 @@ const MyForm = () => {
           name="statusId"
           value={project.status}
           sx={{
-            width:"100%",
+            width: "100%",
             height: 50,
           }}
         >
@@ -107,15 +96,6 @@ const MyForm = () => {
           <MenuItem value="5">Cancelled</MenuItem>
         </Select>
 
-        {/* <TextField
-          label="Manager"
-          name="Manager"
-          type="number"
-          style={{ margin: "10px" }}
-          onChange={handleChange("managerId")}
-          value={project.managerId}
-        /> */}
-
         <Typography variant="h5">Manager</Typography>
         <Select
           placeholder="Manager"
@@ -124,11 +104,13 @@ const MyForm = () => {
           name="Manager"
           value={project.managerId}
           sx={{
-            width:"100%",
+            width: "100%",
             height: 50,
           }}
         >
-          <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">Manager 1</MenuItem>
+          <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">
+            Manager 1
+          </MenuItem>
           <MenuItem value="1">Manager 2</MenuItem>
           <MenuItem value="2">Manager 3</MenuItem>
         </Select>
@@ -140,21 +122,17 @@ const MyForm = () => {
             onClick={() => handleSubmit()}
             variant="contained"
           >
-          {project.id===0?"Add":"Update"}
+            {project.id === 0 ? "Add" : "Update"}
           </Button>
           <Button
             style={{ margin: "10px" }}
-            onClick={() =>
-              dispatch(
-                setProjectSlice(intialState)
-              )
-            }
+            onClick={() => dispatch(setProjectSlice(intialState))}
             variant="contained"
           >
             Reset
           </Button>
         </Box>
-      </ Box>
+      </Box>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from "redux-saga/effects";
+import { put, takeEvery } from "redux-saga/effects";
 import {
   DELETE_APPROVALS,
   GET_APPROVALS,
@@ -16,7 +16,6 @@ import {
 import {
   deleteApproval,
   getApprovals,
-  updateApproval,
 } from "../reducers/approvals";
 
 export function* getApprovalSaga(): any {
@@ -28,7 +27,6 @@ export function* getApprovalWeekSaga(action: any): any {
   yield put(getApprovals(a.data));
 }
 export function* updateApprovalSaga(action: any) {
-  //console.log(action.approval);
   yield updateApprovalAPI(action.approval);
   //yield put(updateApproval(action.approval));
   yield getApprovalSaga()
