@@ -33,9 +33,9 @@ function App(props: any) {
             <Route path="/home" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />
-            {/* <Route path="/myapprovals" element={<ApprovalPage />} /> */}
-            {KeyCloakService?.GetUserRoles()?.toString()==="Manager" && 
-          <Route path="/myapprovals" element={<ApprovalPage/>} />}
+            <Route path="/myapprovals" element={<ApprovalPage />} />
+            {/* {KeyCloakService?.GetUserRoles()?.toString()==="Manager" && 
+          <Route path="/myapprovals" element={<ApprovalPage/>} />} */}
           </Routes>
         </Box>
       </Box>

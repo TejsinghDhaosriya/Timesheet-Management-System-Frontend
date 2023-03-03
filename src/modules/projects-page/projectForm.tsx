@@ -41,7 +41,7 @@ const MyForm = () => {
           justifyContent: "space-between",
           alignItems: "left",
           mb: "1rem",
-          margin:"10%"
+          margin:"5%"
         }}
       >
         <Typography variant="h5" margin="10px" lineHeight="0.5">Project</Typography>

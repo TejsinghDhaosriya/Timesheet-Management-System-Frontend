@@ -15,17 +15,18 @@ let drawerList = [
   { key: "home", text: "Home", icon: <HomeIcon /> },
   { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
+  { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
   { key: "help", text: "Help", icon: <HelpIcon /> },
 ];
-if (KeyCloakService?.GetUserRoles()?.toString() === "Manager") {
-  drawerList = [
-    { key: "home", text: "Home", icon: <HomeIcon /> },
-    { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
-    { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
-    { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
-    { key: "help", text: "Help", icon: <HelpIcon /> },
-  ];
-}
+// if (KeyCloakService?.GetUserRoles()?.toString() === "Manager") {
+//   drawerList = [
+//     { key: "home", text: "Home", icon: <HomeIcon /> },
+//     { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
+//     { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
+//     { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
+//     { key: "help", text: "Help", icon: <HelpIcon /> },
+//   ];
+// }
 
 interface SideBarProps {}
 
