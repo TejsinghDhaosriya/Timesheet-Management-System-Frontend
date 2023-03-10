@@ -20,6 +20,7 @@ import MyForm from "./projectForm";
 import CloseIcon from "@mui/icons-material/Close";
 import Project from "./ProjectInterface";
 import { intialState } from "./ProjectState";
+import dayjs from "dayjs";
 
 export default function MyTable() {
   const project = useSelector((state: any) => state.projects);
@@ -113,8 +114,8 @@ export default function MyTable() {
                   {row.name}
                 </TableCell>
                 <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.startDate}</TableCell>
-                <TableCell align="right">{row.endDate}</TableCell>
+                <TableCell align="right">{dayjs(row.startDate).format("DD,MMMM YYYY")}</TableCell>
+                <TableCell align="right">{dayjs(row.endDate).format("DD,MMMM YYYY")}</TableCell>
                 <TableCell align="right">{numberMap[row.status]}</TableCell>
                 <TableCell align="right">{managerMap[row.managerId]}</TableCell>
                 <TableCell align="right">

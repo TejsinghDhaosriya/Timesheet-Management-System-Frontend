@@ -14,6 +14,7 @@ import {
 } from "./actions/approvalTypes";
 import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
+import dayjs from "dayjs";
 
 const style = {
   position: "absolute" as "absolute",
@@ -30,8 +31,8 @@ const style = {
 export default function WeekTable() {
   const approv = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [status, setStatus] = useState("");
   const [reason, setReason] = useState("");
   const [modal, setModal] = useState(false);
@@ -111,69 +112,71 @@ export default function WeekTable() {
         placeholder="Enter End Date"
         value={endDate}
       />
-
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Start Date</TableCell>
-              <TableCell>End Date</TableCell>
-              <TableCell>Total Hours</TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{startDate}</TableCell>
-              <TableCell>{endDate}</TableCell>
-              <TableCell>{totalHourss}</TableCell>
-              <TableCell>
-                {status !== "set" ? (
-                  <Box>
-                    <Button color="primary" onClick={() => handleAccept()}>
-                      <DoneIcon />
-                    </Button>
-                    <Button color="primary" onClick={() => handleReject()}>
-                      <CloseIcon />
-                    </Button>
-                    {
-                      <Modal
-                        open={open}
-                        onClose={handleClosee}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                      >
-                        <Box sx={style}>
-                          <Typography>
-                            Confirm Rejection With Reason!!!
-                          </Typography>
-                          <TextField
-                            rows="5"
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                          />
-                          <Button
-                            onClick={() => {
-                              handleSave();
-                              handleClosee();
-                              setReason("");
-                            }}
-                          >
-                            Submit
-                          </Button>
-                        </Box>
-                      </Modal>
-                    }
-                  </Box>
-                ) : (
-                  <Box>"Already Set"</Box>
-                )}
-              </TableCell>
-            </TableRow>
-            {/* ))} */}
-          </TableBody>
-        </Table>
-      </TableContainer>
+{startDate!==null && endDate !==null && 
+ <TableContainer component={Paper}>
+ <Table aria-label="simple table">
+   <TableHead>
+     <TableRow>
+       <TableCell>Start Date</TableCell>
+       <TableCell>End Date</TableCell>
+       <TableCell>Total Hours</TableCell>
+       <TableCell>Status</TableCell>
+     </TableRow>
+   </TableHead>
+   <TableBody>
+     <TableRow>
+       <TableCell>{dayjs(startDate).format("DD,MMMM YYYY")}</TableCell>
+       <TableCell>{dayjs(endDate).format("DD,MMMM YYYY")}</TableCell>
+       <TableCell>{totalHourss}</TableCell>
+       <TableCell>
+         {status !== "set" ? (
+           <Box>
+             <Button color="primary" onClick={() => handleAccept()}>
+               <DoneIcon />
+             </Button>
+             <Button color="primary" onClick={() => handleReject()}>
+               <CloseIcon />
+             </Button>
+             {
+               <Modal
+                 open={open}
+                 onClose={handleClosee}
+                 aria-labelledby="modal-modal-title"
+                 aria-describedby="modal-modal-description"
+               >
+                 <Box sx={style}>
+                   <Typography>
+                     Confirm Rejection With Reason!!!
+                   </Typography>
+                   <TextField
+                     rows="5"
+                     value={reason}
+                     onChange={(e) => setReason(e.target.value)}
+                   />
+                   <Button
+                     onClick={() => {
+                       handleSave();
+                       handleClosee();
+                       setReason("");
+                     }}
+                   >
+                     Submit
+                   </Button>
+                 </Box>
+               </Modal>
+             }
+           </Box>
+         ) : (
+           <Box>"Already Set"</Box>
+         )}
+       </TableCell>
+     </TableRow>
+     {/* ))} */}
+   </TableBody>
+ </Table>
+</TableContainer>
+}
+     
     </>
   );
 }

@@ -44,14 +44,14 @@ const MyForm = () => {
           margin:"5%"
         }}
       >
-        <Typography variant="h5" margin="10px" lineHeight="0.5">Project</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Project</Typography>
         <TextField
           style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("name")}
           placeholder="Enter Project"
           value={project.name}
         />
-        <Typography variant="h5" margin="10px" lineHeight="0.5">Description</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Description</Typography>
         <TextField
           style={{ margin: "10px", width: "100%" }}
           onChange={handleChange("description")}
@@ -59,7 +59,7 @@ const MyForm = () => {
           value={project.description}
         />
 
-        <Typography variant="h5" margin="10px" lineHeight="0.5">Start Date</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Start Date</Typography>
         <TextField
           required
           type="date"
@@ -68,7 +68,7 @@ const MyForm = () => {
           placeholder="Enter Start Date"
           value={project.startDate}
         />
-        <Typography variant="h5" margin="10px" lineHeight="0.5">End Date</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">End Date</Typography>
         <TextField
           type="date"
           style={{ margin: "10px", width: "100%" }}
@@ -77,7 +77,7 @@ const MyForm = () => {
           value={project.endDate}
         />
 
-        <Typography variant="h5" margin="10px" lineHeight="0.5">Status</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Status</Typography>
         <Select
           placeholder="Status"
           onChange={handleChange("status")}
@@ -97,7 +97,7 @@ const MyForm = () => {
           <MenuItem value="5">Cancelled</MenuItem>
         </Select>
 
-        <Typography variant="h5" margin="10px" lineHeight="0.5">Manager</Typography>
+        <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Manager</Typography>
         <Select
           placeholder="Manager"
           defaultValue="select"

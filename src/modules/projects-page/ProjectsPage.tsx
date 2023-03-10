@@ -30,7 +30,7 @@ function Projects() {
         anchor="right"
         open={isDrawerOpen}
       >
-        <Box style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
+        <Box style={{width:"100%",display:"flex",justifyContent:"flex-end",padding:"10px"}}>
           <IconButton
             size="small"
             edge="start"

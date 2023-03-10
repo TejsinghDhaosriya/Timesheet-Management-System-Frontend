@@ -38,7 +38,7 @@ const approvals = createSlice({
     },
     updateApproval: (state, action) => {
       state = state.map((i) =>
-        i.id == action.payload.id ? action.payload : i
+        i.id === action.payload.id ? action.payload : i
       );
       return state;
     },

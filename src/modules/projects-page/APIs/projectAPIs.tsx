@@ -6,9 +6,9 @@ import Project from "../ProjectInterface";
 // axios.defaults.baseURL = "https://143.110.248.171:5001/api/v1/";
 // axios.defaults.headers.common['Authorization'] = token;
 
-axios.defaults.baseURL = "https://143.110.248.171:5001/api/v1/";
+axios.defaults.baseURL = `https://143.110.248.171:5001/api/v1/`;
 
-export const getProjectsAPI = async () => axios.get("/project");
+export const getProjectsAPI = async () => axios.get(`/project`);
 
 export const getProjectByIdAPI = async (id:number) => axios.get(`/project/${id}`);
 

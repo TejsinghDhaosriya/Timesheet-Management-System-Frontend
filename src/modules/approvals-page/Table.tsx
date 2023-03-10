@@ -23,8 +23,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { Approval, Timesheet } from "./TimesheetInterface";
 import EditIcon from "@mui/icons-material/Edit";
+import dayjs from "dayjs";
 
 const style = {
+  display:"flex",
   position: "absolute" as "absolute",
   top: "50%",
   left: "50%",
@@ -102,7 +104,7 @@ export default function Tablee() {
                   <TableCell>{index}</TableCell>
                   <TableCell>{row.timesheetId}</TableCell>
                   <TableCell>{approval.description}</TableCell>
-                  <TableCell>{approval.date}</TableCell>
+                  <TableCell>{dayjs(approval.date).format("DD,MMMM YYYY")}</TableCell>
                   <TableCell>{approval.totalHours}</TableCell>
                   <TableCell>
                     {statusMap[row.status] === "rejected"
@@ -140,7 +142,6 @@ export default function Tablee() {
                               value={reason}
                               onChange={(e) => setReason(e.target.value)}
                             />
-                            <Box padding="10px 14px">
                             <Button
                               onClick={() => {
                                 handleSave();
@@ -150,8 +151,6 @@ export default function Tablee() {
                             >
                               Submit
                             </Button>
-                            </Box>
-                            
                           </Box>
                         </Modal>
                       </Box>
