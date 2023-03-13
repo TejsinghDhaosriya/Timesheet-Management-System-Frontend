@@ -65,7 +65,7 @@ const FormModal = (props: any) => {
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
-      <Box sx={{ ...style, width: 500 }}>
+      <Box sx={{ ...style, width: 800 }}>
         <TimesheetForm
           {...props}
           setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}

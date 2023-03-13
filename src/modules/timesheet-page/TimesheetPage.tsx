@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import FormModal from "../../components/FormModal";
 import { Box } from "@mui/system";
-import Calendar from "react-calendar";
+import Calendar from "./calendar/Calendar";
 import "react-calendar/dist/Calendar.css";
 import "./reactCalendar.css";
 import { Typography, Tooltip } from "@mui/material";
@@ -10,6 +10,11 @@ import { checkDateInSelectedDateArray } from "./helper";
 import { GET_TIMESHEETS } from "./actions/timesheetTypes";
 import { useDispatch, useSelector } from "react-redux";
 import KeyCloakService from "../../security/keycloakService";
+import {
+  timesheet_completed_color,
+  timesheet_disabled_color,
+} from "../../utils/constants";
+import HomePage from "../../components/HomePage";
 
 export default function TimesheetPage() {
   const ts = useSelector((state: any) => state.timesheet);
@@ -53,15 +58,16 @@ export default function TimesheetPage() {
   return (
     <Box sx={{ marginTop: "70px" }} className="time-sheet-page-container">
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        sx={
+          {
+            // display: "flex",
+            // flexDirection: "column",
+            // justifyContent: "center",
+            // alignItems: "center",
+          }
+        }
       >
-        <Typography variant="h3">Time Sheet </Typography>
-        <Calendar
+        {/* <Calendar
           onChange={(value: Date) => {
             setSelectedDate(dayjs(value).format("YYYY-MM-DD"));
             setDateSelectedStatus(true);
@@ -93,6 +99,46 @@ export default function TimesheetPage() {
             ) : null;
           }}
           tileDisabled={isTileDisabled}
+        /> */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <HomePage />
+          <Box>
+            <span
+              style={{
+                padding: "1px 10px",
+                margin: 10,
+                background: `${timesheet_completed_color}`,
+                border: "1px solid",
+              }}
+            >
+              {" "}
+            </span>
+            <span>Time sheet completed</span>
+          </Box>
+          <Box>
+            <span
+              style={{
+                padding: "1px 10px",
+                margin: 10,
+                background: `${timesheet_disabled_color}`,
+                border: "1px solid",
+              }}
+            >
+              {" "}
+            </span>
+            <span>Time sheet disabled</span>
+          </Box>
+        </Box>
+        <Calendar
+          setSelectedDate={setSelectedDate}
+          setDateSelectedStatus={setDateSelectedStatus}
         />
       </Box>
       <FormModal

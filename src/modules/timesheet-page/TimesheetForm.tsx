@@ -258,7 +258,9 @@ const TimesheetForm = (props: any) => {
         />
         <TextField
           value={formValues.description.value}
-          sx={{ mb: 2 }}
+          sx={{mb: 2 }}
+          multiline
+          minRows={4}
           label="Description"
           fullWidth
           required
