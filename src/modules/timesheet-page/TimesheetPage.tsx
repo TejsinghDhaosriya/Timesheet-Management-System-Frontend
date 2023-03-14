@@ -14,7 +14,7 @@ import {
   timesheet_completed_color,
   timesheet_disabled_color,
 } from "../../utils/constants";
-import HomePage from "../../components/HomePage";
+import UserCard from "../../components/HomePage";
 
 export default function TimesheetPage() {
   const ts = useSelector((state: any) => state.timesheet);
@@ -108,7 +108,8 @@ export default function TimesheetPage() {
             alignItems: "center",
           }}
         >
-          <HomePage />
+          <UserCard />
+          <Box style={{display:'flex'}}>
           <Box>
             <span
               style={{
@@ -134,6 +135,7 @@ export default function TimesheetPage() {
               {" "}
             </span>
             <span>Time sheet disabled</span>
+          </Box>
           </Box>
         </Box>
         <Calendar

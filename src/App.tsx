@@ -28,9 +28,8 @@ function App(props: any) {
         >
           <Navbar {...props} />
         </Box>
-        <Box sx={{marginLeft: `${DRAWER_WIDTH}px` }}>
+        <Box sx={{marginLeft: `${DRAWER_WIDTH}px`,marginTop:'40px' }}>
           <Routes>
-            <Route path="/home" element={<HomePage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />
             <Route path="/myapprovals" element={<ApprovalPage />} />

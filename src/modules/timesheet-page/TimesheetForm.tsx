@@ -191,7 +191,8 @@ const TimesheetForm = (props: any) => {
           value: formSubmittedStatus?.totalHours,
         },
         project_name: {
-          value: getProjectInfo.project_name,
+          //value: getProjectInfo.project_name,
+          value: proj[0]?.name,
         },
         project_manager: {
           value: getProjectInfo.project_manager,

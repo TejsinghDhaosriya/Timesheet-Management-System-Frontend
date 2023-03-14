@@ -2,19 +2,20 @@ import { CardContent, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import KeyCloakService from "../security/keycloakService";
 
-function HomePage() {
+function UserCard() {
+  const username = KeyCloakService.GetUserName();
   return (
     <Box>
       <CardContent>
         <Typography variant="h5" component="div">
-          Welcome {KeyCloakService.GetUserName()}
+          Welcome <b style={{textTransform:"capitalize"}}>{username}!</b>
         </Typography>
-        <Typography variant="h6">
+        {/* <Typography variant="h6">
           My Role:{KeyCloakService.GetUserRoles()?.join("")}
-        </Typography>
+        </Typography> */}
       </CardContent>
     </Box>
   );
 }
 
-export default HomePage;
+export default UserCard;

@@ -19,7 +19,7 @@ function Navbar(props: any) {
     backgroundColor: "white",
     color: theme.palette.text.primary,
     boxShadow: "none",
-    marginTop: 24,
+    //marginTop: 24,
     width: `calc(100% - ${DRAWER_WIDTH}px)`,
   }));
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
