@@ -24,7 +24,7 @@ export function* getTimesheetSaga(action: any): any {
   try {
     yield put(setLoadingStart());
     const data = yield getTimesheetApi(action.timesheeet);
-    yield put(setTimesheetData(data.data));
+    yield put(setTimesheetData(data?.data));
   } catch (error) {
     console.log(error);
     yield put(setLoadingEnd());

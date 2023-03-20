@@ -51,7 +51,7 @@ const TimesheetForm = (props: any) => {
 
   const initialFormState = {
     project_name: {
-      value: proj[0]?.name,
+      value: proj[0]?.name||"<some_project_name>",
       error: false,
     },
     project_manager: {
@@ -212,7 +212,7 @@ const TimesheetForm = (props: any) => {
           mb: "1rem",
         }}
       >
-        <Typography variant="h5">Time Sheet Information</Typography>
+        <Typography data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
         {!!formSubmittedStatus ? (
           <>
             <IconButton
@@ -224,6 +224,7 @@ const TimesheetForm = (props: any) => {
                 dispatch({ type: DELETE_TIMESHEET, id: x });
                 props.closeModal();
               }}
+              data-testid="delete-btn"
             >
               <DeleteIcon />
             </IconButton>
@@ -232,6 +233,7 @@ const TimesheetForm = (props: any) => {
                 setEditFormStatus(true);
                 setEditDropdown(true);
               }}
+              data-testid="edit-btn"
             >
               <EditIcon />
             </IconButton>
@@ -239,7 +241,7 @@ const TimesheetForm = (props: any) => {
         ) : (
           <></>
         )}
-        <IconButton onClick={props.closeModal}>
+        <IconButton data-testid="cancel-modal" onClick={props.closeModal}>
           <CancelIcon />
         </IconButton>
       </Box>
@@ -256,12 +258,13 @@ const TimesheetForm = (props: any) => {
           fullWidth
           name="project_name"
           disabled
+          inputProps={{ "data-testid": "projectName" }}
         />
         <TextField
           value={formValues.description.value}
           sx={{mb: 2 }}
           multiline
-          minRows={4}
+          minRows={6}
           label="Description"
           fullWidth
           required
@@ -278,6 +281,7 @@ const TimesheetForm = (props: any) => {
             !!formSubmittedStatus &&
             !editFormStatus
           }
+          inputProps={{ "data-testid": "description" }}
         />
         <TextField
           disabled
@@ -287,6 +291,7 @@ const TimesheetForm = (props: any) => {
           defaultValue={formValues.date.value}
           fullWidth
           name="date"
+          inputProps={{ "data-testid": "date" }}
         />
         <TextField
           type="number"
@@ -308,6 +313,7 @@ const TimesheetForm = (props: any) => {
               ? formValues.totalHours.errorMessage
               : ""
           }
+          inputProps={{ "data-testid": "totalHours" }}
         />
         <FormControl
           sx={{ mb: 2 }}
@@ -352,6 +358,7 @@ const TimesheetForm = (props: any) => {
             formSubmittedStatus.timeSheetSubmitted &&
             !editFormStatus
           }
+          data-testid="submit-btn"
         >
           {editFormStatus ? "Update" : "Create"}
         </Button>

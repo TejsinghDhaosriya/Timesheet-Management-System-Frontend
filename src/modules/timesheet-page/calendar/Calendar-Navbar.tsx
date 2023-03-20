@@ -87,7 +87,7 @@ function CalendarNavbar(props: any) {
       <Tooltip
         title={PreviousLabel(layout)}
       >
-        <IconButton onClick={previous}>
+        <IconButton data-testid="prev-btn" onClick={previous}>
           <ChevronLeftIcon />
         </IconButton>
       </Tooltip>
@@ -95,12 +95,12 @@ function CalendarNavbar(props: any) {
       <Tooltip
         title={NextLabel(layout)}
       >
-        <IconButton onClick={next}>
+        <IconButton data-testid="next-btn" onClick={next}>
           <ChevronRightIcon />
         </IconButton>
       </Tooltip>
 
-      <Typography style={{ fontWeight: "bolder" }}>
+      <Typography data-testid="month-name" style={{ fontWeight: "bolder" }}>
         {showMonthsAndYears || showMonthsAndYear || showMonthAndYear}
       </Typography>
 
@@ -125,6 +125,7 @@ function CalendarNavbar(props: any) {
           aria-label="Week View"
           onClick={(e: any) => setLayout({ e, option: "week" })}
           edge="start"
+          data-testid="week-view"
         >
           <ViewWeekIcon />
         </IconButton>
@@ -138,6 +139,7 @@ function CalendarNavbar(props: any) {
           aria-label="Month View"
           onClick={(e: any) => setLayout({ e, option: "month" })}
           edge="start"
+          data-testid="month-view"
         >
           <ViewModuleIcon />
         </IconButton>

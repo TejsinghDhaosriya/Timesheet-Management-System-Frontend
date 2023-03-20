@@ -23,9 +23,9 @@ const FormModal = (props: any) => {
     formattedDate,
     setSelectedDate,
   } = props;
-  const [openModal, setOpenModal] = useState(dateSelectedStatus);
+  const [openModal, setOpenModal] = useState(true);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
-  const formSubmittedStatus = props.selectedDateArray.find(
+  const formSubmittedStatus = props.selectedDateArray?.find(
     (dateSelect: any) => {
       return (
         dateSelect.timeSheetSubmitted === true &&
@@ -39,17 +39,17 @@ const FormModal = (props: any) => {
   const handleClose = () => {
     setOpenModal(false);
     setSelectedDate("");
-    setDateSelectedStatus(false);
+    //setDateSelectedStatus(false);
   };
   useEffect(() => {
     if (openModal) {
       handleClose();
     } else {
-      if (dateSelectedStatus) {
+      if (dateSelected) {
         handleOpen();
       }
     }
-  }, [dateSelected, dateSelectedStatus]);
+  }, [dateSelected]);
 
   useEffect(() => {
     if (formFilledStatus) {
@@ -61,6 +61,7 @@ const FormModal = (props: any) => {
   }, [formFilledStatus]);
   return (
     <Modal
+      data-testid="timesheet-modal"
       open={openModal}
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"

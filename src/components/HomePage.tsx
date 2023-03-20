@@ -7,7 +7,7 @@ function UserCard() {
   return (
     <Box>
       <CardContent>
-        <Typography variant="h5" component="div">
+        <Typography data-testid="greet-user" variant="h5" component="div">
           Welcome <b style={{textTransform:"capitalize"}}>{username}!</b>
         </Typography>
         {/* <Typography variant="h6">

@@ -74,11 +74,11 @@ function CalendarLayoutMonth(props: any) {
                 onClick={()=>{
                   if(!(isDateDisabled && isDateFuture)){
                     props.setSelectedDate(dayjs(day).format("YYYY-MM-DD"));
-                    props.setDateSelectedStatus(true);
+                    //props?.setDateSelectedStatus(true);
                   }
 
                 }}
-                className="calendar-tile"
+                data-testid="calendar-tile"
                 sx={isDateDisabled || isDateFuture?{background:`${timesheet_disabled_color}`,cursor:"not-allowed",pointerEvents:'none'}:{cursor:"pointer"}}
               >
                 <div>

@@ -37,23 +37,10 @@ export default function TimesheetPage() {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedDateArray, setSelectedDateArray] =
     useState<any>(getSelectedDateArray);
-  function isWeekend(date: Date) {
-    const day = date.getDay();
-    return day === 6 || day === 0; // Saturday or Sunday
-  }
-  function isTileDisabled({ view, date }: any) {
-    const todayDate = new Date().getTime();
-    const clickedDate = new Date(date).getTime();
-    if (view === "month" && isWeekend(date)) {
-      return true; // Disable the tile for weekends in month view
-    } else if (clickedDate > todayDate) {
-      return true;
-    }
-    return false;
-  }
+
   useEffect(() => {
     setSelectedDateArray(getSelectedDateArray);
-  }, [selectedDateArray, getSelectedDateArray]);
+  }, [getSelectedDateArray]);
 
   return (
     <Box sx={{ marginTop: "70px" }} className="time-sheet-page-container">
@@ -146,7 +133,7 @@ export default function TimesheetPage() {
       <FormModal
         dateSelectedStatus={dateSelectedStatus}
         dateSelected={selectedDate}
-        setDateSelectedStatus={(value: boolean) => setDateSelectedStatus(value)}
+        //setDateSelectedStatus={(value: boolean) => setDateSelectedStatus(value)}
         formattedDate={formatedDate}
         setSelectedDateArray={setSelectedDateArray}
         selectedDateArray={selectedDateArray}

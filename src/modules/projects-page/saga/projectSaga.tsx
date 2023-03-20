@@ -22,15 +22,15 @@ import { setProjectSlice } from "../reducers/project";
 
 export function* getProjectSaga(): any {
   const projects = yield getProjectsAPI();
-  yield put(getProjectsSlice(projects.data));
+  yield put(getProjectsSlice(projects?.data));
 }
 
 export function* getProjectByIdSaga(action: any) {
   yield getProjectByIdAPI(action.id);
-  yield put(setProjectSlice(action.id));
+  yield put(setProjectSlice(action?.id));
 }
 export function* createProjectSaga(action: any) {
-  yield createProjectAPI(action.project, action.orgId);
+  yield createProjectAPI(action?.project, action?.orgId);
   // yield put(addProjectSlice(action.project))
   yield getProjectSaga();
 }
