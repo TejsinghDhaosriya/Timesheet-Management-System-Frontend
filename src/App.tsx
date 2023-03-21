@@ -16,7 +16,7 @@ function App(props: any) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          margin: "2em",
+          margin: {xs:"0.5rem",md:"2rem"},
         }}
       >
         <Box
@@ -27,7 +27,7 @@ function App(props: any) {
         >
           <Navbar {...props} />
         </Box>
-        <Box sx={{marginLeft: `${DRAWER_WIDTH}px`,marginTop:'40px' }}>
+        <Box sx={{marginLeft:"10px",marginTop:'40px' }}>
           <Routes>
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />

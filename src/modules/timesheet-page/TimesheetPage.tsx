@@ -11,6 +11,7 @@ import { GET_TIMESHEETS } from "./actions/timesheetTypes";
 import { useDispatch, useSelector } from "react-redux";
 import KeyCloakService from "../../security/keycloakService";
 import {
+  DRAWER_WIDTH,
   timesheet_completed_color,
   timesheet_disabled_color,
 } from "../../utils/constants";
@@ -43,7 +44,7 @@ export default function TimesheetPage() {
   }, [getSelectedDateArray]);
 
   return (
-    <Box sx={{ marginTop: "70px" }} className="time-sheet-page-container">
+    <Box sx={{ marginLeft:{xs:0,sm:`calc(${DRAWER_WIDTH}px)`,md:`calc(${DRAWER_WIDTH}px)`},marginTop: "30px" }} className="time-sheet-page-container">
       <Box
         sx={
           {
@@ -96,7 +97,7 @@ export default function TimesheetPage() {
           }}
         >
           <UserCard />
-          <Box style={{display:'flex'}}>
+          <Box sx={{display:'flex',flexDirection:{xs:"column",sm:"row"}}}>
           <Box>
             <span
               style={{
@@ -137,9 +138,7 @@ export default function TimesheetPage() {
         formattedDate={formatedDate}
         setSelectedDateArray={setSelectedDateArray}
         selectedDateArray={selectedDateArray}
-        setSelectedDate={(value: string) => {
-          setSelectedDate(value);
-        }}
+        setSelectedDate={(value: string) => {setSelectedDate(value);}}
       />
     </Box>
   );

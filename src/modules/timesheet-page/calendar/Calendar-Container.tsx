@@ -21,17 +21,17 @@ function CalendarMain(props: any) {
         container
         //spacing={1}
         direction="row"
-        justifyContent={"center"}
-        alignItems={"center"}
-        wrap={"nowrap"}
-        sx={{ height: "50px",border: "1px solid #dadce0",margin:0,textAlign:"center" }}
+        justifyContent="stretch"
+        alignItems="center"
+        //wrap="wrap"
+        sx={{ height: "50px",border: "1px solid #dadce0",margin:0,textAlign:"center",minWidth:'430px' }}
       >
         {weeks[0].map((weekDay: Date, index: number) => {
           return (
             <Grid item xs key={`calendar-column-header-label-${index}`}>
               <div>
                 <Typography>
-                  {format(weekDay, "EEEE")}
+                  {format(weekDay, "EEE")}
                 </Typography>
               </div>
             </Grid>

@@ -1,6 +1,7 @@
 import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import { DRAWER_WIDTH } from "../../utils/constants";
 import TimesheetManager from "../timesheet-page/TimesheetManager";
 import { GET_APPROVALS } from "./actions/approvalTypes";
 import WeekTable from "./ApprovalTable";
@@ -14,7 +15,7 @@ function ApprovalPage() {
   };
 
   return (
-    <Box>
+    <Box sx={{marginLeft:{xs:0,sm:`calc(${DRAWER_WIDTH}px)`,md:`calc(${DRAWER_WIDTH}px)`}}}>
       <Typography variant="h2" textAlign="center" color="#D5D5D5">
         {" "}
         Approvals

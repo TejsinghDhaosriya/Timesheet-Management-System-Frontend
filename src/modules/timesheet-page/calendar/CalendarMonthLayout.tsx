@@ -43,9 +43,9 @@ function CalendarLayoutMonth(props: any) {
           container
           spacing={0}
           direction="row"
-            justifyContent="space-evenly"
-            alignItems="stretch"
-            wrap="nowrap"
+          //justifyContent="space-evenly"
+          alignItems="stretch"
+          wrap="nowrap"
           key={`calendar-main-line-${weekIndex}`}
           style={maxHeight(weeks)}
         >
@@ -69,7 +69,7 @@ function CalendarLayoutMonth(props: any) {
                   borderRadius: 0,
                   minWidth: 64.38,
                   height: "100%",
-                  padding: "20px",
+                  padding: "18px",
                 }}
                 onClick={()=>{
                   if(!(isDateDisabled && isDateFuture)){
@@ -93,10 +93,6 @@ function CalendarLayoutMonth(props: any) {
                     >
                       {day.getDate()}
                     </span>
-
-                    {day.getDate() === 1
-                      ? format(new Date(day), " MMM")
-                      : null}
                   </Typography>
                   </Tooltip>
                 </div>

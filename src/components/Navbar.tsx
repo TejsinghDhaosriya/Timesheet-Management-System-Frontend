@@ -7,6 +7,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import SideBar from "./SideBar";
 import { DRAWER_WIDTH } from "../utils/constants";
 import KeyCloakService from "../security/keycloakService";
+import MenuIcon from "@mui/icons-material/Menu";
+import { useState } from "react";
 
 function logout() {
   KeyCloakService.CallLogout();
@@ -14,13 +16,16 @@ function logout() {
 
 function Navbar(props: any) {
   const { darkMode, setDarkMode } = props;
-
+  const [mobileOpen,setMobileOpen] = useState(false)
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     backgroundColor: "white",
     color: theme.palette.text.primary,
     boxShadow: "none",
     //marginTop: 24,
-    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    //width:`calc(100% - ${DRAWER_WIDTH}px)`,
+    [theme.breakpoints.down("sm")]: {
+      width:"100%"
+    },
   }));
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
@@ -72,16 +77,28 @@ function Navbar(props: any) {
 
   return (
     <>
-      <SideBar />
-      <AppBarStyled>
+      <SideBar mobileOpen={mobileOpen} setMobileOpen={(value:boolean)=>setMobileOpen(value)} />
+      <AppBarStyled
+        position="fixed"
+        sx={{
+          width:`calc(100% - ${DRAWER_WIDTH}px)`,
+        }} 
+        >
         <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={()=>{setMobileOpen(!mobileOpen)}}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1 }}
-            style={{
-              marginLeft: "1em",
-            }}
+            sx={{ flexGrow: 1}}
+            
           >
             Time Sheet Management
           </Typography>

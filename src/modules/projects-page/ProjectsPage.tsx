@@ -6,17 +6,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import { setProjectSlice } from "./reducers/project";
 import { useDispatch } from "react-redux";
 import { intialState } from "./ProjectState";
+import { DRAWER_WIDTH } from "../../utils/constants";
 
 function Projects() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const dispatch = useDispatch();
   return (
-    <>
-    <Box style={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
+    <Box sx={{marginLeft:{xs:0,sm:`calc(${DRAWER_WIDTH}px)`,md:`calc(${DRAWER_WIDTH}px)`}}}>
+    <Box sx={{width:"100%",display:"flex",justifyContent:"flex-end"}}>
       <Button
         style={{ margin: "20px" ,alignItems:"right"}}
         variant="contained"
         onClick={() => setIsDrawerOpen(true)}
+        data-testid="add-projects-btn"
       >
         Add Projects
       </Button>
@@ -51,7 +53,7 @@ function Projects() {
         </Box>
       </Drawer>
       <MyTable />
-    </>
+    </Box>
   );
 }
 
