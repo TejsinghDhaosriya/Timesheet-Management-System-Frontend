@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Navbar from "./components/Navbar";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,Navigate } from "react-router-dom";
 import ProjectsPage from "./modules/projects-page/ProjectsPage";
 import TimesheetPage from "./modules/timesheet-page/TimesheetPage";
 import { withTheme } from "./theme";
@@ -32,8 +32,7 @@ function App(props: any) {
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />
             <Route path="/myapprovals" element={<ApprovalPage />} />
-            {/* {KeyCloakService?.GetUserRoles()?.toString()==="Manager" && 
-          <Route path="/myapprovals" element={<ApprovalPage/>} />} */}
+            <Route path='/' element={<Navigate to='/timesheet' />} />
           </Routes>
         </Box>
       </Box>
