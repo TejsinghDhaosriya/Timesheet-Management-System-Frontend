@@ -21,15 +21,16 @@ function ApprovalPage() {
         Approvals
       </Typography>
       <FormControl>
-        <Select value={select} onChange={handleSortChange}>
+        <Select sx={{marginBottom:'10px'}} value={select} onChange={handleSortChange}>
           <MenuItem value={"GET_APPROVALS"}>Day</MenuItem>
           <MenuItem value={"GET_APPROVALS_WEEK"}>WeekRange</MenuItem>
-          <MenuItem value={"USER_APPROVALS"}>User Approvals</MenuItem>
+          <MenuItem value={"USER_APPROVALS"}>User Approvals</MenuItem>  
         </Select>
       </FormControl>
       {select === "GET_APPROVALS" && <Tablee />}
       {select === "GET_APPROVALS_WEEK" && <WeekTable />}
       {select === "USER_APPROVALS" && <TimesheetManager />}
+
     </Box>
   );
 }

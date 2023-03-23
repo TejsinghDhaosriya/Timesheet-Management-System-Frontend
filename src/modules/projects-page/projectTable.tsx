@@ -75,9 +75,8 @@ export default function MyTable() {
 
   return (
     <>
-      <Toolbar>
         <FormControl>
-          <Select value={sortBy} onChange={handleSortChange}>
+          <Select sx={{marginBottom:'10px'}} value={sortBy} onChange={handleSortChange}>
             <MenuItem value="All">All</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>
             <MenuItem value="Started">Started</MenuItem>
@@ -87,8 +86,7 @@ export default function MyTable() {
             <MenuItem value="Cancelled">Cancelled</MenuItem>
           </Select>
         </FormControl>
-      </Toolbar>
-      <TableContainer component={Paper} sx={{}}>
+      <TableContainer component={Paper}>
         <Table sx={{ minWidth: 200 }} aria-label="simple table">
           <TableHead>
             <TableRow sx={{ backgroundColor: "#D5D5D5", fontWeight: "bold" }}>
@@ -108,6 +106,7 @@ export default function MyTable() {
               <TableRow
                 key={row.id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                data-testid="project-details-row"
               >
                 <TableCell align="right">{row.id}</TableCell>
                 <TableCell align="right" component="th" scope="row">
@@ -131,7 +130,7 @@ export default function MyTable() {
                   <Drawer
                     PaperProps={{
                       sx: {
-                        width: 400,
+                        width: 500,
                       },
                     }}
                     anchor="right"

@@ -41,19 +41,19 @@ const MyForm = () => {
           justifyContent: "space-between",
           alignItems: "left",
           mb: "1rem",
-          margin:"5%"
+          margin:"10px 20px"
         }}
       >
         <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Project</Typography>
         <TextField
-          style={{ margin: "10px", width: "100%" }}
+          style={{ margin: "10px 10px 20px 10px", width: "100%" }}
           onChange={handleChange("name")}
           placeholder="Enter Project"
           value={project.name}
         />
         <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">Description</Typography>
         <TextField
-          style={{ margin: "10px", width: "100%" }}
+          style={{ margin: "10px 10px 20px 10px", width: "100%" }}
           onChange={handleChange("description")}
           placeholder="Enter Description"
           value={project.description}
@@ -63,7 +63,7 @@ const MyForm = () => {
         <TextField
           required
           type="date"
-          style={{ margin: "10px", width: "100%" }}
+          style={{ margin: "10px 10px 20px 10px", width: "100%" }}
           onChange={handleChange("startDate")}
           placeholder="Enter Start Date"
           value={project.startDate}
@@ -71,7 +71,7 @@ const MyForm = () => {
         <Typography variant="h5" margin="-1px 1px 1px 8px" lineHeight="0.5">End Date</Typography>
         <TextField
           type="date"
-          style={{ margin: "10px", width: "100%" }}
+          style={{ margin: "10px 10px 20px 10px", width: "100%" }}
           onChange={handleChange("endDate")}
           placeholder="Enter End Date"
           value={project.endDate}
@@ -86,7 +86,7 @@ const MyForm = () => {
           sx={{
             width: "100%",
             height: 50,
-            margin: "3%"
+            margin: "10px 10px 20px 10px"
           }}
         >
           <MenuItem value="0">Pending</MenuItem>
@@ -107,7 +107,7 @@ const MyForm = () => {
           sx={{
             width: "100%",
             height: 50,
-            margin: "3%"
+            margin: "10px 10px 0px 10px"
           }}
         >
           <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">
