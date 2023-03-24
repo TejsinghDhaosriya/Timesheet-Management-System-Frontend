@@ -17,7 +17,7 @@ import {
 } from "../../utils/constants";
 import UserCard from "../../components/HomePage";
 
-export default function TimesheetPage() {
+export default function TimesheetPage(props:any) {
   const ts = useSelector((state: any) => state.timesheet);
   const dispatch = useDispatch();
   const userId = KeyCloakService.CallUserId();
@@ -129,16 +129,20 @@ export default function TimesheetPage() {
         <Calendar
           setSelectedDate={setSelectedDate}
           setDateSelectedStatus={setDateSelectedStatus}
+          {...props}
+          layout="month"
+          module="timesheet"
         />
       </Box>
       <FormModal
         dateSelectedStatus={dateSelectedStatus}
         dateSelected={selectedDate}
-        //setDateSelectedStatus={(value: boolean) => setDateSelectedStatus(value)}
+        setDateSelectedStatus={(value: boolean) => setDateSelectedStatus(value)}
         formattedDate={formatedDate}
         setSelectedDateArray={setSelectedDateArray}
         selectedDateArray={selectedDateArray}
         setSelectedDate={(value: string) => {setSelectedDate(value);}}
+        module="timesheet"
       />
     </Box>
   );

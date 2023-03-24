@@ -6,9 +6,10 @@ import TimesheetManager from "../timesheet-page/TimesheetManager";
 import { GET_APPROVALS } from "./actions/approvalTypes";
 import WeekTable from "./ApprovalTable";
 import Tablee from "./Table";
+import WeeklyApprovalPage from "./WeeklyApprovalPage";
 
 function ApprovalPage() {
-  const [select, setSelect] = useState(GET_APPROVALS);
+  const [select, setSelect] = useState("WEEK_APPROVALS");
 
   const handleSortChange = (event: any) => {
     setSelect(event.target.value);
@@ -25,11 +26,13 @@ function ApprovalPage() {
           <MenuItem value={"GET_APPROVALS"}>Day</MenuItem>
           <MenuItem value={"GET_APPROVALS_WEEK"}>WeekRange</MenuItem>
           <MenuItem value={"USER_APPROVALS"}>User Approvals</MenuItem>  
+          <MenuItem value={"WEEK_APPROVALS"}>Weekly Approvals</MenuItem>  
         </Select>
       </FormControl>
       {select === "GET_APPROVALS" && <Tablee />}
       {select === "GET_APPROVALS_WEEK" && <WeekTable />}
       {select === "USER_APPROVALS" && <TimesheetManager />}
+      {select === "WEEK_APPROVALS" && <WeeklyApprovalPage />}
 
     </Box>
   );

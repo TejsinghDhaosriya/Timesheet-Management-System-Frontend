@@ -23,7 +23,7 @@ const FormModal = (props: any) => {
     formattedDate,
     setSelectedDate,
   } = props;
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
   const formSubmittedStatus = props.selectedDateArray?.find(
     (dateSelect: any) => {
@@ -39,17 +39,17 @@ const FormModal = (props: any) => {
   const handleClose = () => {
     setOpenModal(false);
     setSelectedDate("");
-    //setDateSelectedStatus(false);
+    setDateSelectedStatus(false);
   };
   useEffect(() => {
     if (openModal) {
       handleClose();
     } else {
-      if (dateSelected) {
+      if (dateSelected && dateSelectedStatus) {
         handleOpen();
       }
     }
-  }, [dateSelected]);
+  }, [dateSelected,dateSelectedStatus]);
 
   useEffect(() => {
     if (formFilledStatus) {

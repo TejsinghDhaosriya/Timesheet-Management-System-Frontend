@@ -19,6 +19,7 @@ import dayjs from "dayjs";
 import {
   checkDateInSelectedDateArray2,
   formSubmittedStatusHelper,
+  getOnlyApprovalsList,
 } from "./helper";
 import {
   CREATE_TIMESHEET,
@@ -27,6 +28,7 @@ import {
 } from "./actions/timesheetTypes";
 import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 import KeyCloakService from "../../security/keycloakService";
+import { UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -201,6 +203,7 @@ const TimesheetForm = (props: any) => {
       setFormValues(editFormValues);
     }
   }, [editFormStatus]);
+
   return (
     <Box sx={{}}>
       <Box
@@ -213,7 +216,7 @@ const TimesheetForm = (props: any) => {
         }}
       >
         <Typography data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
-        {!!formSubmittedStatus ? (
+        {!!formSubmittedStatus && props.module==='timesheet'? (
           <>
             <IconButton
               onClick={() => {
@@ -349,19 +352,26 @@ const TimesheetForm = (props: any) => {
             <></>
           )}
         </FormControl>
-        <Button
-          type="submit"
+        {props.module ==='approvals' ?<Button type="button" disabled={
+                !!formSubmittedStatus &&
+                !editFormStatus
+              } 
           variant="outlined"
-          color="secondary"
-          disabled={
-            !!formSubmittedStatus &&
-            formSubmittedStatus.timeSheetSubmitted &&
-            !editFormStatus
-          }
-          data-testid="submit-btn"
-        >
-          {editFormStatus ? "Update" : "Create"}
-        </Button>
+          color="secondary">Approve</Button>:<Button
+              type="submit"
+              variant="outlined"
+              color="secondary"
+              disabled={
+                !!formSubmittedStatus &&
+                //formSubmittedStatus.timeSheetSubmitted &&
+                !editFormStatus
+              }
+              data-testid="submit-btn"
+            >
+            {editFormStatus ? "Update" : "Create"}
+          </Button>
+        }
+        
       </Box>
     </Box>
   );
