@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   approval_completed_color,
+  approval_pending_color,
   approval_rejected_color,
   timesheet_completed_color,
   timesheet_disabled_color,
@@ -19,13 +20,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {Paper,Button} from '@mui/material';
-import { getSelectedWeekIndex, getWeekDays } from "../timesheet-page/helper";
+import { getApprovedHoursAndUnApprovedHours, getSelectedWeekIndex, getWeekDays } from "../timesheet-page/helper";
 import { GET_APPROVALS_WEEK } from "./actions/approvalTypes";
 import { format, getDate } from "date-fns";
 import KeyCloakService from "../../security/keycloakService";
 import FormModal from "../../components/FormModal";
 import { GET_TIMESHEETS } from "../timesheet-page/actions/timesheetTypes";
-//import { getStartAndEndOfWeek, getWeekDays } from "../timesheet-page/helper";
 
 const WeeklyApprovalPage = () => {
   const [selectedDate, setSelectedDate] = useState<any>();
@@ -63,33 +63,13 @@ const WeeklyApprovalPage = () => {
     //setModal(true);
   };
 
-  function createData(
-    name: number,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-  ) {
-    return { name, calories, fat, carbs, protein };
-  }
-
-  const rows = [
-    createData(48, 159, 6.0, 24, 4.0),
-  ];
 
   const approvedTimesheetDates = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
-  //console.log('approvedTimesheetDates: ',approvedTimesheetDates);
-  const calculateTotalHours = ()=>{
-    let totalHoursApproved;
-    if(approvedTimesheetDates.length>0){
-        totalHoursApproved = approvedTimesheetDates.reduce((countHours:any,currHours:any,idx:number)=>countHours+=currHours.totalHours,0)
-    }
-    return totalHoursApproved;
-
-  }
+  const approvedAndUnApprovedHours = getApprovedHoursAndUnApprovedHours(approvedTimesheetDates); 
   const userId=KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
+
   useEffect(()=>{
       //console.log(selectedDate);
       if(!!selectedDate){
@@ -155,7 +135,20 @@ const WeeklyApprovalPage = () => {
             >
               {" "}
             </span>
-            <span>Time sheet Pending/Rejected</span>
+            <span>Time sheet Rejected</span>
+          </Box>
+          <Box>
+            <span
+              style={{
+                padding: "1px 10px",
+                margin: 10,
+                background: `${approval_pending_color}`,
+                border: "1px solid",
+              }}
+            >
+              {" "}
+            </span>
+            <span>Time sheet Pending</span>
           </Box>
         </Box>
       <Box sx={{ display: "flex",flexDirection:"column",gap:'10px' }} className="weekly-approval-table">
@@ -183,24 +176,23 @@ const WeeklyApprovalPage = () => {
             <Table sx={{ }} aria-label="customized table">
               <TableHead sx={{height:'10px',padding:0}}>
                 <TableRow>
-                  <StyledTableCell align="center">Time Sheet Filled Date</StyledTableCell>
-                  <StyledTableCell align="center">Approved Hours &nbsp;(hours)</StyledTableCell>
-                  <StyledTableCell align="center">UnApproved Hours &nbsp;(hours)</StyledTableCell>
+                  <StyledTableCell align="center">Approved Hours</StyledTableCell>
+                  <StyledTableCell align="center">UnApproved Hours</StyledTableCell>
+                  <StyledTableCell align="center">Non-Billable Hours</StyledTableCell>
                   <StyledTableCell align="center">Status &nbsp;(Approve / Reject)</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.name}>
+                  <TableRow>
                     <TableCell align="center">
-                        Date for which ts filled
+                      {approvedAndUnApprovedHours.totalApprovedHours}
                     </TableCell>
-                    <TableCell>
-
+                    <TableCell align="center">
+                    {40-(approvedAndUnApprovedHours.totalApprovedHours+approvedAndUnApprovedHours.totalUnApprovedHours)}
                     </TableCell>
-                    <StyledTableCell align="center" component="th" scope="row">
-                      {calculateTotalHours()||0}
-                    </StyledTableCell>
+                    <TableCell align="center">
+                      {approvedAndUnApprovedHours.totalUnApprovedHours}
+                    </TableCell>
                     <StyledTableCell align="center">
                         <Button color="primary" onClick={() => handleAccept()}>
                             <DoneIcon />
@@ -210,7 +202,6 @@ const WeeklyApprovalPage = () => {
                         </Button>
                     </StyledTableCell>
                   </TableRow>
-                ))}
               </TableBody>
             </Table>
           </TableContainer>

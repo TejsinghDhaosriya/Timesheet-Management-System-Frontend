@@ -6,6 +6,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  Modal,
   Select,
   TextField,
   Typography,
@@ -17,6 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import {
+  checkApprovalInSelectedDateArray,
   checkDateInSelectedDateArray2,
   formSubmittedStatusHelper,
   getOnlyApprovalsList,
@@ -24,11 +26,13 @@ import {
 import {
   CREATE_TIMESHEET,
   DELETE_TIMESHEET,
+  GET_TIMESHEETS,
   UPDATE_TIMESHEET,
 } from "./actions/timesheetTypes";
 import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 import KeyCloakService from "../../security/keycloakService";
-import { UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
+import { GET_APPROVALS, UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
+import RejectionModal from "./RejectionModal";
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -53,7 +57,7 @@ const TimesheetForm = (props: any) => {
 
   const initialFormState = {
     project_name: {
-      value: proj[0]?.name||"<some_project_name>",
+      value: proj[0]?.name||"",
       error: false,
     },
     project_manager: {
@@ -204,6 +208,31 @@ const TimesheetForm = (props: any) => {
     }
   }, [editFormStatus]);
 
+  // Timesheet module logic
+  const [openRejectionModal,setOpenRejectionModal] = useState(false);
+  const [reasonOfRejection,setReasonOfRejection] = useState('');
+  const approvedTimesheetDateArray = useSelector((state: any) => state.approvals);
+  const approvedTimesheetItem = checkApprovalInSelectedDateArray(approvedTimesheetDateArray,dayjs(props.dateSelected).format("YYYY-MM-DD"))
+   const handleApproveTimeSheet = ()=>{
+    dispatch({
+      type: UPDATE_APPROVAL,
+      approval: { ...approvedTimesheetItem, status: 1 },
+    });
+    props.setApprovedStatus(true);
+   }
+
+   const handleRejectTimesheet = () =>{
+    //openRejectionModal
+    //setOpenRejectionModal(true);
+    dispatch({
+      type: UPDATE_APPROVAL,
+      approval: { ...approvedTimesheetItem, status: 2, reasonForRejection: reasonOfRejection },
+    });
+    props.setApprovedStatus(true);
+   }
+
+
+  // Timesheet module logic
   return (
     <Box sx={{}}>
       <Box
@@ -352,18 +381,16 @@ const TimesheetForm = (props: any) => {
             <></>
           )}
         </FormControl>
-        {props.module ==='approvals' ?<Button type="button" disabled={
-                !!formSubmittedStatus &&
-                !editFormStatus
-              } 
-          variant="outlined"
-          color="secondary">Approve</Button>:<Button
+        {props.module ==='approvals' ?<>
+<Button sx={{mr:2}} disabled={approvedTimesheetItem?.status===1} type="button" variant="outlined" color="secondary" onClick={handleApproveTimeSheet}>Approve</Button>
+<Button disabled={approvedTimesheetItem?.status===2} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>      
+</>:
+              <Button
               type="submit"
               variant="outlined"
               color="secondary"
               disabled={
                 !!formSubmittedStatus &&
-                //formSubmittedStatus.timeSheetSubmitted &&
                 !editFormStatus
               }
               data-testid="submit-btn"
@@ -371,6 +398,8 @@ const TimesheetForm = (props: any) => {
             {editFormStatus ? "Update" : "Create"}
           </Button>
         }
+
+        {props.module ==='approvals'?<RejectionModal openRejectionModal={openRejectionModal} setOpenRejectionModal={setOpenRejectionModal} reasonOfRejection={reasonOfRejection} setReasonOfRejection={setReasonOfRejection} handleRejectTimesheet={handleRejectTimesheet} />:<></>}
         
       </Box>
     </Box>

@@ -36,6 +36,16 @@ export function checkDateInSelectedDateArray(
   return isDatePresent?.length === 1;
 }
 
+export function checkApprovalInSelectedDateArray(
+  selectedDateArray: any,
+  dateString: string
+) {
+  const approvedDateItem = selectedDateArray?.filter((selDate: any) => {
+    return dayjs(selDate.date).format("YYYY-MM-DD") === dateString;
+  });
+  return approvedDateItem[0]?.approvals[0];
+}
+
 export function checkDateInSelectedDateArray2(
   selectedDateArray: any,
   dateString: string
@@ -183,4 +193,23 @@ export const getOnlyApprovalsList = (approvedTimeSheetArray:[])=>{
   //return isDatePresent?.length === 1;
   //console.log(isDatePresent[0]?.status)
   return isDatePresent[0]?.status||0;
+}
+
+
+export const getApprovedHoursAndUnApprovedHours = (approvedTimesheetDatesArr:any)=>{
+
+    const arraywithApprovedAndUnApprovedItem = approvedTimesheetDatesArr.map((item:any)=>{
+      let totalApprovedHours=0,totalUnApprovedHours=0
+      if(item.approvals[0].status===1){
+        totalApprovedHours+=item.totalHours
+      }else if(item.approvals[0].status===2){
+      totalUnApprovedHours+=item.totalHours
+      }
+      return {totalApprovedHours:totalApprovedHours,totalUnApprovedHours:totalUnApprovedHours}
+    })
+
+    const approvedHours = arraywithApprovedAndUnApprovedItem.reduce((countHours:any,currHours:any,idx:number)=>countHours+=currHours.totalApprovedHours,0);
+    const unapprovedHours = arraywithApprovedAndUnApprovedItem.reduce((countHours:any,currHours:any,idx:number)=>countHours+=currHours.totalUnApprovedHours,0);
+
+  return {totalApprovedHours:approvedHours,totalUnApprovedHours:unapprovedHours}
 }

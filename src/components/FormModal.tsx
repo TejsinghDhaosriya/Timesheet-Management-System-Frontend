@@ -25,6 +25,7 @@ const FormModal = (props: any) => {
   } = props;
   const [openModal, setOpenModal] = useState(false);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
+  const [approvedStatus, setApprovedStatus] = useState(false);
   const formSubmittedStatus = props.selectedDateArray?.find(
     (dateSelect: any) => {
       return (
@@ -57,8 +58,17 @@ const FormModal = (props: any) => {
         setFormFilledStatus(false);
         handleClose();
       }, 1000);
+
     }
-  }, [formFilledStatus]);
+
+    if (approvedStatus) {
+      setTimeout(() => {
+        setApprovedStatus(false);
+        handleClose();
+      }, 1000);
+
+    }
+  }, [formFilledStatus,approvedStatus]);
   return (
     <Modal
       data-testid="timesheet-modal"
@@ -70,6 +80,7 @@ const FormModal = (props: any) => {
         <TimesheetForm
           {...props}
           setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}
+          setApprovedStatus={(value: boolean) => setApprovedStatus(value)}
           closeModal={handleClose}
         />
       </Box>
