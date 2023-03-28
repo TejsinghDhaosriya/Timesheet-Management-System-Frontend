@@ -22,6 +22,7 @@ import {
   checkDateInSelectedDateArray2,
   formSubmittedStatusHelper,
   getOnlyApprovalsList,
+  updateCalendarByWeekOnApproveOrReject,
 } from "./helper";
 import {
   CREATE_TIMESHEET,
@@ -31,7 +32,7 @@ import {
 } from "./actions/timesheetTypes";
 import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 import KeyCloakService from "../../security/keycloakService";
-import { GET_APPROVALS, UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
+import { GET_APPROVALS, GET_APPROVALS_WEEK, UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
 import RejectionModal from "./RejectionModal";
 
 const TimesheetForm = (props: any) => {
@@ -216,9 +217,19 @@ const TimesheetForm = (props: any) => {
    const handleApproveTimeSheet = ()=>{
     dispatch({
       type: UPDATE_APPROVAL,
-      approval: { ...approvedTimesheetItem, status: 1 },
+      approval: { ...approvedTimesheetItem, status: 1,reasonForRejection:null },
     });
     props.setApprovedStatus(true);
+    const getStartAndEndDate = updateCalendarByWeekOnApproveOrReject(props.dateSelected);
+    setTimeout(()=>{
+      dispatch({
+        type: GET_APPROVALS_WEEK,
+        startDate: getStartAndEndDate.startDate,
+        endDate: getStartAndEndDate.endDate,
+        userId:user,
+        orgId:orgId
+    });
+    },2000)
    }
 
    const handleRejectTimesheet = () =>{
@@ -229,6 +240,16 @@ const TimesheetForm = (props: any) => {
       approval: { ...approvedTimesheetItem, status: 2, reasonForRejection: reasonOfRejection },
     });
     props.setApprovedStatus(true);
+    const getStartAndEndDate = updateCalendarByWeekOnApproveOrReject(props.dateSelected);
+    setTimeout(()=>{
+      dispatch({
+        type: GET_APPROVALS_WEEK,
+        startDate: getStartAndEndDate.startDate,
+        endDate: getStartAndEndDate.endDate,
+        userId:user,
+        orgId:orgId
+    });
+    },2000)
    }
 
 

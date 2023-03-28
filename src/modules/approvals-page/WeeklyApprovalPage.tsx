@@ -13,72 +13,30 @@ import CloseIcon from "@mui/icons-material/Close";
 import DoneIcon from "@mui/icons-material/Done";
 import { useDispatch, useSelector } from "react-redux";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import {Paper,Button} from '@mui/material';
 import { getApprovedHoursAndUnApprovedHours, getSelectedWeekIndex, getWeekDays } from "../timesheet-page/helper";
 import { GET_APPROVALS_WEEK } from "./actions/approvalTypes";
 import { format, getDate } from "date-fns";
 import KeyCloakService from "../../security/keycloakService";
 import FormModal from "../../components/FormModal";
 import { GET_TIMESHEETS } from "../timesheet-page/actions/timesheetTypes";
+import WeeklyApprovalTable from "./WeeklyApprovalTable";
 
-const WeeklyApprovalPage = () => {
+const WeeklyApprovalPage = (props:any) => {
   const [selectedDate, setSelectedDate] = useState<any>();
   const [dateSelectedStatus, setDateSelectedStatus] = useState(false);
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.white,
-      color: theme.palette.common.black,
-      fontWeight:'bolder',
-      border:'1px solid black'
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-  
-  // const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  //   '&:nth-of-type(odd)': {
-  //     backgroundColor: theme.palette.action.hover,
-  //   },
-  //   // hide last border
-  //   '&:last-child td, &:last-child th': {
-  //     border: 0,
-  //   },
-  // }));
-  
-
-  const handleAccept = () => {
-    //result.map((app: any, i: any) => (result[i].status = 1));
-    //setStatus("set");
-    //dispatch({ type: UPDATE_ALL_APPROVALS, result });
-  };
-  const handleReject = () => {
-    //handleOpenn();
-    //setModal(true);
-  };
-
 
   const approvedTimesheetDates = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
-  const approvedAndUnApprovedHours = getApprovedHoursAndUnApprovedHours(approvedTimesheetDates); 
-  const userId=KeyCloakService.CallUserId();
+  const userId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
 
   useEffect(()=>{
-      //console.log(selectedDate);
       if(!!selectedDate){
-        const weeks = getWeekDays(new Date(selectedDate), 7);
+      const weeks = getWeekDays(new Date(selectedDate), 7);
       const selectedWeekIndex = getSelectedWeekIndex(new Date(selectedDate), weeks, 0);
       const selectedWeek = weeks[selectedWeekIndex];
       const startDate = format(new Date(selectedWeek[1]),'yyyy-MM-dd')||null;
       const endDate = format(new Date(selectedWeek[5]),'yyyy-MM-dd')||null;    
-      //console.log(startDate,endDate)
         dispatch({
             type: GET_APPROVALS_WEEK,
             startDate: startDate,
@@ -172,39 +130,7 @@ const WeeklyApprovalPage = () => {
           />
         </Box>
         <Box>
-          <TableContainer component={Paper} sx={{mt:5}}>
-            <Table sx={{ }} aria-label="customized table">
-              <TableHead sx={{height:'10px',padding:0}}>
-                <TableRow>
-                  <StyledTableCell align="center">Approved Hours</StyledTableCell>
-                  <StyledTableCell align="center">UnApproved Hours</StyledTableCell>
-                  <StyledTableCell align="center">Non-Billable Hours</StyledTableCell>
-                  <StyledTableCell align="center">Status &nbsp;(Approve / Reject)</StyledTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                  <TableRow>
-                    <TableCell align="center">
-                      {approvedAndUnApprovedHours.totalApprovedHours}
-                    </TableCell>
-                    <TableCell align="center">
-                    {40-(approvedAndUnApprovedHours.totalApprovedHours+approvedAndUnApprovedHours.totalUnApprovedHours)}
-                    </TableCell>
-                    <TableCell align="center">
-                      {approvedAndUnApprovedHours.totalUnApprovedHours}
-                    </TableCell>
-                    <StyledTableCell align="center">
-                        <Button color="primary" onClick={() => handleAccept()}>
-                            <DoneIcon />
-                        </Button>
-                        <Button color="primary" onClick={() => handleReject()}>
-                            <CloseIcon />
-                        </Button>
-                    </StyledTableCell>
-                  </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <WeeklyApprovalTable selectedDate={selectedDate} userId={userId} />
         </Box>
       </Box>
     </Box>

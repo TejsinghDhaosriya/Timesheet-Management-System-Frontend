@@ -213,3 +213,14 @@ export const getApprovedHoursAndUnApprovedHours = (approvedTimesheetDatesArr:any
 
   return {totalApprovedHours:approvedHours,totalUnApprovedHours:unapprovedHours}
 }
+
+
+
+export function updateCalendarByWeekOnApproveOrReject(selectedDate:string){
+  const weeks = getWeekDays(new Date(selectedDate), 7);
+  const selectedWeekIndex = getSelectedWeekIndex(new Date(selectedDate), weeks, 0);
+  const selectedWeek = weeks[selectedWeekIndex];
+  const startDate = format(new Date(selectedWeek[1]),'yyyy-MM-dd')||null;
+  const endDate = format(new Date(selectedWeek[5]),'yyyy-MM-dd')||null;    
+  return {startDate:startDate,endDate:endDate};
+}
