@@ -34,6 +34,7 @@ import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 import KeyCloakService from "../../security/keycloakService";
 import { GET_APPROVALS, GET_APPROVALS_WEEK, UPDATE_APPROVAL } from "../approvals-page/actions/approvalTypes";
 import RejectionModal from "./RejectionModal";
+import Alert from '@mui/material/Alert';
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const TimesheetForm = (props: any) => {
   const user = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
   const proj = getProjectInfoo?.filter((proje: any) => proje.id === pId);
-
+  const [showRejectionMore,setShowRejectionMore] = useState(false)
   useEffect((): any => {
     dispatch({ type: GET_PROJECTS });
   }, [dispatch]);
@@ -85,6 +86,7 @@ const TimesheetForm = (props: any) => {
   const [formValues, setFormValues] = useState<any>(initialState);
   const [editFormStatus, setEditFormStatus] = useState<any>(false);
   const [editDropdown, setEditDropdown] = useState(false);
+  const [editApproved,setEditApproved] = useState(false);
   const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormValues({
@@ -292,7 +294,17 @@ const TimesheetForm = (props: any) => {
             </IconButton>
           </>
         ) : (
-          <></>
+          <>
+          <IconButton
+          onClick={() => {
+            //setEditFormStatus(true);
+            //setEditDropdown(true);
+            setEditApproved(true)
+          }}
+          data-testid="edit-btn"
+        >
+          <EditIcon />
+        </IconButton></>
         )}
         <IconButton data-testid="cancel-modal" onClick={props.closeModal}>
           <CancelIcon />
@@ -403,8 +415,9 @@ const TimesheetForm = (props: any) => {
           )}
         </FormControl>
         {props.module ==='approvals' ?<>
-<Button sx={{mr:2}} disabled={approvedTimesheetItem?.status===1} type="button" variant="outlined" color="secondary" onClick={handleApproveTimeSheet}>Approve</Button>
-<Button disabled={approvedTimesheetItem?.status===2} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>      
+<Button sx={{mr:2}} disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={handleApproveTimeSheet}>Approve</Button>
+<Button disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>
+ {approvedTimesheetItem?.status===2 && <><Alert severity="error" sx={{mt:2}}>Reason for rejection: { showRejectionMore ? approvedTimesheetItem.reasonForRejection:approvedTimesheetItem.reasonForRejection.substring(0,25)}<Typography component={"span"} sx={{ml:1,p:0,color:'#2196f3'}} onClick={() => setShowRejectionMore(!showRejectionMore)}>{showRejectionMore?"show less":"...show more"}</Typography></Alert></>}      
 </>:
               <Button
               type="submit"
