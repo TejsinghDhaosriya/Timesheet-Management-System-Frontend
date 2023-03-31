@@ -14,7 +14,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getApprovedHoursAndUnApprovedHours, getSelectedWeekIndex, getWeekDays } from "../timesheet-page/helper";
-import { GET_APPROVALS_WEEK } from "./actions/approvalTypes";
+import { GET_APPROVALS, GET_APPROVALS_WEEK } from "./actions/approvalTypes";
 import { format, getDate } from "date-fns";
 import KeyCloakService from "../../security/keycloakService";
 import FormModal from "../../components/FormModal";
@@ -27,7 +27,8 @@ const WeeklyApprovalPage = (props:any) => {
 
   const approvedTimesheetDates = useSelector((state: any) => state.approvals);
   const dispatch = useDispatch();
-  const userId = KeyCloakService.CallUserId();
+  const {userId} = props;
+  //const userId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
 
   useEffect(()=>{
@@ -45,7 +46,7 @@ const WeeklyApprovalPage = (props:any) => {
             orgId:orgId
         });
       }
-  },[selectedDate]);
+  },[selectedDate,userId]);
 
   const ts = useSelector((state: any) => state.timesheet);
 
@@ -54,7 +55,8 @@ const WeeklyApprovalPage = (props:any) => {
       type: GET_TIMESHEETS,
       timesheeet: { userId: userId, organizationId: orgId },
     });
-  }, []);
+  }, [userId]);
+
 
   const getSelectedDateArray = ts.timesheet;
 
