@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import Navbar from "./components/Navbar";
 import { Routes, Route,Navigate } from "react-router-dom";
 import ProjectsPage from "./modules/projects-page/ProjectsPage";
+import UsersPage from "./modules/users-page/UsersPage";
 import TimesheetPage from "./modules/timesheet-page/TimesheetPage";
 import { withTheme } from "./theme";
 import { DRAWER_WIDTH } from "./utils/constants";
@@ -29,6 +30,7 @@ function App(props: any) {
         </Box>
         <Box sx={{marginLeft:"10px",marginTop:'40px' }}>
           <Routes>
+          <Route path="/users" element={<UsersPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/timesheet" element={<TimesheetPage />} />
             <Route path="/myapprovals" element={<ApprovalPage />} />

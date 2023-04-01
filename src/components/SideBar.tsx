@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import Person4Icon from '@mui/icons-material/Person4';
 import HelpIcon from "@mui/icons-material/Help";
 import PunchClockIcon from "@mui/icons-material/PunchClock";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -20,6 +21,7 @@ import { DRAWER_WIDTH } from "../utils/constants";
 import KeyCloakService from "../security/keycloakService";
 
 let drawerList = [
+  { key: "users", text: "Users", icon: <Person4Icon/> },
   { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
   { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
