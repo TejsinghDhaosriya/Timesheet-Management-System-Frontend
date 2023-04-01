@@ -5,9 +5,10 @@ export const getApprovalByWeek = async (approval: {
   organizationId: any;
   startDate: string;
   endDate: string;
+  orgId:number;
 }) =>
   axios.get(
-    `timesheet?withApproval=true&startDate=${approval.startDate}&endDate=${approval.endDate}`
+    `timesheet?withApproval=true&startDate=${approval.startDate}&endDate=${approval.endDate}&userid=${approval.userId}&organizationId=${approval.orgId}`
   );
 export const getApprovalAPI = async () =>
   axios.get(`timesheet?withApproval=true`);

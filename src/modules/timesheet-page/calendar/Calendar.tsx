@@ -3,15 +3,15 @@ import CalendarContainer from "./Calendar-Container";
 import CalendarNavbar from "./Calendar-Navbar";
 import { CalendarContext } from "./CalendarContext";
 import { addMonths, addWeeks, addDays, subMonths, subWeeks, subDays } from "date-fns"
+import { getStartDate } from "../helper";
 
 const Calendar = (props:any) => {
 
   const [open, setOpen] = useState(true);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const layout = 'month';
-
+  //const [selectedDate, setSelectedDate] = useState(new Date());
+  const {layout, module,} = props;
   const [stateCalendar, setStateCalendar] = useState({
-    selectedDate,
+    selectedDate:new Date(),
     layout,
   });
 
@@ -40,6 +40,9 @@ const Calendar = (props:any) => {
             break
     }
     setStateCalendar({ ...stateCalendar, selectedDate: newDate })
+    if(module==="approvals"){
+      props.setSelectedDate(newDate);
+    }
 }
 
 const previous = () => {
@@ -59,8 +62,11 @@ const previous = () => {
             break
     }
     setStateCalendar({ ...stateCalendar, selectedDate: newDate })
+    if(module==="approvals"){
+      props.setSelectedDate(newDate);
+    }
 }
-
+  
   return (
     <CalendarContext.Provider value={{ stateCalendar, setStateCalendar }}>
       <CalendarNavbar 
@@ -71,9 +77,10 @@ const previous = () => {
       handleDrawerOpen={handleDrawerOpen}
       handleDrawerClose={handleDrawerClose}
       //handleLayoutChange={handleLayoutChange}
+      {...props}
       />
       <CalendarContainer
-        selectedDate={selectedDate}
+        selectedDate={stateCalendar.selectedDate}
         open={open}
         layout={layout}
         {...props}

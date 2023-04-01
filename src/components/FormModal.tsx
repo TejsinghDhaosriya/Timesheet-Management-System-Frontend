@@ -6,13 +6,14 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "80%",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
   pt: 2,
   px: 4,
   pb: 3,
+  maxHeight:'100%'
 };
 
 const FormModal = (props: any) => {
@@ -23,8 +24,9 @@ const FormModal = (props: any) => {
     formattedDate,
     setSelectedDate,
   } = props;
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const [formFilledStatus, setFormFilledStatus] = useState(false);
+  const [approvedStatus, setApprovedStatus] = useState(false);
   const formSubmittedStatus = props.selectedDateArray?.find(
     (dateSelect: any) => {
       return (
@@ -39,17 +41,17 @@ const FormModal = (props: any) => {
   const handleClose = () => {
     setOpenModal(false);
     setSelectedDate("");
-    //setDateSelectedStatus(false);
+    setDateSelectedStatus(false);
   };
   useEffect(() => {
     if (openModal) {
       handleClose();
     } else {
-      if (dateSelected) {
+      if (dateSelected && dateSelectedStatus) {
         handleOpen();
       }
     }
-  }, [dateSelected]);
+  }, [dateSelected,dateSelectedStatus]);
 
   useEffect(() => {
     if (formFilledStatus) {
@@ -57,8 +59,17 @@ const FormModal = (props: any) => {
         setFormFilledStatus(false);
         handleClose();
       }, 1000);
+
     }
-  }, [formFilledStatus]);
+
+    if (approvedStatus) {
+      setTimeout(() => {
+        setApprovedStatus(false);
+        handleClose();
+      }, 1000);
+
+    }
+  }, [formFilledStatus,approvedStatus]);
   return (
     <Modal
       data-testid="timesheet-modal"
@@ -66,10 +77,11 @@ const FormModal = (props: any) => {
       aria-labelledby="parent-modal-title"
       aria-describedby="parent-modal-description"
     >
-      <Box sx={{ ...style, width:"80%" }}>
+      <Box sx={{ ...style,maxHeight:{xs:'90%',md:"100%"},overflowY:{xs:'scroll',md:"none",lg:'none'} }}>
         <TimesheetForm
           {...props}
           setFormFilledStatus={(value: boolean) => setFormFilledStatus(value)}
+          setApprovedStatus={(value: boolean) => setApprovedStatus(value)}
           closeModal={handleClose}
         />
       </Box>

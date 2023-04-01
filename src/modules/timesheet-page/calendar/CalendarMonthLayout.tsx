@@ -74,7 +74,7 @@ function CalendarLayoutMonth(props: any) {
                 onClick={()=>{
                   if(!(isDateDisabled && isDateFuture)){
                     props.setSelectedDate(dayjs(day).format("YYYY-MM-DD"));
-                    //props?.setDateSelectedStatus(true);
+                    props?.setDateSelectedStatus(true);
                   }
 
                 }}

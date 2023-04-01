@@ -6,6 +6,7 @@ import projects from "../modules/projects-page/reducers/projects";
 import approval from "../modules/approvals-page/reducers/approvals";
 import approvals from "../modules/approvals-page/reducers/approvals";
 import timesheetSlice from "../modules/timesheet-page/reducers/timesheetSlice";
+import userSlice from "../modules/approvals-page/reducers/userSlice";
 
 let sagaMiddleware = createSagaMiddleware();
 const middleware = [sagaMiddleware];
@@ -17,6 +18,7 @@ export const store = configureStore({
     approval,
     approvals,
     timesheet: timesheetSlice,
+    userInfo:userSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(middleware),

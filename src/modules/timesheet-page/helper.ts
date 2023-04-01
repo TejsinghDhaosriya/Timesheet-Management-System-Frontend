@@ -10,6 +10,7 @@ import {
   getMonth,
   getDate,
   getTime,
+  format,
 } from "date-fns";
 import dayjs from "dayjs";
 
@@ -33,6 +34,16 @@ export function checkDateInSelectedDateArray(
     return dayjs(selDate.date).format("YYYY-MM-DD") === dateString;
   });
   return isDatePresent?.length === 1;
+}
+
+export function checkApprovalInSelectedDateArray(
+  selectedDateArray: any,
+  dateString: string
+) {
+  const approvedDateItem = selectedDateArray?.filter((selDate: any) => {
+    return dayjs(selDate.date).format("YYYY-MM-DD") === dateString;
+  });
+  return approvedDateItem[0]?.approvals[0];
 }
 
 export function checkDateInSelectedDateArray2(
@@ -151,4 +162,65 @@ export function isFutureDate(date: any) {
     return true;
   }
   return false;
+}
+
+export function getStartDate(selectedDate:Date){
+  const weeks = getWeekDays(new Date(selectedDate), 7);
+  const selectedWeekIndex = getSelectedWeekIndex(new Date(selectedDate), weeks, 0);
+  const selectedWeek = weeks[selectedWeekIndex];
+  const startDate = format(new Date(selectedWeek[1]),'yyyy-MM-dd');
+  return new Date(selectedWeek[1]);  
+}
+
+export const getOnlyApprovalsList = (approvedTimeSheetArray:[])=>{
+  const approvalsTSArray =  approvedTimeSheetArray.map((approvedTimeSheetItem:any)=>{
+       return {...approvedTimeSheetItem.approvals[0],date:approvedTimeSheetItem.date}
+   })
+   //console.log(approvalsTSArray);
+   return approvalsTSArray;
+ }
+
+ export function checkStatusApprovedOrRejected(
+  statusTimesheetData: any,
+  dateString: string
+) {
+  const isDatePresent = statusTimesheetData?.filter((statusTSDataItem: any) => {
+    if(!!statusTSDataItem?.date && dayjs(statusTSDataItem?.date).format("YYYY-MM-DD") === dateString){
+      return statusTSDataItem
+    }
+    //console.log(statusTSDataItem,dayjs(statusTSDataItem?.date).format("YYYY-MM-DD"),dateString)
+  });
+  //return isDatePresent?.length === 1;
+  //console.log(isDatePresent[0]?.status)
+  return isDatePresent[0]?.status||0;
+}
+
+
+export const getApprovedHoursAndUnApprovedHours = (approvedTimesheetDatesArr:any)=>{
+
+    const arraywithApprovedAndUnApprovedItem = approvedTimesheetDatesArr.map((item:any)=>{
+      let totalApprovedHours=0,totalUnApprovedHours=0
+      if(item.approvals[0].status===1){
+        totalApprovedHours+=item.totalHours
+      }else if(item.approvals[0].status===2){
+      totalUnApprovedHours+=item.totalHours
+      }
+      return {totalApprovedHours:totalApprovedHours,totalUnApprovedHours:totalUnApprovedHours}
+    })
+
+    const approvedHours = arraywithApprovedAndUnApprovedItem.reduce((countHours:any,currHours:any,idx:number)=>countHours+=currHours.totalApprovedHours,0);
+    const unapprovedHours = arraywithApprovedAndUnApprovedItem.reduce((countHours:any,currHours:any,idx:number)=>countHours+=currHours.totalUnApprovedHours,0);
+
+  return {totalApprovedHours:approvedHours,totalUnApprovedHours:unapprovedHours}
+}
+
+
+
+export function updateCalendarByWeekOnApproveOrReject(selectedDate:string){
+  const weeks = getWeekDays(new Date(selectedDate), 7);
+  const selectedWeekIndex = getSelectedWeekIndex(new Date(selectedDate), weeks, 0);
+  const selectedWeek = weeks[selectedWeekIndex];
+  const startDate = format(new Date(selectedWeek[1]),'yyyy-MM-dd')||null;
+  const endDate = format(new Date(selectedWeek[5]),'yyyy-MM-dd')||null;    
+  return {startDate:startDate,endDate:endDate};
 }

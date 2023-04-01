@@ -25,6 +25,7 @@ function CalendarNavbar(props: any) {
     goToToday,
     next,
     previous,
+    module
   } = props;
 
   const { stateCalendar, setStateCalendar } = useContext(CalendarContext);
@@ -133,6 +134,7 @@ function CalendarNavbar(props: any) {
 
       <Tooltip
         title={"Month"}
+        sx={module==="approvals"?{display:"none"}:{}}
       >
         <IconButton
           color="inherit"
