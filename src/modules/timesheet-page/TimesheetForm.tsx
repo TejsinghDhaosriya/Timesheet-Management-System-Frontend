@@ -293,8 +293,8 @@ const TimesheetForm = (props: any) => {
               <EditIcon />
             </IconButton>
           </>
-        ) : (
-          <>
+        ) : null}
+        {props.module==='approvals' && <>
           <IconButton
           onClick={() => {
             //setEditFormStatus(true);
@@ -304,8 +304,7 @@ const TimesheetForm = (props: any) => {
           data-testid="edit-btn"
         >
           <EditIcon />
-        </IconButton></>
-        )}
+        </IconButton></>}
         <IconButton data-testid="cancel-modal" onClick={props.closeModal}>
           <CancelIcon />
         </IconButton>

@@ -66,6 +66,11 @@ function ApprovalPage() {
   useEffect(()=>{
     setUserId("");
   },[projectSelected])
+
+  const userFilteredLength = user_info.filter((user_info_item:any)=>{
+    return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.slice(0,1).toString())   
+  }).length
+
   return (
     <Box sx={{marginLeft:{xs:0,sm:`calc(${DRAWER_WIDTH}px)`,md:`calc(${DRAWER_WIDTH}px)`}}}>
       <Typography variant="h2" textAlign="center" color="#D5D5D5" sx={{p  :2}}>
@@ -81,7 +86,7 @@ function ApprovalPage() {
         </Select>
       </FormControl>
       {select === "WEEK_APPROVALS" && <FormControl sx={{ minWidth: 220 }}>
-        <Select displayEmpty sx={{marginBottom:'10px',ml:1}} value={projectSelected} onChange={(event:any)=>setProjectSelected(event.target.value)}
+        <Select displayEmpty sx={{marginBottom:'10px',ml:1}} value={projectSelected} onChange={(event:any)=>{setProjectSelected(event.target.value);setUserId("")}}
            renderValue={(selected) => {
             if (selected.length === 0) {
               return <span>Please Select a Project</span>;
@@ -103,6 +108,9 @@ function ApprovalPage() {
               return <span>{selected.slice(36).toUpperCase()}</span>;
             }
           }}>
+          <MenuItem disabled={userFilteredLength==0} sx={userFilteredLength!==0?{display:'none'}:{}} value="">
+            No User Found
+          </MenuItem>
           {user_info.length>0  && user_info.map((user_info_item:any)=>{
             return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.slice(0,1).toString()) ?<MenuItem key={user_info_item.id} value={`${user_info_item.id}${user_info_item.firstName}`}>{user_info_item.firstName.toUpperCase()}</MenuItem>:null  
           })}
