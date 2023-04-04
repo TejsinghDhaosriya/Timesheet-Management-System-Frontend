@@ -8,6 +8,7 @@ import { DRAWER_WIDTH } from "./utils/constants";
 import ApprovalPage from "./modules/approvals-page/ApprovalPage";
 import HomePage from "./components/HomePage";
 import KeyCloakService from "./security/keycloakService";
+import { RouteBasedOnRole } from "./components/RouteBasedOnRole";
 
 function App(props: any) {
   return (
@@ -29,10 +30,10 @@ function App(props: any) {
         </Box>
         <Box sx={{marginLeft:"10px",marginTop:'40px' }}>
           <Routes>
-            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/projects" element={<RouteBasedOnRole roles={["Manager","Employee"]}><ProjectsPage /></RouteBasedOnRole>} />
             <Route path="/timesheet" element={<TimesheetPage />} />
-            <Route path="/myapprovals" element={<ApprovalPage />} />
-            <Route path='/' element={<Navigate to='/timesheet' />} />
+            <Route path="/myapprovals" element={<RouteBasedOnRole roles={["Manager"]}><ApprovalPage /></RouteBasedOnRole>} />
+            <Route path='*' element={<Navigate to='/timesheet' />} />
           </Routes>
         </Box>
       </Box>

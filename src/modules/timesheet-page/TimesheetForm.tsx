@@ -267,8 +267,9 @@ const TimesheetForm = (props: any) => {
           mb: "1rem",
         }}
       >
-        <Typography data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
-        {!!formSubmittedStatus && props.module==='timesheet'? (
+        <Typography sx={{fontSize:{xs:'18px',sm:'1.5rem'}}} data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
+        <Box sx={{position:{xs:'',lg:'absolute'},right:{sm:'70px'}}}>
+          {!!formSubmittedStatus && props.module==='timesheet'? (
           <>
             <IconButton
               onClick={() => {
@@ -308,6 +309,7 @@ const TimesheetForm = (props: any) => {
         <IconButton data-testid="cancel-modal" onClick={props.closeModal}>
           <CancelIcon />
         </IconButton>
+        </Box>
       </Box>
       <Box
         component="form"

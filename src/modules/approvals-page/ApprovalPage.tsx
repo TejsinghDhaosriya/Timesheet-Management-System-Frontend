@@ -79,9 +79,6 @@ function ApprovalPage() {
       </Typography>
       <FormControl>
         <Select sx={{marginBottom:'10px'}} value={select} onChange={handleSortChange}>
-          <MenuItem value={"GET_APPROVALS"}>Day</MenuItem>
-          <MenuItem value={"GET_APPROVALS_WEEK"}>WeekRange</MenuItem>
-          <MenuItem value={"USER_APPROVALS"}>User Approvals</MenuItem>  
           <MenuItem value={"WEEK_APPROVALS"}>Weekly Approvals</MenuItem>  
         </Select>
       </FormControl>
@@ -116,9 +113,9 @@ function ApprovalPage() {
           })}
         </Select>
       </FormControl>}
-      {select === "GET_APPROVALS" && <Tablee />}
+      {/* {select === "GET_APPROVALS" && <Tablee />}
       {select === "GET_APPROVALS_WEEK" && <WeekTable />}
-      {select === "USER_APPROVALS" && <TimesheetManager />}
+      {select === "USER_APPROVALS" && <TimesheetManager />} */}
       {select === "WEEK_APPROVALS" && projectSelected!=='' && userId!=="" &&<WeeklyApprovalPage userId={userId.slice(0,36)} />}
 
     </Box>

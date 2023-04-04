@@ -22,8 +22,6 @@ import KeyCloakService from "../security/keycloakService";
 let drawerList = [
   { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
-  { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
-  { key: "help", text: "Help", icon: <HelpIcon /> },
 ];
 // if (KeyCloakService?.GetUserRoles()?.toString() === "Manager") {
 //   drawerList = [
@@ -41,6 +39,19 @@ interface SideBarProps {
 }
 
 function SideBar(props: SideBarProps) {
+  const userRoles = KeyCloakService.GetUserRoles();
+  const isManager = userRoles?.includes('Manager');
+  const [sidebarRoutes,setSidebarRoutes]=useState(drawerList);
+  useEffect(()=>{
+    if(isManager){
+      setSidebarRoutes([...sidebarRoutes,
+        { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
+      ])
+    }
+    else{
+      setSidebarRoutes(drawerList);
+    }
+  },[isManager]);
   const [isSelected, setIsSelected] = useState("timesheet");
   const {mobileOpen,setMobileOpen} = props;
   const list = {
@@ -101,7 +112,7 @@ function SideBar(props: SideBarProps) {
             </IconButton>
           </div>
           <List sx={{ list }}>
-            {drawerList.map((item, index) => {
+            {sidebarRoutes.map((item, index) => {
               return (
                 <Tooltip
                   title={item.text}
@@ -155,7 +166,7 @@ function SideBar(props: SideBarProps) {
               TMS
           </div>
           <List sx={{ list }}>
-            {drawerList.map((item, index) => {
+            {sidebarRoutes.map((item, index) => {
               return (
                 <Tooltip
                   title={item.text}
