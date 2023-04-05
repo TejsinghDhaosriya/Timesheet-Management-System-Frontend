@@ -19,6 +19,7 @@ import {
   timesheet_disabled_color,
 } from "../../utils/constants";
 import UserCard from "../../components/HomePage";
+import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
 
 export default function TimesheetPage(props:any) {
   const ts = useSelector((state: any) => state.timesheet);
@@ -31,6 +32,9 @@ export default function TimesheetPage(props:any) {
       type: GET_TIMESHEETS,
       timesheeet: { userId: userId, organizationId: orgId },
     });
+
+    dispatch({ type: GET_PROJECTS });
+
   }, []);
 
   const getSelectedDateArray = ts.timesheet;

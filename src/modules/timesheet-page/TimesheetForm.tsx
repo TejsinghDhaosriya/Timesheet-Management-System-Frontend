@@ -48,9 +48,6 @@ const TimesheetForm = (props: any) => {
   const orgId = KeyCloakService.CallOrganizationId();
   const proj = getProjectInfoo?.filter((proje: any) => proje.id === pId);
   const [showRejectionMore,setShowRejectionMore] = useState(false)
-  useEffect((): any => {
-    dispatch({ type: GET_PROJECTS });
-  }, [dispatch]);
 
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
