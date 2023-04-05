@@ -40,9 +40,7 @@ const Calendar = (props:any) => {
             break
     }
     setStateCalendar({ ...stateCalendar, selectedDate: newDate })
-    if(module==="approvals"){
-      props.setSelectedDate(newDate);
-    }
+    props.setSelectedDate(newDate);
 }
 
 const previous = () => {
@@ -62,9 +60,7 @@ const previous = () => {
             break
     }
     setStateCalendar({ ...stateCalendar, selectedDate: newDate })
-    if(module==="approvals"){
-      props.setSelectedDate(newDate);
-    }
+    props.setSelectedDate(newDate);
 }
   
   return (

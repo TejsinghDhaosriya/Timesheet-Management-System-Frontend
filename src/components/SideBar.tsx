@@ -20,7 +20,6 @@ import { DRAWER_WIDTH } from "../utils/constants";
 import KeyCloakService from "../security/keycloakService";
 
 let drawerList = [
-  { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
   { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
 ];
 // if (KeyCloakService?.GetUserRoles()?.toString() === "Manager") {
@@ -45,6 +44,7 @@ function SideBar(props: SideBarProps) {
   useEffect(()=>{
     if(isManager){
       setSidebarRoutes([...sidebarRoutes,
+        { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
         { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
       ])
     }

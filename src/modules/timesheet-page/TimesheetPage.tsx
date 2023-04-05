@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from "react-redux";
 import KeyCloakService from "../../security/keycloakService";
 import {
   DRAWER_WIDTH,
+  approval_completed_color,
+  approval_pending_color,
+  approval_rejected_color,
   timesheet_completed_color,
   timesheet_disabled_color,
 } from "../../utils/constants";
@@ -103,26 +106,39 @@ export default function TimesheetPage(props:any) {
               style={{
                 padding: "1px 10px",
                 margin: 10,
-                background: `${timesheet_completed_color}`,
+                background: `${approval_completed_color}`,
                 border: "1px solid",
               }}
             >
               {" "}
             </span>
-            <span>Time sheet completed</span>
+            <span>Time sheet Approved</span>
           </Box>
           <Box>
             <span
               style={{
                 padding: "1px 10px",
                 margin: 10,
-                background: `${timesheet_disabled_color}`,
+                background: `${approval_rejected_color}`,
                 border: "1px solid",
               }}
             >
               {" "}
             </span>
-            <span>Time sheet disabled</span>
+            <span>Time sheet Rejected</span>
+          </Box>
+          <Box>
+            <span
+              style={{
+                padding: "1px 10px",
+                margin: 10,
+                background: `${approval_pending_color}`,
+                border: "1px solid",
+              }}
+            >
+              {" "}
+            </span>
+            <span>Time sheet Pending</span>
           </Box>
           </Box>
         </Box>

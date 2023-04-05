@@ -254,8 +254,10 @@ const TimesheetForm = (props: any) => {
     },2000)
    }
 
+  const userRoles: string[] | undefined = KeyCloakService.GetUserRoles();
+  const isManager = userRoles?.some(userRole => userRole.includes('Manager'));
 
-  // Timesheet module logic
+  // Timesheet module logic 
   return (
     <Box sx={{}}>
       <Box
@@ -269,7 +271,7 @@ const TimesheetForm = (props: any) => {
       >
         <Typography sx={{fontSize:{xs:'18px',sm:'1.5rem'}}} data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
         <Box sx={{position:{xs:'',lg:'absolute'},right:{sm:'70px'}}}>
-          {!!formSubmittedStatus && props.module==='timesheet'? (
+          {!!formSubmittedStatus && props.module==='timesheet' && isManager? (
           <>
             <IconButton
               onClick={() => {
@@ -414,11 +416,11 @@ const TimesheetForm = (props: any) => {
           ) : (
             <></>
           )}
-        </FormControl>
+        </FormControl>  
+
         {props.module ==='approvals' ?<>
 <Button sx={{mr:2}} disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={handleApproveTimeSheet}>Approve</Button>
-<Button disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>
- {approvedTimesheetItem?.status===2 && <><Alert severity="error" sx={{mt:2}}>Reason for rejection: { showRejectionMore ? approvedTimesheetItem.reasonForRejection:approvedTimesheetItem.reasonForRejection.substring(0,25)}<Typography component={"span"} sx={{ml:1,p:0,color:'#2196f3'}} onClick={() => setShowRejectionMore(!showRejectionMore)}>{showRejectionMore?"show less":"...show more"}</Typography></Alert></>}      
+<Button disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>     
 </>:
               <Button
               type="submit"
@@ -433,7 +435,8 @@ const TimesheetForm = (props: any) => {
             {editFormStatus ? "Update" : "Create"}
           </Button>
         }
-
+        {approvedTimesheetItem?.status===2 && <><Alert severity="error" sx={{mt:2}}>Reason for rejection: { showRejectionMore ? approvedTimesheetItem.reasonForRejection:approvedTimesheetItem.reasonForRejection.substring(0,25)}<Typography component={"span"} sx={{ml:1,p:0,color:'#2196f3'}} onClick={() => setShowRejectionMore(!showRejectionMore)}>{showRejectionMore?"show less":"...show more"}</Typography></Alert></>} 
+        {approvedTimesheetItem?.status===1 && <><Alert severity="success" sx={{mt:2}}>Approved</Alert></>}   
         {props.module ==='approvals'?<RejectionModal openRejectionModal={openRejectionModal} setOpenRejectionModal={setOpenRejectionModal} reasonOfRejection={reasonOfRejection} setReasonOfRejection={setReasonOfRejection} handleRejectTimesheet={handleRejectTimesheet} />:<></>}
         
       </Box>

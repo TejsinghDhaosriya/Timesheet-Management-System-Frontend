@@ -30,7 +30,7 @@ function App(props: any) {
         </Box>
         <Box sx={{marginLeft:"10px",marginTop:'40px' }}>
           <Routes>
-            <Route path="/projects" element={<RouteBasedOnRole roles={["Manager","Employee"]}><ProjectsPage /></RouteBasedOnRole>} />
+            <Route path="/projects" element={<RouteBasedOnRole roles={["Manager"]}><ProjectsPage /></RouteBasedOnRole>} />
             <Route path="/timesheet" element={<TimesheetPage />} />
             <Route path="/myapprovals" element={<RouteBasedOnRole roles={["Manager"]}><ApprovalPage /></RouteBasedOnRole>} />
             <Route path='*' element={<Navigate to='/timesheet' />} />

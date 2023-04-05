@@ -1,13 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { CalendarContext } from "./CalendarContext";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import format from "date-fns/format";
 import dayjs from "dayjs";
-import { checkDateInSelectedDateArray, isFutureDate, isTileDisabled } from "../helper";
-import {useSelector} from 'react-redux';
+import { checkDateInSelectedDateArray, checkStatusApprovedOrRejected, getOnlyApprovalsList, isFutureDate, isTileDisabled, updateCalendarByMonthOnApproveOrReject, updateCalendarByWeekOnApproveOrReject } from "../helper";
+import {useDispatch, useSelector} from 'react-redux';
 import { Tooltip } from "@mui/material";
-import { grid_border_color, timesheet_completed_color, timesheet_disabled_color } from "../../../utils/constants";
+import { approval_completed_color, approval_pending_color, approval_rejected_color, grid_border_color, timesheet_completed_color, timesheet_disabled_color } from "../../../utils/constants";
+import { GET_APPROVALS_WEEK } from "../../approvals-page/actions/approvalTypes";
+import KeyCloakService from "../../../security/keycloakService";
 
 
 function CalendarLayoutMonth(props: any) {
@@ -17,7 +19,7 @@ function CalendarLayoutMonth(props: any) {
   const { weeks } = props;
 
   const { stateCalendar, setStateCalendar } = useContext(CalendarContext);
-  const { layout } = stateCalendar;
+  const {selectedDate, layout } = stateCalendar;
 
   const maxHeight = (weeks: any[]) => {
     const size = weeks.length;
@@ -36,6 +38,23 @@ function CalendarLayoutMonth(props: any) {
     };
   };
 
+  const approvedTimesheetDates = useSelector((state: any) => state.approvals);
+  const statusTimesheetData = getOnlyApprovalsList(approvedTimesheetDates);
+  const dispatch = useDispatch();
+  const userId = KeyCloakService.CallUserId();
+  const orgId = KeyCloakService.CallOrganizationId();
+  
+  useEffect(()=>{
+    const updatedTS = updateCalendarByMonthOnApproveOrReject(selectedDate);
+    dispatch({
+      type: GET_APPROVALS_WEEK,
+      startDate: updatedTS.startDate,
+      endDate: updatedTS.endDate,
+      userId:userId,
+      orgId:orgId
+    });
+  },[selectedDate])
+  
   return (
     <>
       {weeks.map((week: any, weekIndex: number) => (
@@ -58,6 +77,20 @@ function CalendarLayoutMonth(props: any) {
               selectedDateArray,
               dayjs(day).format("YYYY-MM-DD")
             );
+            const getStatusApproved = checkStatusApprovedOrRejected(
+              statusTimesheetData,
+              dayjs(day).format("YYYY-MM-DD")
+            );
+            let isDateApproved = false,
+              isDateRejected = false,
+              isDatePending = false;
+            if (getStatusApproved === 1) {
+              isDateApproved = true;
+            } else if (getStatusApproved === 2) {
+              isDateRejected = true;
+            } else if (getStatusApproved === 0) {
+              isDatePending = true;
+            }
             return (
               <Grid
                 item
@@ -81,21 +114,42 @@ function CalendarLayoutMonth(props: any) {
                 data-testid="calendar-tile"
                 sx={isDateDisabled || isDateFuture?{background:`${timesheet_disabled_color}`,cursor:"not-allowed",pointerEvents:'none'}:{cursor:"pointer"}}
               >
-                <div>
-                  <Tooltip
-                        title={statusFormFilled?"Time sheet Filled":""}
-                    >
-                  <Typography
-                  >
-                    <span
-                    //style={isToday?{borderBottom:"2px solid black"}:{}}
-                    style={statusFormFilled?{cursor:"pointer",background:`${timesheet_completed_color}`,padding:'5px 10px',borderRadius:'50%'}:{cursor:"pointer"}}
-                    >
-                      {day.getDate()}
-                    </span>
-                  </Typography>
-                  </Tooltip>
-                </div>
+             <Tooltip
+                title={
+                  isDateApproved
+                    ? "Time sheet Approved"
+                    : isDateRejected
+                    ? "Timesheet Rejected"
+                    : statusFormFilled ? "Timesheet Pending":"Timesheet not filled"
+                }
+              >
+                <span
+                  style={
+                    isDateApproved
+                      ? {
+                          cursor: "pointer",
+                          background: `${approval_completed_color}`,
+                          padding: "5px 10px",
+                          borderRadius: "50%",
+                        }
+                      : isDateRejected && statusFormFilled
+                      ? {
+                          cursor: "pointer",
+                          background: `${approval_rejected_color}`,
+                          padding: "5px 10px",
+                          borderRadius: "50%",
+                        }
+                      : statusFormFilled?{
+                          cursor: "pointer",
+                          background: `${approval_pending_color}`,
+                          padding: "5px 10px",
+                          borderRadius: "50%",
+                        }:{}
+                  }
+                >
+                  {day.getDate()}
+                </span>
+              </Tooltip>
               </Grid>
             );
           })}
