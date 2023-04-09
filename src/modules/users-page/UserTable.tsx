@@ -28,7 +28,7 @@ import { getUser } from "./APIs/UserApi";
 import { UserInterface } from "./interface/UserInterface";
 import { getProject } from "./APIs/ProjectApi";
 import Project from "../projects-page/ProjectInterface";
-import { assignProject, getProjectAssigned } from "./APIs/AssignProject";
+import { assignProject, getProjectAssigned, unAssignProject } from "./APIs/AssignProject";
 
 const style = {
   position: "absolute" as "absolute",
@@ -39,24 +39,10 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  pt: 2,
+  pt: 4,
   px: 4,
   pb: 3,
 };
-
-const projectNames = [
-  { label: "TimeSheet Management System" },
-  { label: "Recruitment Management System" },
-  { label: "Enterprise Emission" },
-  { label: "TimeSheet Management System2" },
-  { label: "Virtual Cops" },
-  { label: "Blood Bank Management System" },
-  { label: "TimeSheet Management System3" },
-  { label: "Student Management System" },
-  { label: "TimeSheet Management System4" },
-  { label: "Rank Interest" },
-  { label: "TimeSheet Management System5" },
-];
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -82,15 +68,17 @@ export default function UserTables() {
   const [data, setData] = React.useState<UserInterface[]>([]);
   const [userName, setUserName] = React.useState("");
   const [userId, setUserId] = React.useState("");
+  const [previousProjectId, setPreviousProjectId] = React.useState([]);
+  const [projectId, setProjectId] = React.useState(0);
   const [selectProject, setSelectProject] = React.useState<string | null>("");
   const [project, setProject] = React.useState<Project[]>([]);
   const [projectAssigned, setProjectAssigned] = React.useState(false);
-  const [IsProjectAssigned, setIsProjectAssigned] = React.useState(false);
+  const [unassignClicked, setUnAssignClicked] = React.useState(false);
   const [alreadyProjectAssign, setAlreadyProjectAssign] = React.useState(false);
   const [userSearch, setUserSearch] = React.useState<string | null>("");
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => {setOpen(false);setProjectAssigned(false);setAlreadyProjectAssign(false);};
+  const handleClose = () => {setOpen(false);setProjectAssigned(false);setAlreadyProjectAssign(false);setUnAssignClicked(false)};
 
   const GetAllUser = async () => {
     try {
@@ -125,6 +113,17 @@ export default function UserTables() {
     } catch (error) {}
   };
 
+  const GetUnAssignedProject = async (userId: string) => {
+    try {
+      const response = await getProjectAssigned(userId);
+      if (response.data.currentProjectId != 0 )
+      {
+        setProjectId(response.data.currentProjectId);
+        setPreviousProjectId(response.data.previousProjectIds);
+      }
+    } catch (error) {}
+  };
+
   const AssignProject = async () => {
     const projectId = Number(selectProject?.slice(0, 1));
     const getStatusCode = await assignProject(userId, projectId);
@@ -133,16 +132,48 @@ export default function UserTables() {
     }
     setTimeout(() => {
       handleClose();
-    }, 2000);
+    }, 1000);
+    // handleClose();
   };
+
+  const UnAssignProject = async () => {
+    const projectId = Number(selectProject?.slice(0, 1));
+    console.log("project Id", projectId);
+    const getStatusCode = await unAssignProject(userId, projectId, previousProjectId);
+    // if (getStatusCode === 200) {
+    //   setProjectAssigned(false);
+    // }
+    handleClose();
+
+  }
 
   const onClickAssign = (item: any) => {
     setUserName(item.username);
     setUserId(item.id);
     GetAssignedProject(item.id);
-    GetAllProject();
     handleOpen();
   };
+
+  const onClickUnAssign = (item: any) => {
+    setUnAssignClicked(true);
+    setUserName(item.username);
+    setUserId(item.id);
+    const unassignedProjectId = GetUnAssignedProject(item.id);
+    handleOpen();
+  };
+
+  React.useEffect(() => {
+    if(unassignClicked)
+    {
+      const selectedProject = project.filter((project_info)=>{
+      console.log("Project Info", project_info, projectId);
+      return project_info.id === projectId;
+  })
+  console.log("selectedpROJECT", selectedProject);
+  const idWithProjectName = `${selectedProject[0].id}${selectedProject[0].name}`
+  setSelectProject(idWithProjectName);
+    }
+  },[projectId])
 
 const filteredUser = (userSearch: string) => {
   const filterUser = data.filter((user_info)=>{
@@ -157,9 +188,12 @@ React.useEffect(() => {
   }
 }, [userSearch]);
 
+React.useEffect(() => {
+  GetAllProject();
+}, []);
   return (
     <TableContainer component={Paper}>
-      <Stack spacing={2} sx={{ width: 300 }}>
+      <Stack spacing={2} sx={{ width: 300, ml: 'auto' }}>
         <Autocomplete
           onInputChange={(event: any, newValue: string) => {
              setUserSearch(newValue);
@@ -196,7 +230,7 @@ React.useEffect(() => {
             <StyledTableCell align="right">Email</StyledTableCell>
             <StyledTableCell align="right">First Name</StyledTableCell>
             <StyledTableCell align="right">Last Name</StyledTableCell>
-            <StyledTableCell align="right">Action</StyledTableCell>
+            <StyledTableCell align="center">Action</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -209,7 +243,7 @@ React.useEffect(() => {
               <StyledTableCell align="right">{row.email}</StyledTableCell>
               <StyledTableCell align="right">{row.firstName}</StyledTableCell>
               <StyledTableCell align="right">{row.lastName}</StyledTableCell>
-              <StyledTableCell align="right">
+              <StyledTableCell align="center">
                 <Tooltip title="Assign Project">
                   <IconButton onClick={() => onClickAssign(row)}>
                     <AddCircleOutlineIcon />
@@ -217,7 +251,7 @@ React.useEffect(() => {
                 </Tooltip>
 
                 <Tooltip title="UnAssign Project">
-                  <IconButton onClick={handleOpen}>
+                  <IconButton onClick={() => onClickUnAssign(row)}>
                     <RemoveCircleOutlineIcon />
                   </IconButton>
                 </Tooltip>
@@ -251,7 +285,7 @@ React.useEffect(() => {
            
           ) : (
             <>
-              {alreadyProjectAssign? <><Box
+              {alreadyProjectAssign===true && unassignClicked===false? <><Box
               sx={{
                 display: "flex",
                 justifyContent: "center",
@@ -274,13 +308,15 @@ React.useEffect(() => {
               />
               <Select
                 displayEmpty
+                disabled={unassignClicked}
                 sx={{ marginBottom: "10px", ml: 1 }}
                 value={selectProject}
                 onChange={(event: any) => setSelectProject(event.target.value)}
                 renderValue={(selected: any) => {
                   if (selected.length === 0) {
                     return <span>Please Select a Project</span>;
-                  } else {
+                  }
+                  else {
                     return <span>{selected.slice(1).toUpperCase()}</span>;
                   }
                 }}
@@ -304,7 +340,15 @@ React.useEffect(() => {
                 alignItems="center"
                 spacing={1}
               >
-                <Button
+                {unassignClicked? <Button
+                  type="submit"
+                  variant="outlined"
+                  color="primary"
+                  data-testid="submit-btn"
+                  onClick={UnAssignProject}
+                >
+                  UnAssign Project
+                </Button> : <Button
                   type="submit"
                   variant="outlined"
                   color="primary"
@@ -312,7 +356,7 @@ React.useEffect(() => {
                   onClick={AssignProject}
                 >
                   Assign Project
-                </Button>
+                </Button>}
                 <Button
                   type="submit"
                   variant="outlined"
