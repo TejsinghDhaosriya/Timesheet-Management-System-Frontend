@@ -231,3 +231,12 @@ export function updateCalendarByMonthOnApproveOrReject(selectedDate:string){
   const endDate = format(new Date(weeks[5][6]),'yyyy-MM-dd')||null;    
   return {startDate:startDate,endDate:endDate};
 }
+
+
+
+export const getUserLoggedInManager=(projectDetails:any,managerInfoList:any)=>{
+  const updatedManagerDetails = managerInfoList.filter((managerInfo_Item:any)=>{
+    return managerInfo_Item.managerId === projectDetails[0].managerId
+  })
+  return updatedManagerDetails;
+}

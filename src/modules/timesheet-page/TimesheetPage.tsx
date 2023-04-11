@@ -20,6 +20,8 @@ import {
 } from "../../utils/constants";
 import UserCard from "../../components/HomePage";
 import { GET_PROJECTS } from "../projects-page/actions/projectTypes";
+import axios from "axios";
+import { getTokenToGetUserInfo } from "../../utils/commonAPI";
 
 export default function TimesheetPage(props:any) {
   const ts = useSelector((state: any) => state.timesheet);
@@ -27,6 +29,24 @@ export default function TimesheetPage(props:any) {
   const userId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
 
+  
+  const getManagersInfoWithToken = async(token:string)=>{
+    const {data} = await axios.get('https://143.110.248.171:8443/admin/realms/Augmento/clients/7e45d71a-ad7f-429b-9a16-7f7440561461/roles/Manager/users',{
+      headers:{
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':`Bearer ${token}`
+      }
+    })
+    return data;
+  }
+  const fetchManagerInfo = async()=>{
+    const access_token  = await getTokenToGetUserInfo();
+    const managerInfo_data = await getManagersInfoWithToken(access_token);
+    const updatedManagerInfo_data = managerInfo_data.map((managerItem:any)=>{
+      return {email:managerItem.email,managerId:managerItem.id,name:managerItem.username}
+    })
+    dispatch({type:"SET_MANAGER_INFO",data:updatedManagerInfo_data})
+  }
   useEffect((): any => {
     dispatch({
       type: GET_TIMESHEETS,
@@ -34,7 +54,7 @@ export default function TimesheetPage(props:any) {
     });
 
     dispatch({ type: GET_PROJECTS });
-
+    fetchManagerInfo();
   }, []);
 
   const getSelectedDateArray = ts.timesheet;

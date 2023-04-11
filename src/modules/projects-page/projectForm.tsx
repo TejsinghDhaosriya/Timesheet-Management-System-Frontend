@@ -31,6 +31,8 @@ const MyForm = () => {
 
     dispatch(setProjectSlice(intialState));
   };
+  
+  const manager_info = useSelector((state:any)=>state.userInfo.managerList);
 
   return (
     <>
@@ -110,11 +112,13 @@ const MyForm = () => {
             margin: "10px 10px 0px 10px"
           }}
         >
-          <MenuItem value="0df67465-e8b8-423b-9076-122538a6d253">
-            Rohit
-          </MenuItem>
-          <MenuItem value="1">Siddarth</MenuItem>
-          <MenuItem value="2">Rajneesh</MenuItem>
+          {manager_info.map((managerItem:{email:string,managerId:string,name:string}) => {
+              return (
+                <MenuItem key={managerItem.managerId} value={managerItem.managerId}>
+                  {managerItem.name}
+                </MenuItem>
+              );
+            })}
         </Select>
         <br />
 

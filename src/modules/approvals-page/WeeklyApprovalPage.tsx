@@ -45,17 +45,15 @@ const WeeklyApprovalPage = (props:any) => {
             userId:userId,
             orgId:orgId
         });
+
+        dispatch({
+          type: GET_TIMESHEETS,
+          timesheeet: { userId: userId, organizationId: orgId },
+        });
       }
   },[selectedDate,userId]);
 
   const ts = useSelector((state: any) => state.timesheet);
-
-  useEffect((): any => {
-    dispatch({
-      type: GET_TIMESHEETS,
-      timesheeet: { userId: userId, organizationId: orgId },
-    });
-  }, [userId]);
 
 
   const getSelectedDateArray = ts.timesheet;
@@ -129,6 +127,7 @@ const WeeklyApprovalPage = (props:any) => {
             setSelectedDate={(value: string) => {setSelectedDate(value);}}
             layout="week"
             module="approvals"
+            userId={userId}
           />
         </Box>
         <Box>

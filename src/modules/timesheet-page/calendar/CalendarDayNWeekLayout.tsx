@@ -39,19 +39,20 @@ const CalendarDayNWeekLayout = (props: any) => {
 
   const approvedTimesheetDates = useSelector((state: any) => state.approvals);
   const statusTimesheetData = getOnlyApprovalsList(approvedTimesheetDates);
-  //console.log(statusTimesheetData);
   const userId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
   const dispatch = useDispatch();
   useEffect(()=>{
-    const updatedTS = updateCalendarByWeekOnApproveOrReject(selectedDate);
-    dispatch({
-      type: GET_APPROVALS_WEEK,
-      startDate: updatedTS.startDate,
-      endDate: updatedTS.endDate,
-      userId:userId,
-      orgId:orgId
-    });
+    if(module==='timesheet'){
+      const updatedTS = updateCalendarByWeekOnApproveOrReject(selectedDate);
+      dispatch({
+        type: GET_APPROVALS_WEEK,
+        startDate: updatedTS.startDate,
+        endDate: updatedTS.endDate,
+        userId:userId,
+        orgId:orgId
+      });
+    }
   },[selectedDate])
   
   return (
@@ -81,7 +82,6 @@ const CalendarDayNWeekLayout = (props: any) => {
           } else if (getStatusApproved === 0) {
             isDatePending = true;
           }
-          //console.log(statusApproved, statusFormFilled);
           return (
             <Grid
               item
