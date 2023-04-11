@@ -1,10 +1,10 @@
 import { useState,useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link,useLocation,useNavigate } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { styled } from "@mui/material/styles";
 import {
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   Drawer,
   IconButton,Box
@@ -41,10 +41,12 @@ function SideBar(props: SideBarProps) {
   const userRoles = KeyCloakService.GetUserRoles();
   const isManager = userRoles?.includes('Manager');
   const [sidebarRoutes,setSidebarRoutes]=useState(drawerList);
+  
   useEffect(()=>{
     if(isManager){
-      setSidebarRoutes([...sidebarRoutes,
+      setSidebarRoutes([
         { key: "projects", text: "Projects", icon: <AccountTreeIcon /> },
+        { key: "timesheet", text: "Timesheets", icon: <PunchClockIcon /> },
         { key: "myapprovals", text: "My Approvals", icon: <AssignmentIcon /> },
       ])
     }
@@ -57,7 +59,7 @@ function SideBar(props: SideBarProps) {
   const list = {
     textAlign: "center",
   };
-  const ListItemStyled = styled(ListItem)(({ theme }) => ({
+  const ListItemStyled = styled(ListItemButton)(({ theme }) => ({
     borderRadius: "14px",
     padding: "16px",
     height: "60px",
@@ -66,6 +68,9 @@ function SideBar(props: SideBarProps) {
     "&.Mui-selected": {
       backgroundColor: theme.palette.primary.main,
     },
+    "&.Mui-selected:hover":{
+      backgroundColor: theme.palette.primary.main,
+    }
   }));
   const ListItemIconStyled = styled(ListItemIcon)({
     fontSize: "24px",
@@ -84,6 +89,14 @@ function SideBar(props: SideBarProps) {
     overflowY: "hidden",
     width: `${DRAWER_WIDTH}px)`,
   });
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(isSelected!==location.pathname.slice(1)){
+      navigate('/')
+    }
+  },[location.pathname])
 
   const drawerContentWithMenuButton = () => {
     return (
