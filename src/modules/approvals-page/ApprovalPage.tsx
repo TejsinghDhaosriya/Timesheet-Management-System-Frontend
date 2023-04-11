@@ -83,9 +83,8 @@ function ApprovalPage() {
   },[projectSelected])
 
   const userFilteredLength = user_info.filter((user_info_item:any)=>{
-    return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.slice(0,1).toString())   
+    return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.split(" ")[0].toString())   
   }).length
-
   return (
     <Box sx={{marginLeft:{xs:0,sm:`calc(${DRAWER_WIDTH}px)`,md:`calc(${DRAWER_WIDTH}px)`}}}>
       <Box sx={projectSelected==='' && userId===""?{display:'flex',flexDirection:"column",justifyContent:"flex-start",alignItems:"center",marginTop:'5rem'}:{display:"flex",flexDirection:"column",justifyContent:"flex-start",alignItems:"flex-start"}}>
@@ -100,14 +99,14 @@ function ApprovalPage() {
                 if (selected.length === 0) {
                   return <span>Please Select a Project</span>;
                 }else{
-                  return <span>{selected.slice(1).toUpperCase()}</span>;
+                  return <span>{selected.slice(2).toUpperCase()}</span>;
                 }
               }}>
               <MenuItem disabled={projectDropdown.length===0} sx={projectDropdown.length!==0?{display:'none'}:{}} value="">
                 No Project Found
               </MenuItem>
               {projectDropdown.length>0 && projectDropdown.map((project_info_item:any)=>{
-                return <MenuItem key={project_info_item.name} value={`${project_info_item.id}${project_info_item.name}`}>{project_info_item.name.toUpperCase()}</MenuItem>
+                return <MenuItem key={project_info_item.name} value={`${project_info_item.id} ${project_info_item.name}`}>{project_info_item.name.toUpperCase()}</MenuItem>
               })}
             </Select>
           </FormControl>}
@@ -124,7 +123,7 @@ function ApprovalPage() {
                 No Employee Found
               </MenuItem>
               {user_info.length>0  && user_info.map((user_info_item:any)=>{
-                return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.slice(0,1).toString()) ?<MenuItem key={user_info_item.id} value={`${user_info_item.id}${user_info_item.firstName}`}>{user_info_item.firstName.toUpperCase()}</MenuItem>:null  
+                return (Object.keys(user_info_item?.attributes).length===2)&&(user_info_item?.attributes?.['Project Id'][0] === projectSelected.split(" ")[0].toString()) ?<MenuItem key={user_info_item.id} value={`${user_info_item.id}${user_info_item.firstName}`}>{user_info_item.firstName.toUpperCase()}</MenuItem>:null  
               })}
             </Select>
           </FormControl>}
