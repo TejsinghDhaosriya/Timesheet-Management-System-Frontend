@@ -97,7 +97,9 @@ const WeeklyApprovalTable = ({ userId, selectedDate }: any) => {
   };
 
   const handleReject = () => {
-    setOpenRejectionModal(true);
+    if(approvedTimesheetDateArray.length>0){
+      setOpenRejectionModal(true);
+    }
   };
   const handleRejectTimesheet = () => {
     if (

@@ -22,6 +22,7 @@ import {
   checkDateInSelectedDateArray2,
   formSubmittedStatusHelper,
   getOnlyApprovalsList,
+  getUserLoggedInManager,
   updateCalendarByWeekOnApproveOrReject,
 } from "./helper";
 import {
@@ -38,24 +39,23 @@ import Alert from '@mui/material/Alert';
 
 const TimesheetForm = (props: any) => {
   const dispatch = useDispatch();
-  const getProjectInfo: any = useSelector<any>(
-    (state) => state.timesheet.project_info
-  );
+  // const getProjectInfo: any = useSelector<any>(
+  //   (state) => state.timesheet.project_info
+  // );
+  const manager_info = useSelector((state:any)=>state.userInfo.managerList);
   const getProjectInfoo = useSelector((state: any) => state.projects);
-
+  const {userId} = props;
   const pId = KeyCloakService.CallUserProject();
-  const user = KeyCloakService.CallUserId();
+  const loggedInUserId = KeyCloakService.CallUserId();
   const orgId = KeyCloakService.CallOrganizationId();
   const proj = getProjectInfoo?.filter((proje: any) => proje.id === pId);
   const [showRejectionMore,setShowRejectionMore] = useState(false)
-  useEffect((): any => {
-    dispatch({ type: GET_PROJECTS });
-  }, [dispatch]);
 
   let formSubmittedStatus = formSubmittedStatusHelper(
     props.selectedDateArray,
     props.dateSelected
   );
+  const updateYourManagerDetails = getUserLoggedInManager(proj,manager_info);
 
   const initialFormState = {
     project_name: {
@@ -63,7 +63,7 @@ const TimesheetForm = (props: any) => {
       error: false,
     },
     project_manager: {
-      value: getProjectInfo.project_manager,
+      value: [updateYourManagerDetails[0].name],
       error: false,
       errorMessage: "Please select a manager",
     },
@@ -151,7 +151,7 @@ const TimesheetForm = (props: any) => {
         description: newFormValues.description.value,
         totalHours: Number(newFormValues.totalHours.value),
         project_name: formValues.project_name.value,
-        CreatedBy: user,
+        CreatedBy: loggedInUserId,
         // project_manager: formValues?.project_manager.value,
       };
       props.setSelectedDateArray([...props.selectedDateArray, timesheetData]);
@@ -171,7 +171,7 @@ const TimesheetForm = (props: any) => {
         dispatch({
           type: CREATE_TIMESHEET,
           timesheetData,
-          user: user,
+          user: loggedInUserId,
           orgId: orgId,
           pId: pId,
           
@@ -188,6 +188,8 @@ const TimesheetForm = (props: any) => {
     setFormValues(initialFormState);
   };
   useEffect(() => {
+    const updateYourManagerDetails = getUserLoggedInManager(proj,manager_info);
+
     if (!!formSubmittedStatus) {
       let editFormValues = {
         ...formValues,
@@ -204,7 +206,7 @@ const TimesheetForm = (props: any) => {
           value: proj[0]?.name,
         },
         project_manager: {
-          value: getProjectInfo.project_manager,
+          value: [updateYourManagerDetails[0].name],
         },
       };
       setFormValues(editFormValues);
@@ -228,7 +230,7 @@ const TimesheetForm = (props: any) => {
         type: GET_APPROVALS_WEEK,
         startDate: getStartAndEndDate.startDate,
         endDate: getStartAndEndDate.endDate,
-        userId:user,
+        userId:userId,
         orgId:orgId
     });
     },2000)
@@ -248,14 +250,17 @@ const TimesheetForm = (props: any) => {
         type: GET_APPROVALS_WEEK,
         startDate: getStartAndEndDate.startDate,
         endDate: getStartAndEndDate.endDate,
-        userId:user,
+        userId:userId,
         orgId:orgId
     });
     },2000)
    }
 
-
-  // Timesheet module logic
+  const userRoles: string[] | undefined = KeyCloakService.GetUserRoles();
+  const isManager = userRoles?.some(userRole => userRole.includes('Manager'));
+   
+  
+  // Timesheet module logic 
   return (
     <Box sx={{}}>
       <Box
@@ -267,9 +272,22 @@ const TimesheetForm = (props: any) => {
           mb: "1rem",
         }}
       >
-        <Typography data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
-        {!!formSubmittedStatus && props.module==='timesheet'? (
+        <Typography sx={{fontSize:{xs:'18px',sm:'1.5rem'}}} data-testid="timesheet-form-header" variant="h5">Time Sheet Information</Typography>
+        <Box sx={{position:{xs:'',lg:'absolute'},right:{sm:'70px'}}}>
+          {!!formSubmittedStatus && props.module==='timesheet' && isManager? (
           <>
+            <IconButton
+              onClick={() => {
+                setEditFormStatus(true);
+                setEditDropdown(true);
+              }}
+              data-testid="edit-btn"
+            >
+              <EditIcon />
+            </IconButton>
+          </>
+        ) : null}
+        {props.module==='approvals' && <>
             <IconButton
               onClick={() => {
                 const x = checkDateInSelectedDateArray2(
@@ -283,18 +301,6 @@ const TimesheetForm = (props: any) => {
             >
               <DeleteIcon />
             </IconButton>
-            <IconButton
-              onClick={() => {
-                setEditFormStatus(true);
-                setEditDropdown(true);
-              }}
-              data-testid="edit-btn"
-            >
-              <EditIcon />
-            </IconButton>
-          </>
-        ) : null}
-        {props.module==='approvals' && <>
           <IconButton
           onClick={() => {
             //setEditFormStatus(true);
@@ -308,6 +314,7 @@ const TimesheetForm = (props: any) => {
         <IconButton data-testid="cancel-modal" onClick={props.closeModal}>
           <CancelIcon />
         </IconButton>
+        </Box>
       </Box>
       <Box
         component="form"
@@ -397,10 +404,10 @@ const TimesheetForm = (props: any) => {
             multiple
             name="project_manager"
           >
-            {["Rohit", "Siddarth", "Rajneesh"].map((name) => {
+            {manager_info.map((managerItem:{email:string,managerId:string,name:string}) => {
               return (
-                <MenuItem key={name} value={name}>
-                  {name}
+                <MenuItem key={managerItem.managerId} value={managerItem.name}>
+                  {`${managerItem.name}`.toUpperCase()}
                 </MenuItem>
               );
             })}
@@ -412,11 +419,11 @@ const TimesheetForm = (props: any) => {
           ) : (
             <></>
           )}
-        </FormControl>
+        </FormControl>  
+
         {props.module ==='approvals' ?<>
 <Button sx={{mr:2}} disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={handleApproveTimeSheet}>Approve</Button>
-<Button disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>
- {approvedTimesheetItem?.status===2 && <><Alert severity="error" sx={{mt:2}}>Reason for rejection: { showRejectionMore ? approvedTimesheetItem.reasonForRejection:approvedTimesheetItem.reasonForRejection.substring(0,25)}<Typography component={"span"} sx={{ml:1,p:0,color:'#2196f3'}} onClick={() => setShowRejectionMore(!showRejectionMore)}>{showRejectionMore?"show less":"...show more"}</Typography></Alert></>}      
+<Button disabled={!editApproved} type="button" variant="outlined" color="secondary" onClick={()=>setOpenRejectionModal(true)}>Reject</Button>     
 </>:
               <Button
               type="submit"
@@ -431,7 +438,8 @@ const TimesheetForm = (props: any) => {
             {editFormStatus ? "Update" : "Create"}
           </Button>
         }
-
+        {approvedTimesheetItem?.status===2 && <><Alert severity="error" sx={{mt:2}}>Reason for rejection: { showRejectionMore ? approvedTimesheetItem.reasonForRejection:approvedTimesheetItem.reasonForRejection.substring(0,25)}<Typography component={"span"} sx={{ml:1,p:0,color:'#2196f3'}} onClick={() => setShowRejectionMore(!showRejectionMore)}>{showRejectionMore?"show less":"...show more"}</Typography></Alert></>} 
+        {approvedTimesheetItem?.status===1 && <><Alert severity="success" sx={{mt:2}}>Approved</Alert></>}   
         {props.module ==='approvals'?<RejectionModal openRejectionModal={openRejectionModal} setOpenRejectionModal={setOpenRejectionModal} reasonOfRejection={reasonOfRejection} setReasonOfRejection={setReasonOfRejection} handleRejectTimesheet={handleRejectTimesheet} />:<></>}
         
       </Box>

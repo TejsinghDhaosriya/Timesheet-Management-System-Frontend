@@ -73,6 +73,19 @@ export default function MyTable() {
       ? project
       : project.filter((row: any) => numberMap[row.status] === sortBy);
 
+  const manager_info = useSelector((state:any)=>state.userInfo.managerList);
+
+  const getProjectsManager=(projectDetails:any,managerInfoList:any)=>{
+    const updatedManagerDetails = managerInfoList.filter((managerInfoListItem:any)=>{
+      return  managerInfoListItem.managerId === projectDetails.managerId
+    })
+    return `${updatedManagerDetails[0]?.name}`.toUpperCase();
+  }
+
+  // useEffect(()=>{
+  //   getProjectsManager(project,manager_info);
+  // },[])
+
   return (
     <>
         <FormControl>
@@ -116,7 +129,7 @@ export default function MyTable() {
                 <TableCell align="right">{dayjs(row.startDate).format("DD,MMMM YYYY")}</TableCell>
                 <TableCell align="right">{dayjs(row.endDate).format("DD,MMMM YYYY")}</TableCell>
                 <TableCell align="right">{numberMap[row.status]}</TableCell>
-                <TableCell align="right">{managerMap[row.managerId]}</TableCell>
+                <TableCell align="right">{getProjectsManager(row,manager_info)}</TableCell>
                 <TableCell align="right">
                   <IconButton
                     sx={{ backgroundColor: "#D5D5D5" }}

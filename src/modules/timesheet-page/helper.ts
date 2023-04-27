@@ -224,3 +224,19 @@ export function updateCalendarByWeekOnApproveOrReject(selectedDate:string){
   const endDate = format(new Date(selectedWeek[5]),'yyyy-MM-dd')||null;    
   return {startDate:startDate,endDate:endDate};
 }
+
+export function updateCalendarByMonthOnApproveOrReject(selectedDate:string){
+  const weeks = getWeekDays(new Date(selectedDate), 7);
+  const startDate = format(new Date(weeks[0][0]),'yyyy-MM-dd')||null;
+  const endDate = format(new Date(weeks[5][6]),'yyyy-MM-dd')||null;    
+  return {startDate:startDate,endDate:endDate};
+}
+
+
+
+export const getUserLoggedInManager=(projectDetails:any,managerInfoList:any)=>{
+  const updatedManagerDetails = managerInfoList.filter((managerInfo_Item:any)=>{
+    return managerInfo_Item.managerId === projectDetails[0].managerId
+  })
+  return updatedManagerDetails;
+}

@@ -2,7 +2,7 @@ import { Grid, Tooltip } from "@mui/material";
 import { format } from "date-fns";
 import dayjs from "dayjs";
 import React, { useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   approval_completed_color,
   approval_pending_color,
@@ -16,8 +16,11 @@ import {
   getOnlyApprovalsList,
   isFutureDate,
   isTileDisabled,
+  updateCalendarByWeekOnApproveOrReject,
 } from "../helper";
 import { CalendarContext } from "./CalendarContext";
+import { GET_APPROVALS_WEEK } from "../../approvals-page/actions/approvalTypes";
+import KeyCloakService from "../../../security/keycloakService";
 
 const CalendarDayNWeekLayout = (props: any) => {
   const { selectedWeekIndex, selectedWeek, module } = props;
@@ -36,11 +39,25 @@ const CalendarDayNWeekLayout = (props: any) => {
 
   const approvedTimesheetDates = useSelector((state: any) => state.approvals);
   const statusTimesheetData = getOnlyApprovalsList(approvedTimesheetDates);
-  //console.log(statusTimesheetData);
+  const userId = KeyCloakService.CallUserId();
+  const orgId = KeyCloakService.CallOrganizationId();
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    if(module==='timesheet'){
+      const updatedTS = updateCalendarByWeekOnApproveOrReject(selectedDate);
+      dispatch({
+        type: GET_APPROVALS_WEEK,
+        startDate: updatedTS.startDate,
+        endDate: updatedTS.endDate,
+        userId:userId,
+        orgId:orgId
+      });
+    }
+  },[selectedDate])
   
   return (
     <div style={{ display: "flex" }}>
-      {module === "timesheet" &&
+      {
         viewLayout.map((index: any) => {
           const day = layout === "week" ? selectedWeek[index] : selectedDate;
           const isToday =
@@ -51,75 +68,6 @@ const CalendarDayNWeekLayout = (props: any) => {
             selectedDateArray,
             dayjs(day).format("YYYY-MM-DD")
           );
-          return (
-            <Grid
-              item
-              xs
-              id={`day${index + 1}`}
-              data-group="day-column"
-              data-date={day}
-              key={`board-day-column-${layout}-${selectedWeekIndex}-${day}-${index}`}
-              style={{
-                borderBottom: "1px solid #dadce0",
-                border: "1px solid #dadce0",
-                textAlign: "center",
-                borderRadius: 0,
-                minWidth: 64.38,
-                height: "100%",
-                padding: "20px",
-              }}
-              onClick={() => {
-                if (!(isDateDisabled && isDateFuture)) {
-                  props.setSelectedDate(dayjs(day).format("YYYY-MM-DD"));
-                  props.setDateSelectedStatus(true);
-                }
-              }}
-              data-testid="calendar-tile"
-              sx={
-                isDateDisabled || isDateFuture
-                  ? {
-                      background: `${timesheet_disabled_color}`,
-                      cursor: "not-allowed",
-                      pointerEvents: "none",
-                    }
-                  : { cursor: "pointer" }
-              }
-            >
-              <Tooltip title={statusFormFilled ? "Time sheet Filled" : ""}>
-                <span
-                  style={
-                    statusFormFilled
-                      ? {
-                          cursor: "pointer",
-                          background: `${timesheet_completed_color}`,
-                          padding: "5px 10px",
-                          borderRadius: "50%",
-                        }
-                      : { cursor: "pointer" }
-                  }
-                >
-                  {day.getDate()}
-                </span>
-              </Tooltip>
-            </Grid>
-          );
-        })}
-
-      {module === "approvals" &&
-        viewLayout.map((index: any) => {
-          const day = layout === "week" ? selectedWeek[index] : selectedDate;
-          const isToday =
-            format(day, "ddMMyyyy") === format(new Date(), "ddMMyyyy");
-          const isDateDisabled = isTileDisabled({ view: "month", date: day });
-          const isDateFuture = isFutureDate(day);
-          const statusFormFilled = checkDateInSelectedDateArray(
-            selectedDateArray,
-            dayjs(day).format("YYYY-MM-DD")
-          );
-          const statusApproved = checkDateInSelectedDateArray(
-            approvedTimesheetDates,
-            dayjs(day).format("YYYY-MM-DD")
-          ); 
           const getStatusApproved = checkStatusApprovedOrRejected(
             statusTimesheetData,
             dayjs(day).format("YYYY-MM-DD")
@@ -134,7 +82,6 @@ const CalendarDayNWeekLayout = (props: any) => {
           } else if (getStatusApproved === 0) {
             isDatePending = true;
           }
-          //console.log(statusApproved, statusFormFilled);
           return (
             <Grid
               item
